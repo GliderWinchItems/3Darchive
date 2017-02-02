@@ -1,0 +1,89 @@
+$fn=100;
+
+screw_dia=3.4;
+washer_hole_dia=13.63;
+washer_od=27;
+washer_thickness=2;
+mountholes_radius= (washer_od + washer_hole_dia)/4;
+centerhole_dia=3;
+base_thickness=12;
+base_diameter=41;
+pipe_od=9.525;
+pipe_length= (base_thickness + 41);
+barb_ht=2;
+shoulder_transition_thickness=8;
+
+module base(diameter,height)
+{
+	cylinder(height, diameter/2, diameter/2,center=false);
+}
+
+module post(diameter, height)
+{
+	
+	cylinder(height, diameter/2, diameter/2, center=false);
+}
+
+module center_hole(diameter)
+{
+	cylinder(100,diameter/2,diameter/2,center=false);
+}
+
+module mount_hole(diameter, radius, angle)
+{
+	rotate(a = angle)
+		translate([radius,0,0])
+			cylinder(100,diameter/2,diameter/2,center=false);
+}
+
+module barb(diameter, length)
+{
+	union()
+	{
+		cylinder(length/2,0,diameter/2,false);
+		translate([0,0,length/2])
+			cylinder(length/2,diameter/2,0,false);
+	}
+}
+
+module shoulder_transition(length)
+{
+		translate ([0,0,base_thickness + washer_thickness ])
+			cylinder(length,washer_hole_dia/2,0,false);
+}
+
+module tip_chamfer(length)
+{
+		translate ([0,0,pipe_length ])
+			cylinder(length,pipe_od/2,0,false);
+}
+
+module gizmo()
+{
+		difference()
+		{
+			union()
+			{
+				base(base_diameter,base_thickness);
+				post(pipe_od, pipe_length);
+				translate ([0,0,base_thickness])
+						cylinder(washer_thickness,washer_hole_dia/2,washer_hole_dia/2,false);
+				translate([0,0, base_thickness + washer_thickness + 10])
+						barb(pipe_od + 2,pipe_od * barb_ht);
+				translate([0,0, base_thickness + washer_thickness + 20])
+						barb(pipe_od + 2,pipe_od * barb_ht);
+				shoulder_transition(shoulder_transition_thickness);
+				tip_chamfer(4);
+			}
+			union()
+			{
+				mount_hole(screw_dia, mountholes_radius,   0);
+				mount_hole(screw_dia, mountholes_radius, 120);
+				mount_hole(screw_dia, mountholes_radius, 240);
+				center_hole(centerhole_dia);
+			}
+		}
+}
+
+gizmo();
+

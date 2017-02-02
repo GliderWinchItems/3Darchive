@@ -1,0 +1,148 @@
+1/7/2017
+Notes: 3-D printer workshop at USF
+
+jnussbaum@mail.usf.edu
+anthonyross@mail.usf.edu
+
+- Patents are expiring and low cost machines will be encorporating the features.
+
+- Include mico-drill for cleaning the nozzle--probably never will need.  Easy to break.  
+  Easy to scratch nozzle hole and that causes thread to curl.
+
+- Leveling bed:  The most important part of the setup and the largest cause of failures of the printed part.
+
+- Spinning one motor (z axis) will cause the other motor to move also, so hold the other motor when
+  adjusting the lead screw (to adjust horizontal guides for x axis motion.
+
+- The lead screw (z axis) should not have to be touched after initial setup.
+
+- Base plate cover wears out eventually.  Spare is included.  There are other options covered later (???)
+
+- Nozzles are replaceable.  Be careful about not scratching them.
+
+- A couple of "old guys" attending gave a short talk on the following which they are involved--
+
+http://enablingthefuture.org/upper-limb-prosthetics/
+
+Something said that I didn't catuch about AIO Robotics 
+
+-  "Hot end" - term for the nozzle end 
+
+  thermisters used on nozzle and bed for temp control.  Special nozzles/head for high temp use thermocouples.
+
+-  If there is a jam the feed gear digs into the filament and the teeth clog up so it won't feed.
+   Use a dental pick (cheap online) to clean the teeth.  Probably not needed.  Long periods where
+   the head is set too clos to the bed plate might cause this.
+
+   Most likely with PLA.  Not so much with ABS.
+
+-  Heated bed (for warping)
+
+   Not so important for PLA, but since present use it.
+
+  PETG and ABS need a heated bed.
+
+-  Plastics
+
+   3.0 mm was early standard.  1.75 mm now most popular.
+   Not much quality control for cheap China products.
+   Lots of types with fillers such as wood, conductive, thermochromatic.  Metal doesn't quite match sheen
+     of metal, but is stronger than filament w/o metal.
+     Filler needs to be much smaller than nozzel dia.
+   Replacement nozzles are cheap.
+   Don't buy filament that does not specify the dia tolerance, or tolerance more than 0.05 mm
+   Standard spec: 1.75 +/- 0.05 mm
+
+   (Later: for Slic3R parameters, measure the diameter of your filament at several places
+    and average.  0.03 mm makes a big difference.)
+
+   PLA: Bed temp 50-70C
+    Best temperature may vary between batches of filament from the same mfgr.
+    Brittle, but easy to use.  ABS and PETG better for strength.
+   Water soluble filament picks up water with time in FL.
+
+  ABS: Good engineering material
+   Warps a lot.  Best for strength
+   Some machines have the whole thing in a heated enclosure.  Some outfit has a patent so some enclose 
+     everything but the front to get around the patent and let the use close the front.  The Chinese just
+     ignore the patent.  Hold 50C would be good enough in a box.
+   Warpage isn't much of problem for parts maybe an inch across.  A bit 6" box would be a big problem.
+   Not resistant to acetone.  
+   "vapor polishing"
+      Part in bottle at room temp will take about 2 hrs.
+      Avoid youtube demos--most use a crock-pot and heat the acetone.  Part polishes in about 15 secs
+        if you don't blow yourself up.
+      Polishing other plastics requires chemicals too toxic for home use.
+
+  PETG:  Between ABS and PLA.  Less warpage than ABS and stronger that PLA.
+
+-  1 KG spool of filament will last you a long time.
+
+- Thermochromic filament: changes color from body heat.
+
+- Curve (forgot what the acronym)  weight, and heat input, versus temperature
+  glitch in the curve shows where the material goes liquid.
+  knee of curve where it turns down is where it too hot and eventually chars.
+  They have a machine to test samples.
+
+  Nylon: 260C nozzle is too hot for this machine.  Limit it to 240C
+
+-  Thing universe--the google of 3D
+
+-  stl files
+   Developed in the '80s.  amf format is the coming type.  Allows for color selection and other things.
+
+-  Repetier program 
+   
+   Move the centering of the part around each time so the printer bed cover doesn't wear out in the the middle.
+
+   Nozzle is 0.4mm so can't print a layer width less than that.
+
+   'infill' - 
+      7 - 15% saves filament.  Solid is of course the strongest.
+      honeycomb is the best, rectangular next best
+      j.n. doesn't have much experience with 3D honeycomb.  The layers are offset for more strength.
+
+   The first layer is solid for a good base.  Sometimes "1" is OK, but  "3" maybe needed .
+   The top layer may need 4 layers to reduce droop between lattice fill.
+
+   "Skirt" -- outline around the part.
+     Primarily needed to assure nozzle filled
+     Gets thrown away when part is done
+     Sometimes need 2 skirts, but one usually OK.
+     Skirt distance: "10" is general.
+       One could build a wall around the part with the skirt and keep air/wind off the part.
+   "Brim" -- a skirt with a distance of 0.
+       Helps anchor down base, but usually don't need.
+
+- Slic3R
+   Warp layer - e.g. the Butterfly part that came with the printer SD
+    (Skirt comes before warp)
+
+   Speed
+     Quality versus time required
+     Small circles might require slow speed since previous layer may not have cooled enough.
+     Stepper motor skipping.  Parts shift as part builds
+       Can sometimes hear clicking.  Bad skipping is a grinding noise.
+   
+   Correction factor for filament dia shouldn't be more than +/- 10%.  Should be zero if filament size
+       entered is correct.  Use digital calipers (cheap $10 ones OK) to measure dia.  0.03 mm has a big
+       impact.
+
+   1st layer somewhat hotter than other layers.
+
+   Fan cooling allows longer bridges.  Never have fan on for ABS.
+
+   Head height adjustment (software)
+      0.2-0.3 mm makes a big difference.  Printer manual pixs, pg 23,24 are good illustration.
+
+   Filament needed computed by the program is the filament length out-of-the-nozzle and not the input.
+     Nozzle is 0.4 mm and input is 1.75 mm.
+
+-  Solidwords software
+
+   It is all based on triangles and there is the issue of "normal face" to understand.
+
+
+
+
