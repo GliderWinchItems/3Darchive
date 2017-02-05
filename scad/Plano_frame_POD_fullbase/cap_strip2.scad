@@ -9,15 +9,9 @@ $fn = 50;
 screw_dia = 2.78;	// Dia of threads
 screw_dia_head = 4.8;	// Dia of screw (pan) head
 strip_thick = 1.75;
-strip_width = 9;
-strip_space = 46;	// Spacing between mounting holes
-strip_length= (14.5*2);
-strip_1stofs= strip_length/2;	// 1st hole offset
-post =5.3;
-stiff_wid = 2;
-stiff_ht = 2;
-stiff_len = strip_length/2 - post - 1;
-
+strip_width = 8.9;
+strip_1stofs= 5.4;	// 1st hole offset
+strip_length = 14;
 
 wx = strip_width/2;
 
@@ -28,11 +22,6 @@ module strip()
       union()
       {
          cube([strip_width, strip_length, strip_thick], false);
-         translate([strip_width/2 - stiff_wid/2, 0,-strip_thick])
-               cube([stiff_wid, stiff_len, stiff_ht],false);
-         translate([strip_width/2 - stiff_wid/2, strip_length-stiff_len,-strip_thick])
-               cube([stiff_wid, stiff_len, stiff_ht],false);
-
       }
 
       union()
