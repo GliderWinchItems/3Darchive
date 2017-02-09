@@ -52,13 +52,13 @@ module screw_hole(dia)
 }
 pu_screw = 3.2;     // Diameter of screw
 pu_ofs_x = sp_wid1 + sp_cutout/2 + pu_screw/2;
-pu_ofs_y1 = 3;
-pu_ofs_y2 = ca_ht - 3;
+pu_ofs_y1 = 5;
+pu_ofs_y2 = 17.78 + pu_ofs_y1 ;
 pu_ofs_y3 = 6;  	// Cutout hole offset from bottom
-pu_lead_hole = 5.5;	// Hole where leads come thru perf board
+pu_lead_hole = 6.0;	// Hole where leads come thru perf board
 pu_selftap_dia = 2.8;	// Self-tapping screws for perf board
 pu_selftap_y = (pu_ofs_y2-pu_ofs_y1)/2 + pu_ofs_y1;
-pu_sensor_wid = 5;	// Width of sensor body
+pu_sensor_wid = 8.5;	// Width of sensor body
 
 module center_cutout()
 {
@@ -73,6 +73,7 @@ module center_cutout()
 
 module punch()
 {
+echo (pu_ofs_y2-pu_ofs_y1);
   // Four 4-40 screw holes
   translate([-pu_ofs_x,pu_ofs_y1,0])
        screw_hole(pu_screw); 
@@ -88,8 +89,8 @@ module punch()
     center_cutout();
   translate([-pu_sensor_wid/2,0,0])
     center_cutout();
-  translate([-pu_lead_hole/2,pu_ofs_y3-pu_lead_hole/2,0])
-    cube([pu_lead_hole,ph_lead_y+pu_lead_hole,ca_thick+.01],false);
+  translate([-pu_lead_hole/2-1,pu_ofs_y3-pu_lead_hole/2,0])
+    cube([pu_lead_hole+2,ph_lead_y+pu_lead_hole,ca_thick+.01],false);
 
 // PC board self-tapping screws
   translate([-pu_ofs_x,pu_selftap_y,0])

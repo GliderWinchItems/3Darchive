@@ -183,8 +183,8 @@ module pc_shell()
  pcps_frm_side = 6.3;	// side to hole
  pcps_post_dia = 7.0;	// Post diameter
 
- pcps_screw_dia = 2.4;	// Screw diameter
- pcps_screw_ht = 4;	// Screw thread length
+ pcps_screw_dia = 2.6;	// Screw diameter
+ pcps_screw_ht = 5;	// Screw thread length
 
  pcps_post_ht = 5;
 pcps_ofs_y = pclen/2 - pcps_frm_top;

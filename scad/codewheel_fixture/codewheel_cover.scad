@@ -60,8 +60,6 @@ module brd_tab()
 }
 base_thick 	= 2.0;	// Thickness of base
 base_rad	= 10;	// Radius around mags
-base_x		= mag_spacing_x + 2*base_rad;
-base_y		= mag_spacing_y + 2*base_rad;
 
 shell_wall = 2;		// Cover wall thickness
 shell_ht = 10.5;	;	// Cover side height
@@ -142,7 +140,47 @@ module pc_shell()
         brd_tab();
 
 }
+module rounded_bar_end(l, w, h)
+{
+        cylinder(d = w, h = h, center = false);
+        translate([-l, -w/2, 0])
+           cube([l, w, h],false);
+}
+module rounded_rectangle(lo,wo,h,rad)
+{
+ translate([-rad/2,rad/2,0])
+ {
+  l = lo - rad; w = wo - rad;
+  lr = l - 2*rad; wr = w - 2*rad;
+   translate([-l,0,0])
+     cube([l,w,h],false);
 
+   ww = w; ll = l;
+   translate([0,0,0])
+     rounded_bar_end(ll,rad,h);
+   translate([0,ww,0])
+     rotate([0,0,90])
+        rounded_bar_end(ww,rad,h);
+   translate([-ll,0,0])
+     rotate([0,0,-90])
+        rounded_bar_end(ww,rad,h);
+   translate([-ll,ww,0])
+     rotate([0,0,180])
+        rounded_bar_end(ll,rad,h);
+ }
+}
+// Window 
+module window()
+{
+  translate([43,-35,0])
+     rounded_rectangle(30,50, base_thick+3,6);    
+
+//  translate([15,-35,0])
+//         cube([30,50,base_thick+3],false);    
+
+//translate([-50,0,0])
+//     rounded_rectangle(30,15, base_thick+3, 3);    
+}
 
 
 module total()
@@ -150,8 +188,8 @@ module total()
    difference()
    {
       pc_shell();
-      translate([15,-35,0])
-         cube([30,50,base_thick+3],false);      
+        window();
    }
+//      window();
 }
 total();

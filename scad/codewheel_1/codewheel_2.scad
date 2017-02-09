@@ -1,11 +1,11 @@
-/* Code wheel for fairlead sheave
- * Date: 20170116
- * codewheel_1
+/* Code wheel for test stand
+ * Date: 20170208
+ * codewheel_2
  */
  
- dia_center_hole = (2.8); // Center mounting hole
- thick_center_hole = (4.6); // Thickness at center hole
- dia_magtop = (14.0);  // Diameter flat of magnet top
+ dia_center_hole = (4.9); // Center mounting hole
+ thick_center_hole = (4.0); // Thickness at center hole
+ dia_magtop = (20.0);  // Diameter flat of magnet top
 
  dia_taper = (30); // Diameter where taper ends
  nsegs = 6;  // Number of segments
@@ -83,6 +83,7 @@ module arc( height, depth, radius, degrees ) {
 
 	// Punch out timing holes	
 //D_arc(w=thickness_of_arc, r=radius_of_arc, deg=degrees_of_arc_angle, fn=resolution, h=height_of_arc);
+
 module timing_holes()
 {
         for ( i = [0 : timingHoles-1] ) {
