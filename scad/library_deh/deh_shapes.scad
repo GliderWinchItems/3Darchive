@@ -13,6 +13,7 @@ module tubedeh(d1,d2,ht)
    }
 }
 /* ***** rounded_bar *****
+ * rectangular bar with rounded end
 bar with one end rounded
 d = diameter of rounded end, and width of bar
 l = length of bar from center of rounded end to end
@@ -28,6 +29,7 @@ module rounded_bar(d, l, h)
        cube([l, d, h],false);
 }
 /* ***** eyebar *****
+ * rounded bar with hole in rounded end
 d1 = outside diameter of rounded end, and width of bar
 d2 = diameter of hole in end of bar
 */
@@ -39,7 +41,7 @@ module eye_bar(d1, d2, len, ht)
       cylinder(d = d2, h = ht + .001, center = false);
    }
 }
-/* ***** rounded_rectangle *****
+/* ***** rounded_rectangle ******
 l = length (x direction)
 w = width (y direction)
 h = thickness (z direction)
@@ -105,9 +107,6 @@ module rounded_triangle(l1,l2,l3,h,rad)
         rounded_bar(rad,l2,h);
   // Fill in center
     triangle(l1,l2,l3,h);
-
-
-
 }
 /* ***** triangle *****
  * l1 = side 1
@@ -123,6 +122,18 @@ module triangle(l1,l2,l3,h)
   linear_extrude(height = h)
   polygon(points = [[0,0],[l3,0],[l2*cos(al1),l2*sin(al1)]]);
 }
+/* ***** chamfered hole *****
+ * Punch hole with chamfer on one end
+ * d1 = main hole diameter
+ * d2 = hole diameter at chamfered end
+ * ht1 = height of whole hole
+ * ht2 = depth of  chamfer
+*/
+module chamfered_hole(d1,d2,ht1,ht2)
+{
+   rotate_extrude(convexity = 10)
+     polygon(points = [[0,0],[d1/2,0],[d1/2,ht1-ht2],[d2/2,ht1],[0,ht1]]);
 
+}
 
 
