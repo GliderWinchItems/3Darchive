@@ -67,6 +67,12 @@ module puck_cable()
       cylinder(d = p_dia+4, h = ptop_ht+.01, center = false);
    }
 }
+module cable_hole()
+{
+  translate([0,-bot_dia/2+13,-.01])
+   cylinder(d = 20, h = 50, center = false);
+
+}
 
 module total()
 {
@@ -78,6 +84,9 @@ module total()
         translate([0,0,-.01]) puck();
         puck_wire();
         translate([0,0,-.01]) puck_cable();
+        rotate([0,0,10]) cable_hole();
+        rotate([0,0,5]) cable_hole();
+        cable_hole();
      }
   }
 

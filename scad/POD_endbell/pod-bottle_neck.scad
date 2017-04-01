@@ -64,13 +64,13 @@ module cable_lc_cutout()
    translate([pc_wid/2-5,pc_ofs_y+cable_lc_dia/2-.5,0])
      cylinder(d = cable_lc_dia, h = 150, center = false);
 }
-gps_dia = 70;  	// Dia for gps well
-gps_thick = 18; // Depth of gps well
+gps_dia2 = 70;  	// Dia for gps well
+gps_dia1 = 80;  	// Dia for gps well
+gps_thick = 28; // Depth of gps well
 module gps_cutout()
 {
    translate([0,0,0])
-     cylinder(d = gps_dia, h = gps_thick, center=false);
-
+     cylinder(d1 = gps_dia1,d2 = gps_dia2, h = gps_thick, center=false);
 }
 
 module total()

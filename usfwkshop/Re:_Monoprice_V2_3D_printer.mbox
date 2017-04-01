@@ -1,0 +1,260 @@
+From jnussbaum@mail.usf.edu Sun Mar  5 20:39:29 2017
+Received: from vms172077pub.verizon.net (vms172077pub.verizon.net
+ [206.46.172.77]) (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128
+ bits)) (No client certificate requested) by mtaiw-aag08.mx.aol.com
+ (Internet Inbound) with ESMTPS id 2CE1470000085 for
+ <dhaselwood@verizon.net>; Sun,  5 Mar 2017 20:39:29 -0500 (EST)
+Received: from mail-qk0-f177.google.com ([209.85.220.177]) by
+ vms172077.mailsrvcs.net (Oracle Communications Messaging Server 7.0.5.34.0
+ 64bit (built Oct 14 2014)) with ESMTPS id
+ <0OMD00A6WCX61S20@vms172077.mailsrvcs.net> for dhaselwood@verizon.net
+ (ORCPT dhaselwood@verizon.net); Sun, 05 Mar 2017 19:39:28 -0600 (CST)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.2 cv=BJjDlBYG c=1 sm=1 tr=0
+ a=p8Ef205JKUyCBKvL+1JEIw==:117 a=6Iz7jQTuP9IA:10 a=o1OHuDzbAAAA:8
+ a=Npn9PEg5AAAA:8 a=f2QNJDZ7bUpxpZswqrYA:9 a=A9uR44rKUIW8rQpU:21
+ a=hg_6KjD337FzS4v9:21 a=QEXdDO2ut3YA:10 a=GnZvTPCceBYWKx74j_0A:9
+ a=d_RFVDF-9qqxOjZ0:21 a=sN84P9Np3VxFQRjU:21 a=e2Ro4TQ02mPqACye:21
+ a=5YQ6H4ZxyGn-KoBYtt8s:22 a=1Hby81R7P6Sg1jutD0kV:22
+X-Originating-IP: [209.85.220.177]
+Received: by mail-qk0-f177.google.com with SMTP id v125so70692242qkh.2 for
+ <dhaselwood@verizon.net>; Sun, 05 Mar 2017 17:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;       
+ d=mail.usf.edu; s=googleapps;
+ h=mime-version:in-reply-to:references:from:date:message-id:subject:to;
+ bh=wmckiz9V+N2sBe2lu/R8COrlTYSuKqsfJJNDjMGU5q4=;
+ b=jbjRpr6TKuquaTcbuhqPJdN9hA/xLdtf1CJnGJTlXvUFUlhOHojxCC+x2xB6W7HHe8
+ PWC2dhf5SUyNp51MlyQoNGJvKClZRHqu36+GBayQEY0wE4cSxSrLoPYO513HpgEcrJt7
+ 5Qgr9vMjQrwY4Dis/8qt53JIq1HUTxNM+7KCI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1e100.net;
+ s=20161025;
+ h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+ :message-id:subject:to; bh=wmckiz9V+N2sBe2lu/R8COrlTYSuKqsfJJNDjMGU5q4=;
+ b=DxPKYqew6nfLYM1cAkJR5/HbC4c2XJA+zt0FjAOSpSpXW4rq1XRiNsBxWpUQNnOaev
+ PF/UbbJQ6vSUKQFV8zEop85U6xX+NdyBEOPZQYUHdAFJZx4I5lS+rfcmyhkHkWKB0uND
+ WtWqhcSQOauHYLCMht4jD7TuSAwFEyA+85oiBscA6KR8pw2oLL37v/dVKy3VRI0S20Dz
+ mgsV/51VXjLmqYNZdFNn44k1pVeUzt9+AXU0SEcSTJ1a3RBMUq+I2llccrbQnta0FWym
+ Y26fkVfHgYId5QO3lkEI5KtiybVBsPH++AU90Yp3Xl0/jFm27U4WtKO8ErsLOu/ii79e wbBg==
+X-Gm-Message-State:
+ AMke39mO3HElt5DEwi5ksCVqAVzBiA/O6IZQo+4UWqOCz4gpUia+/qtlYdEdFXeCQJ9TjdNVFPWQTL3KnLb19zZV
+X-Received: by 10.200.48.171 with SMTP id
+ v40mr14438239qta.80.1488764368049; Sun, 05 Mar 2017 17:39:28 -0800 (PST)
+MIME-version: 1.0
+Received: by 10.12.182.41 with HTTP; Sun, 5 Mar 2017 17:39:27 -0800 (PST)
+In-reply-to: <CACVVG1r=7mPxHosgt=AYq0RxY_n15CaatZXTp+1jQN5JiiOn7g@mail.gmail.com>
+References: <1487990063.3109.277.camel@verizon.net>
+	 <CACVVG1qWYefjyDC8=CyQBGwM_Bi+bCrmZ-S6nJcQ4an-HqvrSw@mail.gmail.com>
+	 <1487998008.3109.292.camel@verizon.net>
+	 <CACVVG1r=7mPxHosgt=AYq0RxY_n15CaatZXTp+1jQN5JiiOn7g@mail.gmail.com>
+From: Justin Nussbaum <jnussbaum@mail.usf.edu>
+Date: Sun, 05 Mar 2017 20:39:27 -0500
+Message-id: <CACVVG1oCONrj1W2+XUHpTenvuNOboii6ma77Sy-zTTqS4RbxUw@mail.gmail.com>
+Subject: Re: Monoprice V2 3D printer
+To: Donald E Haselwood <dhaselwood@verizon.net>
+Content-type: multipart/alternative; boundary=001a113a15e84fe419054a05f7d2
+x-aol-global-disposition: G
+X-AOL-SCOLL-AUTHENTICATION: vms172077.mailsrvcs.net ; domain : mail.usf.edu
+ DKIM : fail
+Authentication-Results: mx.aol.com; spf=none (aol.com: the domain
+ mail.usf.edu appears to have no SPF Record.) smtp.mailfrom=mail.usf.edu;
+ dkim=fail (aol.com: Signature verification failed computation.)
+ header.d=mail.usf.edu;
+x-aol-sid: 3039ac1a7e4558bcbdd1791e
+X-AOL-IP: 209.85.220.177
+X-AOL-SPF: domain : mail.usf.edu SPF : none
+X-Evolution-POP3-UID: 46884.beKaexn1rz59GagD+,xuPIDVjSc=
+X-Evolution-Source: 1376709560.6289.0@dehmain
+
+
+--001a113a15e84fe419054a05f7d2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Hi Don,
+
+I know it took a while but I got the order number but hopefully you won't
+need it!
+
+Order number:
+15384977
+
+Thank you,
+*Justin Nussbaum*, Doctoral Candidate
+Mechanical Engineering
+University of South Florida
+
+On Sat, Feb 25, 2017 at 6:09 PM, Justin Nussbaum <jnussbaum@mail.usf.edu>
+wrote:
+
+> Hi Don,
+>
+> Thanks for the advice. I'll keep that in mind if I ever have to
+> disassemble the extruder. Glad you figured it out though!
+>
+> Thank you,
+> *Justin Nussbaum*, Doctoral Candidate
+> Mechanical Engineering
+> University of South Florida
+>
+> On Fri, Feb 24, 2017 at 11:46 PM, Donald E Haselwood <
+> dhaselwood@verizon.net> wrote:
+>
+>> Justin,
+>>
+>> Thanks for the response.
+>>
+>> I did try the steel push stick several times and even increased the
+>> temperature to 215 C.  When I took the extruder fan/motor off there was
+>> a piece of the old filament protruding slightly above the flare which
+>> pulled out easily with a pair of long nosed pliers.  I think what
+>> happened was when I was unloading the previous filament I pulled too
+>> hard and it separated at a point where the hot end is too cool, but the
+>> filament was partially melted so it stuck.
+>>
+>> A tip--There are two screws that hold the fan, heat sink, and extruder
+>> motor together.  When the two screws are removed there are two spacers
+>> between the heat sink and the metal block.  These fall onto the printer
+>> base and roll into the slot, and down inside.  I was able to retrieve
+>> them with long nose pliers--a bit tedious.  When assembling the parts I
+>> managed to drop one of the spacers and again it rolled down inside,
+>> this time a bit harder to retrieve.  The solution was to place a piece
+>> of paper between the bed rails and base, thus covering the slot and
+>> preventing the spacers from falling into the abyss.
+>>
+>> Don
+>>
+>>
+>>
+>>
+>> On Fri, 2017-02-24 at 22:24 -0500, Justin Nussbaum wrote:
+>> > Hi Donald,
+>> >
+>> > I don't have the order number since I didn't place the order. I'll
+>> > contact the purchaser and see if they can find it for you. In the
+>> > mean time, if you need it the order was created from quote
+>> > # C30463623.
+>> >
+>> > Glad to hear you were able to figure out how to unjam your extruder.
+>> > In the future using the steel push stick that came with your printer
+>> > is a much easier way. You can use it to just push the extra filament
+>> > through the nozzle.
+>> >
+>> > Thank you,
+>> > Justin Nussbaum, Doctoral Candidate
+>> > Mechanical Engineering
+>> > University of South Florida
+>> >
+>> > On Fri, Feb 24, 2017 at 9:34 PM, Donald E Haselwood <dhaselwood@veriz
+>> > on.net> wrote:
+>> > > Justin,
+>> > >
+>> > > Re: Jan 7/17 3D printer workshop
+>> > >
+>> > > Do you have the Monoprice order number that we could use if we
+>> > > contact
+>> > > Monoprice?
+>> > >
+>> > > Several weeks ago I had a question and the form for contacting them
+>> > > required a valid order number.  Not having it, I turned to chat and
+>> > > got
+>> > > my question answered.
+>> > >
+>> > > Tonight I was switching filaments and removal of the old filament
+>> > > has
+>> > > left a small piece inside.  I happened to find a youtube video that
+>> > > showed exactly how to disassemble the fan and extruder motor, and I
+>> > > fixed the problem, but it reminded me that it might be good to have
+>> > > an
+>> > > order number to be able to contact the Monoprice support in the
+>> > > future.
+>> > >
+>> > > Don
+>> > >
+>> > >
+>>
+>
+>
+
+--001a113a15e84fe419054a05f7d2
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<div dir="ltr">Hi Don,<div><br></div><div>I know it took a while but I got the order number but hopefully you won&#39;t need it!</div><div><br></div><div>Order number:</div><div>15384977</div></div><div class="gmail_extra"><br clear="all"><div><div class="gmail_signature" data-smartmail="gmail_signature"><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div>Thank you,</div><div dir="ltr"><b>Justin Nussbaum</b>, <span style="font-size:12.8px">Doctoral Candidate</span></div><div>Mechanical Engineering</div><div>University of South Florida</div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+<br><div class="gmail_quote">On Sat, Feb 25, 2017 at 6:09 PM, Justin Nussbaum <span dir="ltr">&lt;<a href="mailto:jnussbaum@mail.usf.edu" target="_blank">jnussbaum@mail.usf.edu</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir="ltr">Hi Don,<div><br></div><div>Thanks for the advice. I&#39;ll keep that in mind if I ever have to disassemble the extruder. Glad you figured it out though!</div></div><div class="gmail_extra"><span class=""><br clear="all"><div><div class="m_201946621186085833gmail_signature" data-smartmail="gmail_signature"><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div><div dir="ltr"><div>Thank you,</div><div dir="ltr"><b>Justin Nussbaum</b>, <span style="font-size:12.8px">Doctoral Candidate</span></div><div>Mechanical Engineering</div><div>University of South Florida</div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+<br></span><div><div class="h5"><div class="gmail_quote">On Fri, Feb 24, 2017 at 11:46 PM, Donald E Haselwood <span dir="ltr">&lt;<a href="mailto:dhaselwood@verizon.net" target="_blank">dhaselwood@verizon.net</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Justin,<br>
+<br>
+Thanks for the response.  <br>
+<br>
+I did try the steel push stick several times and even increased the<br>
+temperature to 215 C.  When I took the extruder fan/motor off there was<br>
+a piece of the old filament protruding slightly above the flare which<br>
+pulled out easily with a pair of long nosed pliers.  I think what<br>
+happened was when I was unloading the previous filament I pulled too<br>
+hard and it separated at a point where the hot end is too cool, but the<br>
+filament was partially melted so it stuck.<br>
+<br>
+A tip--There are two screws that hold the fan, heat sink, and extruder<br>
+motor together.  When the two screws are removed there are two spacers<br>
+between the heat sink and the metal block.  These fall onto the printer<br>
+base and roll into the slot, and down inside.  I was able to retrieve<br>
+them with long nose pliers--a bit tedious.  When assembling the parts I<br>
+managed to drop one of the spacers and again it rolled down inside,<br>
+this time a bit harder to retrieve.  The solution was to place a piece<br>
+of paper between the bed rails and base, thus covering the slot and<br>
+preventing the spacers from falling into the abyss.<br>
+<br>
+Don<br>
+<div class="m_201946621186085833HOEnZb"><div class="m_201946621186085833h5"><br>
+<br>
+<br>
+<br>
+On Fri, 2017-02-24 at 22:24 -0500, Justin Nussbaum wrote:<br>
+&gt; Hi Donald,<br>
+&gt;<br>
+&gt; I don&#39;t have the order number since I didn&#39;t place the order. I&#39;ll<br>
+&gt; contact the purchaser and see if they can find it for you. In the<br>
+&gt; mean time, if you need it the order was created from quote<br>
+&gt; # C30463623.<br>
+&gt;<br>
+&gt; Glad to hear you were able to figure out how to unjam your extruder.<br>
+&gt; In the future using the steel push stick that came with your printer<br>
+&gt; is a much easier way. You can use it to just push the extra filament<br>
+&gt; through the nozzle.<br>
+&gt;<br>
+&gt; Thank you,<br>
+&gt; Justin Nussbaum, Doctoral Candidate<br>
+&gt; Mechanical Engineering<br>
+&gt; University of South Florida<br>
+&gt;<br>
+&gt; On Fri, Feb 24, 2017 at 9:34 PM, Donald E Haselwood &lt;dhaselwood@veriz<br>
+&gt; <a href="http://on.net" rel="noreferrer" target="_blank">on.net</a>&gt; wrote:<br>
+&gt; &gt; Justin,<br>
+&gt; &gt;<br>
+&gt; &gt; Re: Jan 7/17 3D printer workshop<br>
+&gt; &gt;<br>
+&gt; &gt; Do you have the Monoprice order number that we could use if we<br>
+&gt; &gt; contact<br>
+&gt; &gt; Monoprice?<br>
+&gt; &gt;<br>
+&gt; &gt; Several weeks ago I had a question and the form for contacting them<br>
+&gt; &gt; required a valid order number.  Not having it, I turned to chat and<br>
+&gt; &gt; got<br>
+&gt; &gt; my question answered.  <br>
+&gt; &gt;<br>
+&gt; &gt; Tonight I was switching filaments and removal of the old filament<br>
+&gt; &gt; has<br>
+&gt; &gt; left a small piece inside.  I happened to find a youtube video that<br>
+&gt; &gt; showed exactly how to disassemble the fan and extruder motor, and I<br>
+&gt; &gt; fixed the problem, but it reminded me that it might be good to have<br>
+&gt; &gt; an<br>
+&gt; &gt; order number to be able to contact the Monoprice support in the<br>
+&gt; &gt; future.<br>
+&gt; &gt;<br>
+&gt; &gt; Don<br>
+&gt; &gt;<br>
+&gt; &gt;<br>
+</div></div></blockquote></div><br></div></div></div>
+</blockquote></div><br></div>
+
+--001a113a15e84fe419054a05f7d2--
+

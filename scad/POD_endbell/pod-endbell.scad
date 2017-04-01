@@ -42,10 +42,27 @@ module chamfer()
            center = false);
      }
  }
+
+/* ridge for a grip point for removing endbell */
+rid_wid = 5;
+rid_len = 15;
+rid_thick = 3;
+
+module ridge()
+{
+//   translate([0,0,height_sides])
+//     cube([rid_wid,rid_len,rid_thick],center = false);   
+  difference()
+  {
+   translate([0,0,height_sides]) 
+     cylinder(d = dia_od, h = rid_thick, center = false);
+   translate([-dia_od/2+8,-dia_od/2,height_sides]) 
+     cube([dia_od,dia_od,rid_thick], center = false);
+  }
+}
+
 module ring()
 {
-  render()
-  {
      // Sides
      translate([0,0,thick_bottom])
         difference()
@@ -73,7 +90,6 @@ module ring()
               r2 = (dia_od - 2*thick_sides)/2, 
               center = false);
      }
-  }
 }
 module crossbar()
 {

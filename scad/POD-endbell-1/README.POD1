@@ -1,0 +1,20 @@
+README.POD1
+03/31/2017
+
+POD-endbell-1
+
+scad and stl files for 3D parts for housing
+POD #1 
+- Nose of bottle 
+- GPS insert
+- electronics
+- spacer ring
+- end-bell
+
+POD #1 does not have the POD board and battery
+housed in an enclosure.
+
+The pushbutton and LED were epoxied to a small
+perf-board for the earlier packaging and a cutout
+to accommodate it was made.
+
