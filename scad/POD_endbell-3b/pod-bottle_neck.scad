@@ -1,17 +1,14 @@
 /* pod-bottle_neck.scad
-   POD neck insert for POD #3
-   04/01/2017
+   POD neck insert for POD #1
+   03/04/2017
 */
-
-
-include <enclose_cutout.scad>;
 
 $fn = 200;
 
-bot_dia = 105;	// 2L bottle diameter
+bot_dia = 105;
 
 
-// Contour of neck of bottle
+// Contour
 nofs = bot_dia/2 - 45;
 lofs = 5;
 
@@ -64,24 +61,16 @@ cable_lc_dia = 16; // Load-cell cable (at connector)
 
 module cable_lc_cutout()
 {
-   translate([pc_wid/2-10,pc_ofs_y+cable_lc_dia/2-.5,0])
-    rotate([25,25,0])
+   translate([pc_wid/2-5,pc_ofs_y+cable_lc_dia/2-.5,0])
      cylinder(d = cable_lc_dia, h = 150, center = false);
-   translate([12,-10,0])
-    rotate([0,0,-25])
-     cube([15,16,15],center=false);
-  translate([0,0,-10])
-    cylinder(r1 = 40, r2 = 3, h = 50, center = false);
 }
-
-/* Cutout for enclosure to penetrate into neck part. */
-z_depth = -len_en+2;
-extra = 1;	// Shrinkage and slop allowance
-
-module en_cutout(z_ofs)
+gps_dia2 = 70;  	// Dia for gps well
+gps_dia1 = 80;  	// Dia for gps well
+gps_thick = 28; // Depth of gps well
+module gps_cutout()
 {
-  translate([0,0,z_ofs])
-   enclose_cutout(len_en, extra);
+   translate([0,0,0])
+     cylinder(d1 = gps_dia1,d2 = gps_dia2, h = gps_thick, center=false);
 }
 
 module total()
@@ -92,9 +81,8 @@ module total()
      union()
      {
         cable_lc_cutout();
-        en_cutout(z_depth);
+        gps_cutout();
      }
   }
-//en_cutout(z_depth);
 }
 total();

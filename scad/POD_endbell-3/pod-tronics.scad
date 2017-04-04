@@ -1,9 +1,11 @@
 /* pod_tronics.scad
-   POD #2 electronics holders
-   03/15/2017
+   POD #3 main enclosure
+   04/02/2017
 */
-$fn = 400;
 
+$fn = 200;
+
+include <enclose_cutout.scad>;
 include <../library_deh/deh_shapes.scad>
 
 dia_od = (105); // diameter (inside of bottle)
@@ -11,47 +13,11 @@ dia_od = (105); // diameter (inside of bottle)
 thick_bottom = 1;
 thick_sides = 1;
 
+
 chfm_ht = 4;
 chfm_wid = 3;
 
-slop = 1;
-bat_len = 112.7+slop;
-bat_ofs_z = 1;
-
-pc_wid = 82.2+slop;	// Width of PC board
-pc_len = 110;	// Length of PC board
-pc_thick = 25+slop;	// Thickness allowance for wires etc.
-pc_ofs_y = -22;
-side_ht = bat_len +bat_ofs_z-chfm_ht-.01;	// Height
-pc_ofs_z = side_ht+chfm_ht-pc_len;	// Offset from bottom of insert
-
-echo (side_ht+chfm_ht);	// Echo overall length
-
-
-/* Note: side height is adjusted so that the PC board box has
-a minimal floor on the bottom (pc_ofs) and the top is flush
-with the top of the insert.  The battery box z offset is set
-so that the top of the battery box is flush with the top.
-Beware: the chamfer height adds to the side_ht, hence the
-offsets have the chamfer height subtracted from the z offset.
-*/
-
-module pc_board()
-{
-    translate([-pc_wid/2,pc_ofs_y,pc_ofs_z])
-      cube([pc_wid,pc_thick,pc_len],center=false);
-
-}
-pc_bat_sep = 1.5;	// Separator foam between battery & PC boxes
-bat_wid = 62.6+slop;
-bat_thick = 30.7+pc_bat_sep+slop;
-bat_ofs_y = pc_ofs_y+pc_thick-.01;
-
-module battery()
-{
-    translate([-bat_wid/2-0.1,bat_ofs_y,bat_ofs_z])
-      cube([bat_wid,bat_thick,bat_len+10],center=false);
-}
+extra = 1;	// Slop & shrinkage allowance
 
 module chamfer()
 {
@@ -68,6 +34,42 @@ module chamfer()
 */
      }
  }
+dia_hatch = 25;
+dh_ht = 72;
+dh_in = 38;
+dh_x = wid_mid/2 - dh_in;
+module side_hatch()
+{
+  translate([dh_x,70,dh_ht-neck_ofs])
+   rotate([90,0,0])
+    cylinder(d = dia_hatch, h = 60, center = false);
+
+}
+ld_ht = 110;
+ld_in = 14;
+dia_led = 30;
+ld_x = wid_mid/2 - ld_in;
+
+module led_port()
+{
+  translate([ld_x,70,ld_ht-neck_ofs])
+   rotate([90,0,0])
+    cylinder(d = dia_led, h = 60, center = false);
+
+
+}
+
+neck_ofs = 2;	// Enclosure goes into neck a bit
+
+module en_cutout()
+{
+  translate([0,0,-.01])
+   enclose_cutout(len_en-neck_ofs+10, extra);
+}
+
+
+
+side_ht = len_en-neck_ofs-chfm_ht+0.02;
 
 module insert()
 {
@@ -76,27 +78,41 @@ module insert()
    chamfer();
 }
 
-
-/* Slot for running gps cable down side */
-cable_gps_dia = 12;
-module cable_gps_cutout()
+tr_thick = 3;
+tr_ht = 13;
+module top_ring_recess()
 {
-  translate([-pc_wid/2,pc_ofs_y,pc_ofs])
-    rounded_bar(cable_gps_dia, cable_gps_dia, 110);
+
+  translate([0,0,side_ht-tr_ht])
+ {
+     difference()
+     {
+        cylinder(d = dia_od, h = tr_ht, center = false);
+        cylinder(d = dia_od-2*tr_thick, h = tr_ht, center = false);
+     }
+  }
+
+}
+module side_hole()
+{
+      translate([dia_od/2-tr_thick*2,0, side_ht-(tr_ht/2)] )
+      rotate([90,0,90])
+        cylinder(d = 2.0, h = 40, center = true);
+}
+module side_holes()
+{
+      rotate([0,0,   0]) side_hole();
+      rotate([0,0,  60]) side_hole();
+      rotate([0,0,  90]) side_hole();
+      rotate([0,0, 120]) side_hole();
+      rotate([0,0, 180]) side_hole();
+      rotate([0,0, -60]) side_hole();
+      rotate([0,0, -90]) side_hole();
+      rotate([0,0,-120]) side_hole();
+
 }
 
-/* Hole in bottom for load-cell cable & GPS */
-cable_lc_dia = 20; // Load-cell cable (at connector)
-lc_wid = 5; //20;
-lc_len = 40;
-lc_ht = 150;
-module cable_lc_cutout()
-{
-   translate([15,pc_ofs_y+5, -.01])
-       cube([lc_len, lc_wid, lc_ht],center=false);
-   translate([8,pc_ofs_y+10, -.01])
-     cylinder(d = cable_lc_dia, h = 150, center = false);
-}
+
 
 module total()
 {
@@ -108,12 +124,11 @@ module total()
       }
       union()
       {
-         pc_board();	// PC board pocket  
-         battery();     // Battery pocket
-/*         rotate([0,0,-45])
-           cable_gps_cutout(); // GPS cable groove
-*/
-         cable_lc_cutout();    // Load-cell cable hole
+	en_cutout();
+	side_hatch();
+	led_port();
+//  	top_ring_recess();
+//        side_holes();
       }
    }
 }
