@@ -42,6 +42,7 @@ module eye_bar(d1, d2, len, ht)
    }
 }
 /* ***** rounded_rectangle ******
+rounded_rectangle(l,w,h,rad);
 l = length (x direction)
 w = width (y direction)
 h = thickness (z direction)
