@@ -6,7 +6,7 @@
  * Latest edit: 20170408
  */
 
- $fn=100;
+ $fn=50;
 
 include <../library_deh/deh_shapes.scad>
 
@@ -35,6 +35,8 @@ include <../library_deh/mag_mount.scad>
  mag_stud_z = (mag_washer_thick +mag_nut_thick);
  mag_wash_recess_z = mag_stud_len - mag_stud_z;    
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
+
+
 
 
 module tube(d1,d2,ht)
@@ -95,22 +97,12 @@ module mag_mts()
 
 
 // Tabs for holding pc board cover down
-bt_wid = 18;
-bt_hole_dia = 3.2;  // Screw hold dia
-bt_thick = 4;	// Thickness
-bt_len = 12;	// Length
-bt_w_ht = 7;	// Stiffner height
 
-module brd_tab()
-{
-   mag_mnt_bar(bt_wid, bt_hole_dia, bt_len, bt_thick);
-   translate([-(bt_len - bt_len) ,(bt_wid/2 - bt_thick),bt_thick])
-      rotate([0,0,90])
-         wedge(bt_thick,bt_len,bt_w_ht);
-   translate([-(bt_len - bt_len) ,-(bt_wid/2),bt_thick])
-      rotate([0,0,90])
-         wedge(bt_thick,bt_len,bt_w_ht);
-}
+ cm_od = 10;	// Diameter of cover mounting post
+ cm_len = cm_od/2 + 4;
+ cm_id = 2.5;	// Self-tapping screw hole diameter
+ cm_wg = 5;	// Bottom wedge	
+
 
 
 // Base
@@ -125,8 +117,11 @@ shell_ht = 25 + 5;	;	// Enclosure wall height
 shell_x = pcwid + 2*shell_wall;
 shell_y = pclen + 2*shell_wall;
 
-shell_tab = 10;
-tab_rad = 6;
+tab_len = 10;
+tab_dia = mag_shell_dia;
+tab_thick = 4;
+tab_overlap = 10;	// Overlap of tab bar with spacer plate
+   cov_ofs = 8.5;  // Tab top distance below top edge of board
 
 module pc_shell()
 {
@@ -140,65 +135,16 @@ module pc_shell()
      cube([shell_x, shell_wall, shell_ht]);
 
    // Wall: -y end 
- //  difference()
-//   {
-      translate([0, -shell_y/2,base_thick])
-        cube([shell_x, shell_wall, shell_ht]);
-//      translate([shell_x - 12, -shell_y/2,base_thick])
-// 	cable_cutout();
-//   }
+   translate([0, -shell_y/2,base_thick])
+     cube([shell_x, shell_wall, shell_ht]);
 
    // Wall: x=0 side
    translate([0, -shell_y/2, base_thick])
-   {
      cube([shell_wall, shell_y, shell_ht]);
-   }
 
-   // Tab for mounting box to magnet base
-/* ***** rounded_rectangle ******
-l = length (x direction)
-w = width (y direction)
-h = thickness (z direction)
-rad = radius of corners
-reference = center of rectangle x,y, bottom 
-*/
-tab_thick = 2;
-
- difference()
- {
-   union()
-   {
-      // Full length plate
-      translate([shell_x+spacer_thick, 0, shell_ht/2+base_thick/2])
-       rotate([0,-90,0])
-        rotate([0,0,90])
-        rounded_rectangle((shell_y+2*shell_tab), shell_ht-2*base_thick,tab_thick,tab_rad);
-   }
-   union()
-   {
-     // Cutout for CAN cables 
-     translate([50,-25,shell_ht+6])
-       rotate([0,90,0])
-         rounded_rectangle(15,15,25,4);
-     // Mounting holes
-     translate([shell_x-tab_thick-10, (shell_y+2*shell_tab)/2, 0])
-        translate([0,-tab_rad,tab_rad]) tab_hole();
-
-     translate([shell_x-tab_thick-10, -(shell_y+2*shell_tab)/2, 0])
-        translate([0, tab_rad,tab_rad]) tab_hole();
-
-     translate([shell_x-tab_thick-10, (shell_y+2*shell_tab)/2,shell_ht + base_thick])
-        translate([0,-tab_rad,-tab_rad]) tab_hole();
-
-     translate([shell_x-tab_thick-10,-(shell_y+2*shell_tab)/2,shell_ht + base_thick])
-        translate([0, tab_rad,-tab_rad]) tab_hole();
-
-
-   }
- }
 
    // Spacer between box and magnet base 
-spacer_thick = 5;	// Spacer between magnet base and box
+spacer_thick = 7;	// Spacer between magnet base and box
 cover_depth = 11.5;	// Width/depth of cover lip over box
    translate([shell_x, -shell_y/2, 0])
    {
@@ -214,17 +160,75 @@ cover_depth = 11.5;	// Width/depth of cover lip over box
        rotate([0,0,90])
  	cable_cutout();
    }
-
+   
    // Posts for screw mounting of pc board
    translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) pc_posts4();
 
    // Tabs for mounting top cover
-   translate([shell_x/2,-(shell_y/2 + bt_len - shell_wall),shell_ht - 7.5])
-     rotate([0,180,90])
-        brd_tab();
-   translate([shell_x/2,(shell_y/2 + bt_len - shell_wall),shell_ht - 7.5])
-     rotate([0,180,-90])
-        brd_tab();
+   translate([shell_x/2,(shell_y/2 + cm_len - shell_wall),0])
+	cover_mnt_tab();
+
+   translate([shell_x/2,-(shell_y/2 + cm_len - shell_wall),0])
+      rotate([0,0,180])
+	cover_mnt_tab();
+
+/*   translate([shell_x/2+cm_od/4+cm_len,(shell_y/2 - shell_wall)-.1,shell_ht - cov_ofs])
+    rotate([-90,0,0])
+    rotate([0,0,90])
+     wedge(shell_ht - cov_ofs,cm_len,cm_len+cm_od/2);
+*/
+
+   // Mag-mount base & tabs
+   eb_ofs_x = (shell_x + spacer_thick) + tab_thick;
+   eb_ofs_y = (shell_y/2 + tab_len);
+   eb_len = tab_len + tab_overlap;	// Length of end tabs
+   eb_ofs_z = shell_ht - cover_depth + 25;
+   eb_len2 = eb_ofs_z;	// Length of center/back tab
+
+   // Compute triangle sides
+   tt_x = eb_ofs_z;
+   tt_y = eb_ofs_y;
+   tt_l = sqrt(tt_x*tt_x + tt_y*tt_y);
+
+/* ***** rounded_triangle *****
+ * l1 = side 1
+ * l2 = side 2
+ * l3 = side 3
+ * h  = height/thickness
+ * rad = radius of rounded corners
+module rounded_triangle(l1,l2,l3,h,rad)
+*/
+translate([eb_ofs_x,eb_ofs_y,tab_dia/2])
+ {
+   rotate([0,90,-90])
+     rotate([90,-90,0])
+   {
+     {
+       difference()
+       {
+         union()  // Triangular base, rounded ends
+         {
+           rounded_triangle(tt_l, tt_l, 2*tt_y, tab_thick, tab_dia);
+         }
+         union() // Punch holes for magnet studs
+         {
+           cylinder(d=mag_stud_dia, h=40, center= false);
+
+           translate([2*tt_y,0,0])
+              cylinder(d=mag_stud_dia, h=40, center= false);
+
+           translate([tt_y,tt_x,0])
+	     cylinder(d=mag_stud_dia, h=40, center= false);
+         }
+       }
+     }
+   }
+ }
+ fil_rad = 3;
+  translate([eb_ofs_x-tab_thick,-shell_y/2,shell_ht-cover_depth])
+   rotate([0,180,0])
+   rotate([-90,0,0])
+    fillet(fil_rad,shell_y);
 
 }
 
@@ -233,8 +237,7 @@ module tab_hole()
    rotate([0,90,0])
     cylinder(d=mag_stud_dia, h=40, center= false);
 }
-
-
+   
 // PC board mounting
  pcps_space_y = 25.4;  	// Distance between holes lengthwise
  pcps_space_x = 38.4;  	// Distance between holes across board 
@@ -245,7 +248,7 @@ module tab_hole()
  pcps_screw_dia = 2.6;	// Screw diameter
  pcps_screw_ht = 5;	// Screw thread length
 
- pcps_post_ht = 5;
+ pcps_post_ht = 5+1;	// PC mounting post height
  pcps_ofs_y = pclen/2 - pcps_frm_top;
  pcps_ofs_x = shell_wall + pcps_frm_side;
 
@@ -270,8 +273,6 @@ cc_frm_top =  5;		// Offset from top of side
 cc_frm_side = 8;	// Offset from side
 cc_sense_dia = 4;	// Sensor cable dia
 
-
-
 module cable_cutout()
 {
  cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
@@ -281,13 +282,6 @@ module cable_cutout()
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
     rotate([0,90,90])
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
-
-
-/*   // Sensor wires
-   translate([cc_frm_side+cc_wid/2, shell_wall+.02,shell_ht-cc_ofs_z])
-     rotate([90,0,0])
-       cylinder(d = cc_sense_dia,h = shell_wall+.05, center = false);
-*/
 }
 
 module round_ridge(dia,len,ht)
@@ -349,6 +343,34 @@ module ps_cutout()
 
 }
 
+module cover_mnt_tab()
+{
+  difference()
+  {
+    union()
+    {
+      rotate([0,0,-90])
+        eye_bar(cm_od,cm_id,cm_len,shell_ht - cov_ofs);
+
+      translate([cm_len+(cm_od*(3/4)),-cm_len,shell_ht - cov_ofs])
+        rotate([-90,0,0])
+          rotate([0,0,90])
+            wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
+
+      translate([-(cm_len + (cm_od*(3/4))),-cm_len,0])
+        rotate([0,0,-90])
+          rotate([0,-90,0])
+            wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
+    }
+    union()
+    {
+      translate([-cm_od/2-20,-cm_od/2-3,0])
+        wedge(cm_od+80,cm_od+10,cm_od/2+10);
+
+    }
+  }
+}
+
 module total()
 {
   difference()
@@ -365,9 +387,7 @@ translate([0,0,0])
 
     }
   }
-
 }
 
 total();
-
 

@@ -137,4 +137,28 @@ module chamfered_hole(d1,d2,ht1,ht2)
 
 }
 
+/* ***** fillet *****
+ * r = radius of fillet
+ * l = length of fillet
+ fillet (r,l);
+*/
+module fillet(r,l)
+{
+   difference()
+   {
+     union()
+     {
+       cube([2*r,2*r,l]);
+     }
+     union()
+     {
+       translate ([r,r,0])
+           cylinder(d = 2*r, h = l, center = false);
+       translate([r,0,0])
+           cube([r,2*r,l],center = false);
+       translate([0,r,0])
+           cube([2*r,r,l],center = false);
+     }
+   }
+}
 
