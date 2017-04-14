@@ -4,6 +4,8 @@
  * Latest edit: 20170408
  */
 
+include <../library_deh/deh_shapes.scad>
+
  $fn=50;
 
 // PC board dimensions
@@ -42,7 +44,7 @@ module mag_mnt_bar(d1, d2, len, ht)
     
 }
 // Tabs for holding pc board cover down
-bt_wid = 18;
+bt_wid = 10;
 bt_hole_dia = 3.2;  // Screw hold dia
 bt_thick = 3;	// Thickness
 bt_len = 10;	// Length
@@ -80,13 +82,14 @@ shell_iiy = shell_iy - 2*shell_iw;
 shell_or_x1 = shell_gap + 2*shell_wall + shell_iofs/2;
 shell_or_x2 = shell_or_x1 + shell_iw;
 
-// CAN bus cable cutout in wall
 cc_wid = 6.5;		// Telephone type cable width
 cc_thick = 2.25;	// Thickness
 cc_frm_top = 3;		// Offset from top of side
-cc_frm_side = 11;	// Offset from side
+cc_frm_side = 19;	// Offset from side
 cc_sense_dia = 4;	// Sensor cable dia
 cc_z = cc_thick + cc_frm_top;
+
+
 
 module pc_shell()
 {
@@ -106,31 +109,27 @@ module pc_shell()
    }
 
    // Wall: +y end with cable cutout
- difference()
- {
    translate([0, shell_y/2 - shell_wall,base_thick])
      cube([shell_x, shell_wall, shell_ht]);
-   translate([cc_frm_side, shell_y/2 - shell_wall - .01, shell_ht - cc_z])
-     cube([cc_wid,shell_wall + .01, 10],false);
- }
+
    // Wall: -y end 
    translate([0, -shell_y/2,base_thick])
      cube([shell_x, shell_wall, shell_ht]);
-//    rotate([0,0,-90])
-//     rounded_rect_ridge(shell_wall, shell_x, shell_ht);
 
    // Wall: x=0 side
-   translate([0, -shell_y/2, base_thick])
+   difference()
    {
-     cube([shell_wall, shell_y, shell_ht]);
-//       round_ridge(shell_wall,shell_y, shell_ht);
+      translate([0, -shell_y/2, base_thick])
+        cube([shell_wall, shell_y, shell_ht]);
+    // Cable cutout
+      translate([-1, shell_y/2 - cc_frm_side - cc_wid , shell_ht - cc_z])
+        cube([shell_wall + 2,cc_wid, 10],false);
    }
 
    // Wall: +x side
-   translate([shell_x - shell_wall, -shell_y/2, base_thick])
-     cube([shell_wall, shell_y, shell_ht]);
-
- 
+      translate([shell_x - shell_wall, -shell_y/2, base_thick])
+        cube([shell_wall, shell_y, shell_ht]);
+/* 
    // Tabs for mounting top cover
    translate([shell_x/2,-(shell_y/2 + bt_len - tab_ofs),shell_ht+1.5])
      rotate([0,180,90])
@@ -138,6 +137,14 @@ module pc_shell()
    translate([shell_x/2,(shell_y/2 + bt_len - tab_ofs),shell_ht+1.5])
      rotate([0,180,-90])
         brd_tab();
+*/
+   translate([shell_x/2,-(shell_y/2 + cm_len - 0.05),0])
+     rotate([0,0,180])
+	cover_mnt_tab();
+
+   translate([shell_x/2, (shell_y/2 + cm_len - 0.05),0])
+     rotate([0,0,0])
+	cover_mnt_tab();
 
 }
 module rounded_bar_end(l, w, h)
@@ -182,6 +189,45 @@ module window()
 //     rounded_rectangle(30,15, base_thick+3, 3);    
 }
 
+// Tabs for holding pc board cover down
+
+ cm_od = 10;	// Diameter of cover mounting post
+ cm_len = cm_od/2 + 0;
+ cm_id = 2.6;	// Self-tapping screw hole diameter
+ cm_wg = 5;	// Bottom wedge	
+ cm_screw_head_dia = 9; // Screw head/washer diameter
+ cm_recess = 8.5; 
+cov_ofs = 0;  // Tab top distance below top edge of board
+
+module cover_mnt_tab()
+{
+  difference()
+  {
+    union()
+    {
+      rotate([0,0,-90])
+        eye_bar(cm_od,cm_id,cm_len,shell_ht + base_thick);
+
+      translate([cm_len+(cm_od*(3/4)),-cm_len,shell_ht + base_thick])
+        rotate([-90,0,0])
+          rotate([0,0,90])
+            wedge(shell_ht + base_thick,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
+
+      translate([-(cm_len + (cm_od*(3/4))),-cm_len,0])
+        rotate([0,0,-90])
+          rotate([0,-90,0])
+            wedge(shell_ht + base_thick,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
+    }
+    union()
+    {
+      translate([-cm_od/2-20,-cm_od/2-3,0])
+        wedge(cm_od+80,cm_od+10,cm_od/2+10);
+
+      translate([0,0,0])
+       cylinder(d=cm_screw_head_dia, h = cm_recess, center=false);
+    }
+  }
+}
 
 module total()
 {
@@ -190,6 +236,5 @@ module total()
       pc_shell();
         window();
    }
-//      window();
 }
 total();

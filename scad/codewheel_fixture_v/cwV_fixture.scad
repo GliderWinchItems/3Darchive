@@ -1,9 +1,8 @@
-/*
 /* File: cwV_fixture.scad
  * Photocell sensor magnet mount for sheave codewheel
  * Reflective photosensors version, (V = vertical)
  * Author: deh
- * Latest edit: 20170408
+ * Latest edit: 20170412
  */
 
  $fn=50;
@@ -37,8 +36,6 @@ include <../library_deh/mag_mount.scad>
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
 
 
-
-
 module tube(d1,d2,ht)
 {
    difference()
@@ -47,63 +44,13 @@ module tube(d1,d2,ht)
      cylinder(d = d2, h = ht + .001, center = false);
    }
 }
-module mag_mnt_bar(d1, d2, len, ht)
-{
-   difference()
-   {
-     union()
-     {
-        cylinder(d = d1, h = ht, center = false);
-        translate([-len, -d1/2, 0])
-           cube([len, d1, ht]);
-     }
-       cylinder(d = d2, h = ht + .001, center = false);
-   }
-    
-}
-mm_bar_len = 55;  // Mag mount bar end length
-mm_bar_wid = 12; // Mag mount bar width
-mm_theta =  atan(mag_spacing_x/mag_spacing_y);    
-
-module corner_bars(cb_rotate)
-{
-     rotate(cb_rotate,0,0)
-        mag_mnt_bar(mm_bar_wid,mag_stud_dia, mm_bar_len +1, base_thick);
-//echo (mm_theta);
-}
-
-module mag_mts()
-{
-   translate([0,0,0])
-   {
-     corner_bars(mm_theta + 90);
-     corner_bars(-(mm_theta + 90));
-   }
-   translate([mag_spacing_x,mag_spacing_y,0])
-   {
-     corner_bars(90 - mm_theta);
-     corner_bars(90);
-   }
-   translate([mag_spacing_x,-mag_spacing_y,0])
-   {
-     corner_bars(mm_theta + 270);
-     corner_bars(-90);
-   }
-   // Fill in base
-   translate([45,-45,0])
-    rotate([0,0,90])
-       triangle(60,60,90,base_thick);
-}
-
 
 // Tabs for holding pc board cover down
 
  cm_od = 10;	// Diameter of cover mounting post
  cm_len = cm_od/2 + 4;
- cm_id = 2.5;	// Self-tapping screw hole diameter
+ cm_id = 2.6;	// Self-tapping screw hole diameter
  cm_wg = 5;	// Bottom wedge	
-
-
 
 // Base
 base_thick 	= 2.0;	// Thickness of base
@@ -122,6 +69,20 @@ tab_dia = mag_shell_dia;
 tab_thick = 4;
 tab_overlap = 10;	// Overlap of tab bar with spacer plate
    cov_ofs = 8.5;  // Tab top distance below top edge of board
+
+wh_dia = 13; // Wire hole diameter in triangular base
+
+spacer_thick = 7;	// Spacer between magnet base and box
+cover_depth = 11.5;	// Width/depth of cover lip over box
+
+tab_hole = mag_stud_dia + 0.3;	// Magnet stud hole in triangular base
+
+// Triangular mag-mount base
+   eb_ofs_x = (shell_x + spacer_thick) + tab_thick;
+   eb_ofs_y = (shell_y/2 + tab_len);
+   eb_len = tab_len + tab_overlap;	// Length of end tabs
+   eb_ofs_z = shell_ht - cover_depth + 25;
+   eb_len2 = eb_ofs_z;	// Length of center/back tab
 
 module pc_shell()
 {
@@ -142,10 +103,7 @@ module pc_shell()
    translate([0, -shell_y/2, base_thick])
      cube([shell_wall, shell_y, shell_ht]);
 
-
    // Spacer between box and magnet base 
-spacer_thick = 7;	// Spacer between magnet base and box
-cover_depth = 11.5;	// Width/depth of cover lip over box
    translate([shell_x, -shell_y/2, 0])
    {
      cube([spacer_thick, shell_y, shell_ht-cover_depth]);
@@ -172,38 +130,17 @@ cover_depth = 11.5;	// Width/depth of cover lip over box
       rotate([0,0,180])
 	cover_mnt_tab();
 
-/*   translate([shell_x/2+cm_od/4+cm_len,(shell_y/2 - shell_wall)-.1,shell_ht - cov_ofs])
-    rotate([-90,0,0])
-    rotate([0,0,90])
-     wedge(shell_ht - cov_ofs,cm_len,cm_len+cm_od/2);
-*/
-
-   // Mag-mount base & tabs
-   eb_ofs_x = (shell_x + spacer_thick) + tab_thick;
-   eb_ofs_y = (shell_y/2 + tab_len);
-   eb_len = tab_len + tab_overlap;	// Length of end tabs
-   eb_ofs_z = shell_ht - cover_depth + 25;
-   eb_len2 = eb_ofs_z;	// Length of center/back tab
-
    // Compute triangle sides
    tt_x = eb_ofs_z;
    tt_y = eb_ofs_y;
    tt_l = sqrt(tt_x*tt_x + tt_y*tt_y);
-
-/* ***** rounded_triangle *****
- * l1 = side 1
- * l2 = side 2
- * l3 = side 3
- * h  = height/thickness
- * rad = radius of rounded corners
-module rounded_triangle(l1,l2,l3,h,rad)
-*/
-translate([eb_ofs_x,eb_ofs_y,tab_dia/2])
+ translate([eb_ofs_x,eb_ofs_y,tab_dia/2])
  {
    rotate([0,90,-90])
      rotate([90,-90,0])
    {
      {
+       // Triangular base with screw holes for magnets
        difference()
        {
          union()  // Triangular base, rounded ends
@@ -212,32 +149,26 @@ translate([eb_ofs_x,eb_ofs_y,tab_dia/2])
          }
          union() // Punch holes for magnet studs
          {
-           cylinder(d=mag_stud_dia, h=40, center= false);
+           cylinder(d=tab_hole, h=40, center= false);
 
            translate([2*tt_y,0,0])
-              cylinder(d=mag_stud_dia, h=40, center= false);
+              cylinder(d=tab_hole, h=40, center= false);
 
            translate([tt_y,tt_x,0])
-	     cylinder(d=mag_stud_dia, h=40, center= false);
+	     cylinder(d=tab_hole, h=40, center= false);
          }
        }
      }
    }
  }
+ // Add fillet where base meets spacer
  fil_rad = 3;
   translate([eb_ofs_x-tab_thick,-shell_y/2,shell_ht-cover_depth])
    rotate([0,180,0])
    rotate([-90,0,0])
     fillet(fil_rad,shell_y);
-
 }
 
-module tab_hole()
-{
-   rotate([0,90,0])
-    cylinder(d=mag_stud_dia, h=40, center= false);
-}
-   
 // PC board mounting
  pcps_space_y = 25.4;  	// Distance between holes lengthwise
  pcps_space_x = 38.4;  	// Distance between holes across board 
@@ -284,14 +215,6 @@ module cable_cutout()
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
 }
 
-module round_ridge(dia,len,ht)
-{
-   translate([dia/2,dia/2,ht])
-    rotate([-90,0,0])
-    cylinder(d = dia, h = len - dia - 8,center = false);
-
-}
-
 module rounded_line_ridge(rad, len, ht)
 {
    translate([0,rad,ht])
@@ -316,13 +239,6 @@ module rounded_line_ridge(rad, len, ht)
    translate([-rad,0,0])cube([rad*2,len+rad,ht]);
 }
 
-module rounded_rect_ridge(w,l,h)
-{
-   translate([-w/2,0,0])
-      rounded_line_ridge(w/2,l-w,h);
-
-}
-
    // Cutout for reflective photosensors
 module ps_cutout()
 {
@@ -340,7 +256,6 @@ module ps_cutout()
   ps_ofs_yyy = ps_ofs_yy - ps_space - ps_wid;
    translate([ps_ofs_xx,ps_ofs_yyy,-20])
      cube([ps_len,ps_wid,ps_ht],center=false);
-
 }
 
 module cover_mnt_tab()
@@ -366,7 +281,6 @@ module cover_mnt_tab()
     {
       translate([-cm_od/2-20,-cm_od/2-3,0])
         wedge(cm_od+80,cm_od+10,cm_od/2+10);
-
     }
   }
 }
@@ -377,14 +291,17 @@ module total()
   {
     union()
     {
-      translate([0,0,0])
         pc_shell();
     }
     union()
     {
-translate([0,0,0])
- ps_cutout();
+       // Cutout for reflective photosensors
+       ps_cutout();
 
+       // Hole in triangular base for CAN cables
+       translate([eb_ofs_x - tab_thick - spacer_thick, -25, shell_ht - 2 ])
+       rotate([0,90,0])
+       cylinder(d = wh_dia, h = 20, center = false); 
     }
   }
 }
