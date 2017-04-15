@@ -108,7 +108,7 @@ module pc_shell()
 
    }
 
-   // Wall: +y end with cable cutout
+   // Wall: +y end
    translate([0, shell_y/2 - shell_wall,base_thick])
      cube([shell_x, shell_wall, shell_ht]);
 
@@ -117,27 +117,24 @@ module pc_shell()
      cube([shell_x, shell_wall, shell_ht]);
 
    // Wall: x=0 side
-   difference()
-   {
+
       translate([0, -shell_y/2, base_thick])
         cube([shell_wall, shell_y, shell_ht]);
-    // Cable cutout
-      translate([-1, shell_y/2 - cc_frm_side - cc_wid , shell_ht - cc_z])
-        cube([shell_wall + 2,cc_wid, 10],false);
-   }
+
 
    // Wall: +x side
+   difference()
+   {
       translate([shell_x - shell_wall, -shell_y/2, base_thick])
         cube([shell_wall, shell_y, shell_ht]);
-/* 
+
+    // Cable cutout
+      translate([shell_x - shell_wall-1, (shell_y/2 - cc_frm_side - cc_wid) , shell_ht - cc_z])
+        cube([shell_wall + 2,cc_wid, 10],false);
+   }
+ 
    // Tabs for mounting top cover
-   translate([shell_x/2,-(shell_y/2 + bt_len - tab_ofs),shell_ht+1.5])
-     rotate([0,180,90])
-        brd_tab();
-   translate([shell_x/2,(shell_y/2 + bt_len - tab_ofs),shell_ht+1.5])
-     rotate([0,180,-90])
-        brd_tab();
-*/
+
    translate([shell_x/2,-(shell_y/2 + cm_len - 0.05),0])
      rotate([0,0,180])
 	cover_mnt_tab();
