@@ -21,8 +21,9 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-16
 // Measured dimensions
  mag_thick = 4.82;	    // Magnet thickness (base to shell top)
  mag_shell_dia = 16.0;	    // Magnet shell OD
+ mag_shell_flat_dia = 11;   // Dia of flat of magent
  mag_stud_dia = 2.8;        // Dia of mounting magnet studs (4-40)
- mag_stud_len = 8.0;       // Height of stud from magnet back
+ mag_stud_len = 8.0;        // Height of stud from magnet back
  mag_washer_thick = 1.1;    // Thickness of washer
  mag_nut_thick = 2.4;       // Nut for stud thickness
  mag_washer_dia = 9.5;      // Diameter of washer for magnet stud
