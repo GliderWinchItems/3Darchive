@@ -2,7 +2,7 @@
  * Photocell sensor magnet mount for sheave codewheel
  * Reflective photosensors version, (H = horizontal over top)
  * Author: deh
- * Latest edit: 20170417
+ * Latest edit: 20170420
  */
 
  $fn=50;
@@ -10,24 +10,13 @@
 include <../library_deh/deh_shapes.scad>
 include <cwH_common.scad>
 
- module wedge(l, w, h)
- {
-   polyhedron(
-      points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
-       faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]] );
- }
-
-
 // Magnet mount dimensions
 include <../library_deh/mag_mount.scad>
-
-
 
  // Thickness of base for washer recess
  mag_stud_z = (mag_washer_thick +mag_nut_thick);
  mag_wash_recess_z = mag_stud_len - mag_stud_z;    
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
-
 
 module tube(d1,d2,ht)
 {
@@ -38,104 +27,21 @@ module tube(d1,d2,ht)
    }
 }
 
-
-
-// Triangular mag-mount base
-   eb_ofs_x = (shell_x + spacer_thick) + tab_thick;
-   eb_ofs_y = (shell_y/2 + tab_len);
-   eb_len = tab_len + tab_overlap;	// Length of end tabs
-   eb_ofs_z = shell_ht - cover_depth + 25;
-   eb_len2 = eb_ofs_z;	// Length of center/back tab
-
 module pc_shell()
 {
-
    // Base plate
    translate([0,-shell_y/2,0])
-   cube([shell_x,shell_y,base_thick],false);
+      cube([shell_x,shell_y,base_thick],false);
 
-   // Wall: +y end
-   translate([0, shell_y/2 - shell_wall,base_thick])
-     cube([shell_x, shell_wall, shell_ht]);
-
-   // Wall: -y end 
-   translate([0, -shell_y/2,base_thick])
-     cube([shell_x, shell_wall, shell_ht]);
-
-   // Wall: x=0 side
-   translate([0, -shell_y/2, base_thick])
-     cube([shell_wall, shell_y, shell_ht]);
-
-   // Spacer between box and magnet base 
-   translate([shell_x, -shell_y/2, 0])
-   {
-     cube([spacer_thick, shell_y, shell_ht-cover_depth]);
-   }
-
-   // Wall: +x side
-   difference()
-   {
-      translate([shell_x - shell_wall, -shell_y/2, base_thick])
-        cube([shell_wall, shell_y, shell_ht]);
-      translate([shell_x - 12, -shell_y/2,base_thick])
-       rotate([0,0,90])
- 	cable_cutout();
-   }
-   
    // Posts for screw mounting of pc board
-   translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) pc_posts4();
-
-   // Tabs for mounting top cover
-   translate([shell_x/2,(shell_y/2 + cm_len - shell_wall),0])
-	cover_mnt_tab();
-
-   translate([shell_x/2,-(shell_y/2 + cm_len - shell_wall),0])
-      rotate([0,0,180])
-	cover_mnt_tab();
-
-   // Compute triangle sides
-   tt_x = eb_ofs_z;
-   tt_y = eb_ofs_y;
-   tt_l = sqrt(tt_x*tt_x + tt_y*tt_y);
- translate([eb_ofs_x,eb_ofs_y,tab_dia/2])
- {
-   rotate([0,90,-90])
-     rotate([90,-90,0])
-   {
-     {
-       // Triangular base with screw holes for magnets
-       difference()
-       {
-         union()  // Triangular base, rounded ends
-         {
-           rounded_triangle(tt_l, tt_l, 2*tt_y, tab_thick, tab_dia);
-         }
-         union() // Punch holes for magnet studs
-         {
-           cylinder(d=tab_hole, h=40, center= false);
-
-           translate([2*tt_y,0,0])
-              cylinder(d=tab_hole, h=40, center= false);
-
-           translate([tt_y,tt_x,0])
-	     cylinder(d=tab_hole, h=40, center= false);
-         }
-       }
-     }
-   }
- }
- // Add fillet where base meets spacer
- fil_rad = 3;
-  translate([eb_ofs_x-tab_thick,-shell_y/2,shell_ht-cover_depth])
-   rotate([0,180,0])
-   rotate([-90,0,0])
-    fillet(fil_rad,shell_y);
+   translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) 
+      pc_posts4();
 }
-
 
 module pc_posts_pair()
 {
    tube(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
+
    translate([0,-pcps_space_y,0])
       tube(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
 }
@@ -143,42 +49,17 @@ module pc_posts_pair()
 module pc_posts4()
 {
    pc_posts_pair();
+
    translate([pcps_space_x,0,0])
      pc_posts_pair();
 }
 
-
 module cable_cutout()
 {
-
    // Two telephone type cables
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
     rotate([0,90,90])
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
-}
-
-module rounded_line_ridge(rad, len, ht)
-{
-   translate([0,rad,ht])
-   { 
-     rotate([-90,0,0])
-     {
-       difference()
-       {
-         translate([0, 0, -rad/2rad])
-           minkowski()
-           {
-             sphere(rad);
-             cylinder(h = len, 
-                      r = rad*(1/16),
-                      center = false);
-           }
-         translate([-rad*2,0,-rad])
-           cube([rad*4, rad*2, len+2*rad],false);
-       }
-     }
-   }
-   translate([-rad,0,0])cube([rad*2,len+rad,ht]);
 }
 
    // Cutout for reflective photosensors
@@ -202,14 +83,10 @@ module ps_cutout()
 
 module cover_mnt_tab()
 {
-  difference()
-  {
-    union()
-    {
       rotate([0,0,-90])
         eye_bar(cm_od,cm_id,cm_len,shell_ht - cov_ofs);
-
-      translate([cm_len+(cm_od*(3/4)),-cm_len,shell_ht - cov_ofs])
+/*
+      translate([cm_len+(cm_od*(3/4)),-cm_len,shell_ht - cov_ofs + 0.1])
         rotate([-90,0,0])
           rotate([0,0,90])
             wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
@@ -218,16 +95,88 @@ module cover_mnt_tab()
         rotate([0,0,-90])
           rotate([0,-90,0])
             wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
-    }
-    union()
-    {
-      translate([-cm_od/2-20,-cm_od/2-3,0])
-        wedge(cm_od+80,cm_od+10,cm_od/2+10);
-    }
+*/
+}
+/* ------------------------------------------------------------------- */
+pt_screw_dia = 3.3;	// Self-tapping screw diameter
+pt_rad_tab = 20;	// End mount radius
+pt_thick = base_thick;	// Thickness of platform
+pt_len_x = sp_x+base_rad*2;
+pt_len_y = shell_x*2 - 19;
+
+ww_delta = 1;
+ww1_ofs_x = 100-42;
+ww1_ofs_y = 0;
+ww2_ofs_x = -45-24+7;
+ww2_ofs_y = 0;
+ww_len_y = pt_len_y+18;
+ww3_ofs_x = -ww1_ofs_x - (shell_wall * 2);
+ww3_ofs_y =  ww_len_y/2 - shell_wall + ww_delta;
+ww4_ofs_x =  ww3_ofs_x;
+ww4_ofs_y = -ww3_ofs_y - shell_wall;
+ww_len_x = (ww1_ofs_x * 2) + (shell_wall * 3);
+
+module walls()
+{
+  difference()
+  {
+    rounded_rim(ww_len_x, ww_len_y, shell_ht, 2, shell_wall);
+
+    // Cable cutout for one telephone type cable
+    translate([-70,ww4_ofs_y + 14,0])
+      cable_cutout();
   }
 }
 
-module total()
+
+module platform()
+{
+ difference()
+ {
+   union()
+   {
+      translate([0,0,0])
+         rounded_rectangle(sp_x+base_rad*2,ww_len_y - 2*shell_wall,base_thick,base_rad);
+   }
+   union()
+   {
+      translate([-sp_x/2,0,0])
+        cylinder(d = pt_screw_dia, h = 20, center = false);   
+   
+      translate([sp_x/2,sp_y/2,0])
+        cylinder(d = pt_screw_dia, h = 20, center = false);
+      
+      translate([sp_x/2,-sp_y/2,0])
+        cylinder(d = pt_screw_dia, h = 20, center = false);
+
+      translate([-25,-25,-.1])
+        cube([50,50,base_thick+2],center=false);
+   }
+ }
+}
+
+
+
+cm_ofs_y = -30;
+cm1_ofs_x =  ww2_ofs_x - cm_len;
+cm2_ofs_x = -ww2_ofs_x + cm_len - shell_wall;
+
+module cover_mnt_tabs()
+{
+   translate([cm1_ofs_x,cm_ofs_y,0])
+     rotate([0,0,90])
+      cover_mnt_tab();
+
+   translate([cm1_ofs_x,-cm_ofs_y,0])
+     rotate([0,0,90])
+      cover_mnt_tab();
+
+   translate([cm2_ofs_x + shell_wall,0,0])
+     rotate([0,0,-90])
+      cover_mnt_tab();
+}
+
+module oneboard()
 {
   difference()
   {
@@ -240,13 +189,87 @@ module total()
        // Cutout for reflective photosensors
        ps_cutout();
 
-       // Hole in triangular base for CAN cables
-       translate([eb_ofs_x - tab_thick - spacer_thick, -25, shell_ht - 2 ])
-       rotate([0,90,0])
-       cylinder(d = wh_dia, h = 20, center = false); 
     }
   }
 }
 
+module composite()
+{
+   rotate([0,0,90])
+   translate([-57.5,0,0]) 
+   {
+      translate([0,-14,0])
+        rotate([0,0,0])
+          oneboard();
+
+      translate([115.2,16,0])
+        rotate([0,0,180])
+          oneboard();
+   }
+   translate([0,0,0])
+      platform();
+
+   walls();
+   cover_mnt_tabs();
+}
+
+/* Add mounting for light shield attachment
+   on underside.
+*/
+
+ls_post_dia = 4.5;		// Post diameter
+ls_post_ht = 10;		// Height of post
+ls_screw_dia = pcps_screw_dia;	// Self-tapping screw diameter
+ls_screw_ht = ls_post_ht - 3;	// Depth of screw hole
+ls_post_ofs_x = 17;		// Offset from C/L
+
+module lightshield_posts()
+{
+   translate([ls_post_ofs_x,0,0])
+      cylinder(d = ls_post_dia, h = ls_post_ht, center = false);
+
+   translate([-ls_post_ofs_x,0,0])
+      cylinder(d = ls_post_dia, h = ls_post_ht, center = false);
+}
+
+module lightshield_screws()
+{
+   translate([ls_post_ofs_x,0,0])
+     cylinder(d = ls_screw_dia, h = ls_screw_ht, center = false);
+
+   translate([-ls_post_ofs_x,0,0])
+     cylinder(d = ls_screw_dia, h = ls_screw_ht, center = false);
+}
+
+/* Add small drain hole if for some reason water gets in */
+dn_dia = 1;
+dn_ht = 100;
+dn_ofs_x = -ww_len_x/2;
+dn_ofs_y = -ww_len_y/2;
+
+module drain_hole()
+{
+   translate([dn_ofs_x,dn_ofs_y,2.5])
+     rotate([-45,45,0])
+      cylinder(d = dn_dia, h = dn_ht, center= true);
+
+}
+
+module total()
+{  
+   difference()
+   {
+      union()
+      {
+         composite();
+         lightshield_posts();
+      }
+      union()
+      {
+         lightshield_screws();
+	 drain_hole();
+      }
+   }
+}
 total();
 

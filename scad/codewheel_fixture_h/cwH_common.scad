@@ -44,7 +44,7 @@ base_x		= mag_spacing_x + 2*base_rad;
 base_y		= mag_spacing_y + 2*base_rad;
 
 shell_wall = 2;	// Enclosure wall thickness
-shell_ht = 25 + 5;	;	// Enclosure wall height
+shell_ht = 40;	;	// Enclosure wall height
 
 shell_x = pcwid + 2*shell_wall;
 shell_y = pclen + 2*shell_wall;
@@ -79,12 +79,19 @@ tab_hole = mag_stud_dia + 0.3;	// Magnet stud hole in triangular base
 // CAN bus cable cutout in wall
 cc_wid = 6.5;		// Telephone type cable width
 cc_thick = 10;	// Thickness
-cc_frm_top =  5;		// Offset from top of side
+cc_frm_top =  3;	// Offset from top of side
 cc_frm_side = 8;	// Offset from side
 cc_sense_dia = 4;	// Sensor cable dia
 
  cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
  cc_ofs_x = 20;
  cc_ofs_y = -25;
+
+// Lightshield mounting
+ls_post_dia = 4.5;		// Post diameter
+ls_post_ht = 10;		// Height of post
+ls_screw_dia = pcps_screw_dia;	// Self-tapping screw diameter
+ls_screw_ht = ls_post_ht - 3;	// Depth of screw hole
+ls_post_ofs_x = 17;		// Offset from C/L
 
 

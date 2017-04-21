@@ -71,6 +71,23 @@ module rounded_rectangle(l,w,h,rad)
   }
 }
 
+/* ***** rounded rim *****
+module rounded_rim(l,w,h,rad,tk);
+l = length (inside, x direction)
+w = width (inside, y direction)
+h = thickness (z direction)
+rad = radius of corners
+tk = thickness of rim wall
+*/
+module rounded_rim(l,w,h,rad,tk)
+{
+  difference()
+  {
+    rounded_rectangle(l+2*tk,w+2*tk,h,rad);
+    rounded_rectangle(l, w, h, rad);
+  }
+}
+
 /* ***** wedge *****
 l = length
 w = width
