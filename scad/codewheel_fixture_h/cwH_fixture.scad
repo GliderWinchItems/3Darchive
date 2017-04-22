@@ -1,4 +1,4 @@
-/* File: cwV_fixture.scad
+/* File: cwH_fixture.scad
  * Photocell sensor magnet mount for sheave codewheel
  * Reflective photosensors version, (H = horizontal over top)
  * Author: deh
@@ -217,11 +217,6 @@ module composite()
    on underside.
 */
 
-ls_post_dia = 4.5;		// Post diameter
-ls_post_ht = 10;		// Height of post
-ls_screw_dia = pcps_screw_dia;	// Self-tapping screw diameter
-ls_screw_ht = ls_post_ht - 3;	// Depth of screw hole
-ls_post_ofs_x = 17;		// Offset from C/L
 
 module lightshield_posts()
 {

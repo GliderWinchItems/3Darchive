@@ -85,7 +85,7 @@ module oneside()
 }
 
 tw_sep = 36.8;	// Separation distance of windows
-tw_screw_dia = 3.3;	// Screw hole dia
+tw_screw_dia = 3.0;	// Screw hole dia
 tw_ofs_x = pl_x - 3;
 tw_head_dia = 5.8;	// Screw head dia+
 tw_head_depth = 1.5;	// Head recess
@@ -97,6 +97,8 @@ wg_ofs_x1 = -37;
 wg_ofs_x2 = 37 + 3;
 wg_ofs_y1 = 55;
 
+wg_dx = 2;
+wg_dy = -1;
 
 module total()
 {  
@@ -119,17 +121,17 @@ module total()
      }
      union()
      { // Mounting screw holes
-	translate([0,ls_post_ofs_x,0])
+	translate([wg_dx,ls_post_ofs_x+wg_dy,0])
           cylinder(d = tw_screw_dia, h = 20, center=true);
 
-	translate([0,-ls_post_ofs_x,0])
+	translate([wg_dx,-ls_post_ofs_x+wg_dy,0])
           cylinder(d = tw_screw_dia, h = 20, center=true);
 
        // Recess for screw head
-	translate([0,ls_post_ofs_x,tw_ofs_z])
+	translate([wg_dx,ls_post_ofs_x+wg_dy,tw_ofs_z])
           cylinder(d = tw_head_dia, h = 20, center=false);
 
-	translate([0,-ls_post_ofs_x,tw_ofs_z])
+	translate([wg_dx,-ls_post_ofs_x+wg_dy,tw_ofs_z])
           cylinder(d = tw_head_dia, h = 20, center=false);
      }
    }
