@@ -13,11 +13,11 @@ $fn = 100;
 
 rim_dia = 120;
 rim_wid = 1;
-rim_thick = 2;
+rim_thick = 2.0;
 
-hub_thick = 4;	//
-hub_hole_dia = mag20_stud_dia + .3; // Mounting hole
-hub_disc_dia = 60;
+hub_thick = 2;	//
+hub_hole_dia = mag20_stud_dia; // Mounting hole
+hub_disc_dia = 80;
 
 hub_washer_dia = mag20_washer_dia + 1.0;
 
@@ -25,7 +25,7 @@ seg_dia_inner = hub_disc_dia;
 seg_dia_outer = rim_dia;
 seg_thick = rim_thick;	// Thickness of segments
 
-nsegs = 10;	// Number of segments
+nsegs = 16;	// Number of segments
 
 
 module segment()

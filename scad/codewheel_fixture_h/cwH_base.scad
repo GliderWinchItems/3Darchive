@@ -1,4 +1,4 @@
-/* File: cwV_fixture.scad
+/* File: cwH_base.scad
  * Photocell sensor magnet mount for sheave codewheel
  * Reflective photosensors version, (H = horizontal over top)
  * Author: deh

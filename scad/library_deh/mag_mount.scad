@@ -25,8 +25,10 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-16
  mag_stud_dia = 2.8;        // Dia of mounting magnet studs (4-40)
  mag_stud_len = 8.0;        // Height of stud from magnet back
  mag_washer_thick = 1.1;    // Thickness of washer
- mag_nut_thick = 2.4;       // Nut for stud thickness
- mag_washer_dia = 9.5;      // Diameter of washer for magnet stud
+ mag_nut_thick = 2.4;       // Stud nut (M3) thickness
+ mag_nut_hex_flat = 5.41;   // Nut across flats
+ mag_nut_hex_peak = 6.20;   // Nut across peaks (also dia of nut)
+ mag_washer_dia = 7.1; // 9.5;      // Diameter of washer for magnet stud
  mag_washer_dia_extra = 2;  // Washer slop
 
 /*
@@ -85,4 +87,9 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-25
  mag25_nut_thick = 2.4;       // Nut for stud thickness
  mag25_washer_dia = 9.5;      // Diameter of washer for magnet stud
  mag25_washer_dia_extra = 2;  // Washer slop
+
+// Cylindrical magnets
+mag_cyl_dia = 6.5; 
+mag_cyl_ht = 5.05;
+
 

@@ -136,7 +136,7 @@ module platform()
    union()
    {
       translate([0,0,0])
-         rounded_rectangle(sp_x+base_rad*2,ww_len_y - 2*shell_wall,base_thick,base_rad);
+         rounded_rectangle(sp_x + 5,ww_len_y,base_thick,base_rad);
    }
    union()
    {
@@ -149,13 +149,16 @@ module platform()
       translate([sp_x/2,-sp_y/2,0])
         cylinder(d = pt_screw_dia, h = 20, center = false);
 
-      translate([-25,-25,-.1])
-        cube([50,50,base_thick+2],center=false);
+      // Cutout so as not to cover photocell cutout
+      translate([-20, 15,-.1])
+        cube([40,40,base_thick+2],center=false);
+
+      translate([-20,-55,-.1])
+        cube([40,40,base_thick+2],center=false);
+
    }
  }
 }
-
-
 
 cm_ofs_y = -30;
 cm1_ofs_x =  ww2_ofs_x - cm_len;
@@ -195,17 +198,19 @@ module oneboard()
 
 module composite()
 {
+
    rotate([0,0,90])
    translate([-57.5,0,0]) 
    {
-      translate([0,-14,0])
+      translate([115.2-55,-15,0])
         rotate([0,0,0])
           oneboard();
 
-      translate([115.2,16,0])
+      translate([55,14,0])
         rotate([0,0,180])
           oneboard();
    }
+
    translate([0,0,0])
       platform();
 
@@ -214,10 +219,7 @@ module composite()
 }
 
 /* Add mounting for light shield attachment
-   on underside.
-*/
-
-
+   on underside. */
 module lightshield_posts()
 {
    translate([ls_post_ofs_x,0,0])
