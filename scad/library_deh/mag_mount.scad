@@ -53,7 +53,7 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-20
 */
  mag20_thick = 7.11;	    // Magnet thickness (base to shell top)
  mag20_shell_dia = 20.2;    // Magnet shell OD
- mag20_stud_dia = 4.53;     // Dia of mounting magnet stud at base
+ mag20_stud_dia = 3.75;     // Dia of mounting magnet stud at base
  mag20_stud_len = 7.75;       // Height of stud from magnet back
  mag20_washer_thick = 0.85;    // Thickness of washer
  mag20_nut_thick = 2.93;       // Nut for stud thickness

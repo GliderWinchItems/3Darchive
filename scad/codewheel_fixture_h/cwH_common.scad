@@ -11,7 +11,7 @@ sp_ht = 43;	// Height: plate-to-encoder disk c/l
 sp_dia = 20;	// Post diameter
 sp_x = 149; 	// Spacing in front-back direction
 sp_y = 85;	// Spacing in top-bottom direction
-sp_ht_tol = 12; // Height variation tolerance
+sp_ht_tol = 14; // Height variation tolerance
 
 // Magnets used: post mnts = mag_thick, encoder mnts = mag20_thick
 sp_z = sp_ht - mag_thick + mag20_thick; // Height to print posts
