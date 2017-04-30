@@ -35,6 +35,7 @@ pcthick = 1.7;	// Thickness of board
  cm_od = 10;	// Diameter of cover mounting post
  cm_len = cm_od/2 + 4;
  cm_id = 2.6;	// Self-tapping screw hole diameter
+ cm_id2 = 3.3;  // Non-thread hole for self-tap screw
  cm_wg = 5;	// Bottom wedge	
 
 // Base
@@ -44,10 +45,12 @@ base_x		= mag_spacing_x + 2*base_rad;
 base_y		= mag_spacing_y + 2*base_rad;
 
 shell_wall = 2;	// Enclosure wall thickness
-shell_ht = 40;	;	// Enclosure wall height
+shell_ht = 44;	;	// Enclosure wall height
 
 shell_x = pcwid + 2*shell_wall;
 shell_y = pclen + 2*shell_wall;
+
+shell_rad = 2;  // Rounded corners of walls
 
 tab_len = 10;
 tab_dia = mag_shell_dia;
@@ -72,13 +75,13 @@ tab_hole = mag_stud_dia + 0.3;	// Magnet stud hole in triangular base
  pcps_screw_dia = 2.6;	// Screw diameter
  pcps_screw_ht = 5;	// Screw thread length
 
- pcps_post_ht = 5+1;	// PC mounting post height
+ pcps_post_ht = 5+1+4;	// PC mounting post height
  pcps_ofs_y = pclen/2 - pcps_frm_top;
  pcps_ofs_x = shell_wall + pcps_frm_side;
 
-// CAN bus cable cutout in wall
+// CAN bus cable cutout in wall (of 'fixture.scad)
 cc_wid = 6.5;		// Telephone type cable width
-cc_thick = 10;	// Thickness
+cc_thick = 10;		// Thickness of two
 cc_frm_top =  3;	// Offset from top of side
 cc_frm_side = 8;	// Offset from side
 cc_sense_dia = 4;	// Sensor cable dia
@@ -94,4 +97,21 @@ ls_screw_dia = pcps_screw_dia;	// Self-tapping screw diameter
 ls_screw_ht = ls_post_ht - 3;	// Depth of screw hole
 ls_post_ofs_x = 17;		// Offset from C/L
 
+pt_screw_dia = 3.3;	// Self-tapping screw diameter
+pt_rad_tab = 20;	// End mount radius
+pt_thick = base_thick;	// Thickness of platform
+pt_len_x = sp_x+base_rad*2;
+pt_len_y = shell_x*2 - 19;
+
+ww_delta = 1;
+ww1_ofs_x = 100-42;
+ww1_ofs_y = 0;
+ww2_ofs_x = -45-24+7;
+ww2_ofs_y = 0;
+ww_len_y = pt_len_y+18;
+ww3_ofs_x = -ww1_ofs_x - (shell_wall * 2);
+ww3_ofs_y =  ww_len_y/2 - shell_wall + ww_delta;
+ww4_ofs_x =  ww3_ofs_x;
+ww4_ofs_y = -ww3_ofs_y - shell_wall;
+ww_len_x = (ww1_ofs_x * 2) + (shell_wall * 3);
 

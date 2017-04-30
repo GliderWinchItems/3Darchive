@@ -56,7 +56,7 @@ module pc_posts4()
 
 module cable_cutout()
 {
-   // Two telephone type cables
+   // One telephone type cables
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
     rotate([0,90,90])
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
@@ -98,29 +98,12 @@ module cover_mnt_tab()
 */
 }
 /* ------------------------------------------------------------------- */
-pt_screw_dia = 3.3;	// Self-tapping screw diameter
-pt_rad_tab = 20;	// End mount radius
-pt_thick = base_thick;	// Thickness of platform
-pt_len_x = sp_x+base_rad*2;
-pt_len_y = shell_x*2 - 19;
-
-ww_delta = 1;
-ww1_ofs_x = 100-42;
-ww1_ofs_y = 0;
-ww2_ofs_x = -45-24+7;
-ww2_ofs_y = 0;
-ww_len_y = pt_len_y+18;
-ww3_ofs_x = -ww1_ofs_x - (shell_wall * 2);
-ww3_ofs_y =  ww_len_y/2 - shell_wall + ww_delta;
-ww4_ofs_x =  ww3_ofs_x;
-ww4_ofs_y = -ww3_ofs_y - shell_wall;
-ww_len_x = (ww1_ofs_x * 2) + (shell_wall * 3);
 
 module walls()
 {
   difference()
   {
-    rounded_rim(ww_len_x, ww_len_y, shell_ht, 2, shell_wall);
+    rounded_rim(ww_len_x, ww_len_y, shell_ht, shell_rad, shell_wall);
 
     // Cable cutout for one telephone type cable
     translate([-70,ww4_ofs_y + 14,0])
@@ -135,11 +118,13 @@ module platform()
  {
    union()
    {
+      // Base plate
       translate([0,0,0])
          rounded_rectangle(sp_x + 5,ww_len_y,base_thick,base_rad);
    }
    union()
    {
+      // Holes for mounting to "T" frame
       translate([-sp_x/2,0,0])
         cylinder(d = pt_screw_dia, h = 20, center = false);   
    
