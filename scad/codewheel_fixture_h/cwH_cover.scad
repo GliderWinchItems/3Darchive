@@ -29,7 +29,7 @@ cc_ofs_cz = cvr_wall + 3;  // Offset for cable cutout
 win_len_x = 50;
 win_len_y = 30;
 win_r = 5.0;  	// Recess rim for gluing in clear window
-win_r_z = 10.0 + cc_thick/2; 	// Z offset for recess rim
+win_r_z = cvr_thick/2; 	// Z offset for recess rim
 
 module window()
 {
@@ -40,12 +40,17 @@ module window()
 
 }
 
+// Cover has to fit over cwH_fixture, so increase the dimensions
+cw_slop = 0.5;	// Slop is short for clearance
+cw_len_x = ww_len_x + shell_wall + cw_slop;
+cw_len_y = ww_len_y + shell_wall + cw_slop;
+
 module walls()
 {
   // Top, when installed, but bottom on scad
   difference()
   {
-    rounded_rectangle(ww_len_x, ww_len_y, cvr_thick, shell_rad);
+    rounded_rectangle(cw_len_x, cw_len_y, cvr_thick, shell_rad);
     union()
     {
       // Cutouts for clear plastic windows
@@ -60,12 +65,13 @@ module walls()
   // Walls/rim of cover
   difference()
   {
-    rounded_rim(ww_len_x, ww_len_y, cvr_wall, shell_rad, cvr_thick);
+    rounded_rim(cw_len_x, cw_len_y, cvr_wall, shell_rad, cvr_thick);
 
     // Cable cutout/notch for one telephone type cable
-    translate([70-cc_ofs_x,-70, 10])
+    translate([-(70-cc_ofs_x), 70-15, 10])
       cable_cutout();
   }
+
   // Mounting tabs
     cover_mnt_tabs();
 }
@@ -80,7 +86,7 @@ module cable_cutout()
 module cover_mnt_tab()
 {
       rotate([0,0,-90])
-        eye_bar(cm_od,cm_id2,cm_len,cvr_wall);
+        eye_bar(cm_od,cm_id2,cm_len - (shell_wall + cw_slop) ,cvr_wall);
 }
 cm_ofs_y = -30;
 cm1_ofs_x =  ww2_ofs_x - cm_len;
