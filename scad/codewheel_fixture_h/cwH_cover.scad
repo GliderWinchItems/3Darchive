@@ -41,9 +41,9 @@ module window()
 }
 
 // Cover has to fit over cwH_fixture, so increase the dimensions
-cw_slop = 0.5;	// Slop is short for clearance
-cw_len_x = ww_len_x + shell_wall + cw_slop;
-cw_len_y = ww_len_y + shell_wall + cw_slop;
+cw_slop = 0.8;	// Slop is short for clearance
+cw_len_x = ww_len_x + (shell_wall*2) + cw_slop;
+cw_len_y = ww_len_y + (shell_wall*2) + cw_slop;
 
 module walls()
 {

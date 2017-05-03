@@ -85,17 +85,7 @@ module cover_mnt_tab()
 {
       rotate([0,0,-90])
         eye_bar(cm_od,cm_id,cm_len,shell_ht - cov_ofs);
-/*
-      translate([cm_len+(cm_od*(3/4)),-cm_len,shell_ht - cov_ofs + 0.1])
-        rotate([-90,0,0])
-          rotate([0,0,90])
-            wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
 
-      translate([-(cm_len + (cm_od*(3/4))),-cm_len,0])
-        rotate([0,0,-90])
-          rotate([0,-90,0])
-            wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
-*/
 }
 /* ------------------------------------------------------------------- */
 

@@ -1,6 +1,7 @@
 /* ds_fixture.scad
  * Enclosure/mount for drive shaft
- * Date: 20170430
+ * Interupt type sensor
+ * Date: 20170501
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -10,7 +11,6 @@ include <ds_common.scad>
 
  $fn=50;
 
-
 // Magnet mount dimensions
 include <../library_deh/mag_mount.scad>
 
@@ -19,69 +19,122 @@ include <../library_deh/mag_mount.scad>
  mag_wash_recess_z = mag_stud_len - mag_stud_z;    
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
 
-module tube(d1,d2,ht)
+sm_len_y = 18.55;	// Length
+sm_len_x = 10.0;	// Width of pair
+sm_hole_x = 16.0;	// Sensor mnt board hole, +/-
+sm_hole_y = 8;	
+sm_screw_dia = 3.3;
+sm_brd_y = 26;	// Length of carrier board
+sm_brd_x = 50;	
+
+module sensor_mnt()
 {
-   difference()
-   {
-     cylinder(d = d1, h = ht, center = false);
-     cylinder(d = d2, h = ht + .001, center = false);
-   }
+   translate([-sm_len_x/2, -sm_len_y/2, 0])
+   cube([sm_len_x, sm_len_y, 20], center = false);
+   
+   translate([ sm_hole_x,sm_hole_y,0])
+     cylinder(d = sm_screw_dia, h = 20, center = false);
+
+   translate([-sm_hole_x,-sm_hole_y,0])
+     cylinder(d = sm_screw_dia, h = 20, center = false);
 }
+
+pcs_slop = 2;
+pcs_len_x = shell_x + pcs_slop;
+pcs_len_y = shell_y + 6 + pcs_slop;
 
 module pc_shell()
 {
-
-
    // Base plate
-   translate([0,-shell_y/2,0])
-      cube([shell_x+2,shell_y+2,base_thick],false);
+   translate([-pcs_len_x/2+.1,-pcs_len_y/2 + sm_brd_y/2,0])
+      cube([pcs_len_x+.2,pcs_len_y+.1,base_thick], center = false);
 
    // Posts for screw mounting of pc board
-   translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) 
-      pc_posts4();
+   translate([-pcs_len_x/2,0,0])
+      translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) 
+         pc_posts4();
 }
 
 module pc_posts_pair()
 {
-   tube(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
+   tubedeh(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
 
    translate([0,-pcps_space_y,0])
-      tube(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
+      tubedeh(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
 }
 
 module pc_posts4()
 {
    pc_posts_pair();
 
-   translate([pcps_space_x,0,0])
+   translate([pcps_space_x-0.5,0,0])
      pc_posts_pair();
+}
+
+pcs_mag_dia = mag_stud_dia + 0.5;// Magnet stud dia
+pcs_mag_stud_len = mag_stud_len + 0.5;
+pcs_mag_ofs_x = 22;	// Position of sensor end magnets
+pcs_mag_ofs_y1 = 25; 	// Position of sensor end magnets
+pcs_mag_ofs_y2 = -30;  	// Position of engine end magnet
+
+mag_bot_thick = 1;	// thickness of bottom-to-washer
+mag_post_dia = mag_washer_dia + 2;	// OD of magnet post
+mag_post_ht = mag_stud_len + 1;	 // Height of mag post
+
+po_hex_nut = mag_nut_hex_peak + 0.4; // Dia for hex nut pocket
+po_hex_nut_ht = mag_nut_thick + .25; // Depth of pocket
+
+module mag_mnt_post()
+{
+echo (mag_post_dia);
+       cylinder(d = mag_post_dia, h = mag_post_ht, center = false);
+}
+module mag_mnt_post_hole()
+{
+   // Stud hole
+   cylinder (d = pcs_mag_dia, h = pcs_mag_stud_len, center = false);
+
+   // Washer pocket
+   translate([0,0,mag_bot_thick])
+     cylinder(d = mag_washer_dia, h = mag_washer_thick + .25, center = false);
+
+   // Nut pocket
+   translate([0,0,mag_bot_thick + mag_washer_thick - 0.1])
+      linear_extrude(height = po_hex_nut_ht, center=false)
+         circle(d = po_hex_nut, $fn=6);      
+}
+// Additions
+module mag_mnt_posts()
+{
+   translate([0,pcs_mag_ofs_y2,0])
+    mag_mnt_post();
+
+   translate([pcs_mag_ofs_x,pcs_mag_ofs_y1,0])
+    mag_mnt_post();
+
+   translate([-pcs_mag_ofs_x,pcs_mag_ofs_y1,0])
+    mag_mnt_post();
+}
+// Subtractions
+module mag_mnt_holes()
+{
+   translate([0,pcs_mag_ofs_y2,0])
+    mag_mnt_post_hole();
+
+   translate([pcs_mag_ofs_x,pcs_mag_ofs_y1,0])
+    mag_mnt_post_hole();
+
+   translate([-pcs_mag_ofs_x,pcs_mag_ofs_y1,0])
+    mag_mnt_post_hole();
+   
 }
 
 module cable_cutout()
 {
    // One telephone type cables
-   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z - cc_thick/2])
     rotate([0,90,90])
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
-}
-
-   // Cutout for reflective photosensors
-module ps_cutout()
-{
-  ps_wid = 4.7;	// Width of photosensor
-  ps_len = 6.5;	// Length of photosensor
-  ps_ht = 50;	// Punch through everything with big number
-  ps_space = 0;	// Spacing between (9.8 pc board layout)
-  ps_ofs_y = 24;	// Offset from board edge to side of photosensor
-  ps_ofs_x = 13;	// Offset from board edge to bottom of photosensor
-  ps_ofs_xx = pcwid + shell_wall - ps_ofs_x -ps_len;
-  ps_ofs_yy = pclen/2 - ps_wid - ps_ofs_y;
-   translate([ps_ofs_xx,ps_ofs_yy,-20])
-     cube([ps_len,ps_wid,ps_ht],center=false);
-
-  ps_ofs_yyy = ps_ofs_yy - ps_space - ps_wid;
-   translate([ps_ofs_xx,ps_ofs_yyy,-20])
-     cube([ps_len,ps_wid,ps_ht],center=false);
 }
 
 module cover_mnt_tab()
@@ -100,55 +153,24 @@ module cover_mnt_tab()
             wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
 */
 }
-/* ------------------------------------------------------------------- */
 
-ds_len_x = shell_y;
-ds_len_y = shell_x;
+ds_len_x = pcs_len_x - pcs_slop;
+ds_len_y = pcs_len_y - pcs_slop;
+ds_ht = shell_ht;
 
 module walls()
 {
-  difference()
+  translate([0,(sm_brd_y)/2,0])
   {
-    rounded_rim(ds_len_x, ds_len_y, shell_ht, shell_rad, shell_wall);
+    difference()
+    {
+      rounded_rim(ds_len_x, ds_len_y, ds_ht, shell_rad, shell_wall);
 
-    // Cable cutout for one telephone type cable
-    translate([-70,ww4_ofs_y + 14,0])
-      cable_cutout();
+      // Cable cutout for one telephone type cable
+      translate([-35,ww4_ofs_y + 14,0])
+        cable_cutout();
+    }
   }
-}
-
-
-module platform()
-{
- difference()
- {
-   union()
-   {
-      // Base plate
-      translate([0,0,0])
-         rounded_rectangle(sp_x + 5,ww_len_y,base_thick,base_rad);
-   }
-   union()
-   {
-      // Holes for mounting to "T" frame
-      translate([-sp_x/2,0,0])
-        cylinder(d = pt_screw_dia, h = 20, center = false);   
-   
-      translate([sp_x/2,sp_y/2,0])
-        cylinder(d = pt_screw_dia, h = 20, center = false);
-      
-      translate([sp_x/2,-sp_y/2,0])
-        cylinder(d = pt_screw_dia, h = 20, center = false);
-
-      // Cutout so as not to cover photocell cutout
-      translate([-20, 15,-.1])
-        cube([40,40,base_thick+2],center=false);
-
-      translate([-20,-55,-.1])
-        cube([40,40,base_thick+2],center=false);
-
-   }
- }
 }
 
 cm_ofs_y = -30;
@@ -157,32 +179,47 @@ cm2_ofs_x = -ww2_ofs_x + cm_len - shell_wall;
 
 module cover_mnt_tabs()
 {
-   translate([cm1_ofs_x,cm_ofs_y,0])
-     rotate([0,0,90])
-      cover_mnt_tab();
-
-   translate([cm1_ofs_x,-cm_ofs_y,0])
-     rotate([0,0,90])
-      cover_mnt_tab();
-
-   translate([cm2_ofs_x + shell_wall,0,0])
+   translate([pcs_len_x/2+cm_len ,-cm_ofs_y,0])
      rotate([0,0,-90])
+      cover_mnt_tab();
+
+   translate([-pcs_len_x/2-cm_len ,-cm_ofs_y,0])
+     rotate([0,0, 90])
+      cover_mnt_tab();
+
+   translate([0,-pcs_len_y/2 + 2*shell_wall,0])
+     rotate([0,0,180])
       cover_mnt_tab();
 }
 
+smsb_z = 3.2;	// Height above bottom for sensor platform
+
 module oneboard()
 {
+sm_ofs_y = (shell_y - 1 + pcs_slop)/2;
   difference()
   {
     union()
     {
-        pc_shell();
+       pc_shell();
+
+       // Raised platform so sensor cross-bar is flush
+       translate([-sm_brd_x/2,sm_ofs_y -sm_brd_y/2 ,0])
+	   cube([sm_brd_x, sm_brd_y, smsb_z], center = false);
+
+       mag_mnt_posts();
+        
     }
     union()
     {
        // Cutout for reflective photosensors
-       ps_cutout();
+//       ps_cutout();
 
+       // Sensor cutout in bottom
+       translate([0,sm_ofs_y,0])
+          sensor_mnt();
+
+       mag_mnt_holes();
     }
   }
 }
@@ -190,39 +227,12 @@ module oneboard()
 module composite()
 {
 
-   rotate([0,0,90])
-   translate([-57.5-42,0,0]) 
    {
-      translate([115.2-55,-15,0])
-        rotate([0,0,0])
           oneboard();
-
-
    }
-  translate([14,-9.5,0])
-      walls();
+     walls();
   
-//   cover_mnt_tabs();
-}
-
-/* Add mounting for light shield attachment
-   on underside. */
-module lightshield_posts()
-{
-   translate([ls_post_ofs_x,0,0])
-      cylinder(d = ls_post_dia, h = ls_post_ht, center = false);
-
-   translate([-ls_post_ofs_x,0,0])
-      cylinder(d = ls_post_dia, h = ls_post_ht, center = false);
-}
-
-module lightshield_screws()
-{
-   translate([ls_post_ofs_x,0,0])
-     cylinder(d = ls_screw_dia, h = ls_screw_ht, center = false);
-
-   translate([-ls_post_ofs_x,0,0])
-     cylinder(d = ls_screw_dia, h = ls_screw_ht, center = false);
+   cover_mnt_tabs();
 }
 
 /* Add small drain hole if for some reason water gets in */
@@ -246,14 +256,14 @@ module total()
       union()
       {
          composite();
-//         lightshield_posts();
+
       }
       union()
       {
-//         lightshield_screws();
 //	 drain_hole();
       }
    }
+
 }
 total();
 
