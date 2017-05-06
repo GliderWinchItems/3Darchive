@@ -7,7 +7,7 @@
 
 include <../library_deh/deh_shapes.scad>
 include <../library_deh/mag_mount.scad>
-include <ds_common.scad>
+include <../drive_shaft/ds_common.scad>
 
 $fn = 100;
 
@@ -109,7 +109,7 @@ module hub()
 module total()
 {
 
-   segments();
+//   segments();
    hub();
 }
 

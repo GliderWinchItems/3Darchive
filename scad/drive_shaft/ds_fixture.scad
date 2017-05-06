@@ -11,9 +11,6 @@ include <ds_common.scad>
 
  $fn=50;
 
-// Magnet mount dimensions
-include <../library_deh/mag_mount.scad>
-
  // Thickness of base for washer recess
  mag_stud_z = (mag_washer_thick +mag_nut_thick);
  mag_wash_recess_z = mag_stud_len - mag_stud_z;    
@@ -142,17 +139,6 @@ module cover_mnt_tab()
 {
       rotate([0,0,-90])
         eye_bar(cm_od,cm_id,cm_len,shell_ht - cov_ofs);
-/*
-      translate([cm_len+(cm_od*(3/4)),-cm_len,shell_ht - cov_ofs + 0.1])
-        rotate([-90,0,0])
-          rotate([0,0,90])
-            wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
-
-      translate([-(cm_len + (cm_od*(3/4))),-cm_len,0])
-        rotate([0,0,-90])
-          rotate([0,-90,0])
-            wedge(shell_ht - cov_ofs,cm_len+cm_od/2,cm_len+cm_od/2-0.5);
-*/
 }
 
 ds_len_x = pcs_len_x - pcs_slop;
