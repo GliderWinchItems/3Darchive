@@ -1,6 +1,6 @@
 /* ds_code.scad
- * Codewheel for drive shaft
- * Date: 20170424
+ * Codewheel for drive shaft--reflective
+ * Date: 20170506
  * #### Be sure to use latest openscad! ####
  * #### or rotate_extrude will not work ####
  */
@@ -9,7 +9,7 @@ include <../library_deh/deh_shapes.scad>
 include <../library_deh/mag_mount.scad>
 include <../drive_shaft/ds_common.scad>
 
-$fn = 100;
+$fn = 200;
 
 
 
@@ -87,8 +87,12 @@ module hub()
          // Collar around shaft
          tubedeh(od,shaft_dia,hub_len);
 
-         // Disc from shaft to segments
+         // Disc from shaft to first step
          tubedeh(seg_dia_inner+.01,od,hub_thick1);
+
+         // Disc from first step to cup wall
+         tubedeh(rrim_dia, seg_dia_inner,rhub_thick1);
+
 
          // Hub tabs for bolting halves together
          hub_tabs();
@@ -106,11 +110,25 @@ module hub()
    }
 }
 
+module cup()
+{
+rotate_extrude(convexity = 10)
+translate([rrim_dia, 0, 0])
+ {
+   difference()
+   {
+    square([3,30]);
+    circle(d = 3);
+   }
+ }
+}
+
 module total()
 {
 
 //   segments();
-   hub();
+//   hub();
+translate([0,0,0]) cup();
 }
 
 

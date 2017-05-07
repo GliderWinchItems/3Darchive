@@ -1,7 +1,7 @@
 /* ds_fixture_r.scad
  * Enclosure/mount for drive shaft
  * Reflective type sensor
- * Date: 20170505
+ * Date: 20170506 v2
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -11,7 +11,7 @@ include <../drive_shaft/ds_common.scad>
 
  $fn=50;
 
-// Id the part
+// **** Id the part ***
 module id()
 {
  {
@@ -22,7 +22,7 @@ module id()
 
  translate([10,-28, base_thick]) 
   linear_extrude(2)
-   text("2017.05.06",size = 3);
+   text("2017 05 06 v2",size = 3);
  }
 }
 
@@ -74,7 +74,7 @@ base_x		= mag_spacing_x + 2*base_rad;
 base_y		= mag_spacing_y + 2*base_rad;
 
 shell_wall = 2;	// Enclosure wall thickness
-shell_ht = 25 + 5;	;	// Enclosure wall height
+shell_ht = 35;	;	// Enclosure wall height
 
 shell_x = pcwid + 2*shell_wall;
 shell_y = pclen + 2*shell_wall;
@@ -168,7 +168,7 @@ cc_sense_dia = 4;	// Sensor cable dia
 module cable_cutout()
 {
  cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
- cc_ofs_x = 20;
+ cc_ofs_x = 20 + 14;
  cc_ofs_y = -25;
    // Two telephone type cables
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
@@ -287,6 +287,17 @@ module mag_mnt_holes()
     mag_mnt_post_hole();
  
 }
+dh_dia1 = 0.4;  // Drain hole diameter
+dh_dia2 = 8;
+dh_ofs_y = -42.5;
+dh_ofs_x = 55;
+
+module drain_hole()
+{
+   translate([dh_ofs_x,dh_ofs_y,0])
+     cylinder (d1 = dh_dia1, d2 = dh_dia2, h = base_thick, center = false);
+
+}
 
 module shell_complete()
 {
@@ -302,10 +313,16 @@ module shell_complete()
     {
        // Cutout for reflective photosensors
        ps_cutout();
+       drain_hole();
     }
   }
 }
-
+/*
+Position shell so that photodetector pair cutout centers
+on [x,y] = [0,0].  That offsets the box rectangle with
+respect to the mounting centerline.  The mag mount posts
+align with the mounting centerline.
+*/
 module total()
 {
   difference()
@@ -314,6 +331,7 @@ module total()
     {
        translate([-39.35,-14.8,0])
          shell_complete();
+    
        mag_mnt_posts();
     }
     union()
