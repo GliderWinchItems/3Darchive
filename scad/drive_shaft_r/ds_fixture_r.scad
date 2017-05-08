@@ -1,7 +1,9 @@
 /* ds_fixture_r.scad
  * Enclosure/mount for drive shaft
  * Reflective type sensor
- * Date: 20170506 v2
+ * Date of latest: 20170507 v3
+ * v2 = higher walls for CAN cable clearance
+ * v3 = move mag mnts to position sensor further out
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -22,7 +24,7 @@ module id()
 
  translate([10,-28, base_thick]) 
   linear_extrude(2)
-   text("2017 05 06 v2",size = 3);
+   text("2017 05 07 v3",size = 3);
  }
 }
 
@@ -225,8 +227,9 @@ module cover_mnt_tabs()
 
 pcs_mag_dia = mag_stud_dia + 0.5;// Magnet stud dia
 pcs_mag_stud_len = mag_stud_len + 0.5;
-pcs_mag_ofs_x = -50;	// Position of sensor end magnet
-pcs_mag_ofs_x1 = -15; 	// Position of sensor end magnet pair
+pcs_del = 8;	//  Adjustment of axle direction of mag mnts
+pcs_mag_ofs_x =  -50 - pcs_del;	// Position of sensor end magnet
+pcs_mag_ofs_x1 = -15 - pcs_del; 	// Position of sensor end magnet pair
 pcs_mag_ofs_y1 = 25;  	// Position of engine end magnet pair
 
 mag_bot_thick = 1;	// thickness of bottom-to-washer
@@ -264,8 +267,8 @@ module mag_mnt_posts()
     mag_mnt_post();
 
    // so, connect it to the shell
-   translate([pcs_mag_ofs_x + 0 ,-mag_post_dia/2,0])
-     cube([mag_post_dia,mag_post_dia,mag_post_ht],center = false);
+   translate([pcs_mag_ofs_x ,-mag_post_dia/2,0])
+     cube([mag_post_dia+pcs_del,mag_post_dia,mag_post_ht],center = false);
 
    // These two are inside shell
    translate([pcs_mag_ofs_x1,pcs_mag_ofs_y1,0])
