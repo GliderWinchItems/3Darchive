@@ -3,6 +3,7 @@
  * Date: 20170506
  * #### Be sure to use latest openscad! ####
  * #### or rotate_extrude will not work ####
+ * v2 = add chamfer to segments + disc cutout
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -14,19 +15,20 @@ $fn = 200;
 // **** Id the part ***
 module id()
 {
+ translate([10,0,0])
  {
   font = "Liberation Sans:style=Bold Italic";
   rotate([0,0,90])
-    translate([hub_disc_dia/2 - 4,0, rhub_thick1]) 
+    translate([hub_disc_dia/2 - 6,0, rhub_thick1]) 
      rotate([0,0,90])
       linear_extrude(0.5)
         text("ds_code_r",size = 3);
 
   rotate([0,0,90])
-    translate([hub_disc_dia/2,0, rhub_thick1]) 
+    translate([hub_disc_dia/2 - 2,0, rhub_thick1]) 
      rotate([0,0,90])
       linear_extrude(0.5)
-        text("2017 05 07 v1",size = 3);
+        text("2017 05 08 v2",size = 3);
  }
 }
 
@@ -71,6 +73,30 @@ module hub_tabs()
 	hub_tab();
 
 }
+/* ***** circular chamfer *****
+ * d = outer diameter
+ * rad = chamfer radius
+ * circular_chamfer(d, rad);
+*/
+module circular_chamfer(d, rad)
+{
+  ofs = (d/2 - rad);
+  rotate_extrude()
+  translate([ofs,0])
+   difference()
+   {
+     union()
+     {
+       square(size = [rad, rad]);
+     }
+     union()
+     {
+       translate ([0,rad])
+           circle(d = 2*rad);
+     }
+   }
+
+}
 
 module hub()
 {
@@ -107,28 +133,37 @@ echo (rhub_wt_ofs);
 }
 
   sc_y = (rrim_dia * 3.14159265)/(2*rnsegs);
-  sc_x = 20;
-  sc_z = 40; // No edge rim
+  sc_x = rrim_ht + 2;
+  sc_z = 20; // No top edge rim
   sc_ofs_x = rrim_rad - 8;
-  sc_ofs_z = rhub_thick1;
+  sc_ofs_z = 0; // rhub_thick1;
 
 module segment_cutout()
 {
-//  rotate([0,0,-(180/rnsegs)])
-   translate([sc_ofs_x,0,sc_ofs_z])
-     cube([sc_x, sc_y, sc_z], center = false);
+   rotate_extrude(angle = 225/nsegs)
+   {
+      translate([sc_ofs_x,0,0])
+        square(size = [sc_z,sc_x]);
+   }
 }
+
+cp_cmfr_rad = 5;  // Chamfer radius
 
 module cup()
 {
-  step = 180/rnsegs;
+
   difference()
   {
-    od = (shaft_dia+hub_thick2);
+    od = (shaft_dia+hub_thick1);
     union()
     {
        // Rim
        tubedeh(rrim_dia, rrim_dia-rrim_thick1, rrim_ht);
+
+       // Chamfer to strengthen segments
+       translate([0,0,rhub_thick1])
+	 circular_chamfer(rrim_dia-rrim_thick1,cp_cmfr_rad);
+
     }
     union()
     {
@@ -138,20 +173,36 @@ module cup()
       translate([-od2/2,-od2,0])
         cube([od2,od2,10*od2],center = false);
 
-      for (i = [0 : 2*step : (180 + .01)])
-      {
-        rotate([0,0,i])
-          segment_cutout();   
-      }  
+
     }
   }
 }
 
+module segment_cutouts()
+{
+  step = 180/rnsegs;
+      for (i = [0 : 2*step : (180 - .01)])
+      {
+        rotate([0,0,i])
+          segment_cutout();   
+      }  
+}
+
 module total()
 {
-     hub();
-     cup();
-     id();
+  difference()
+  {
+    union()
+    {
+      hub();
+      cup();
+      id();
+    }
+    union()
+    {
+      segment_cutouts();
+    }
+  }
 }
 
 total();
