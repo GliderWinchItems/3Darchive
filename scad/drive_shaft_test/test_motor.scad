@@ -1,5 +1,5 @@
 /* Motor holder for drive shaft simulation test
-*  File: codewheel_stand.scad
+*  File: test_motor.scad
  * Author: deh
  * Latest edit: 20170509
 */
@@ -7,19 +7,6 @@ include <../library_deh/deh_shapes.scad>
 
 $fn = 100;
 
-mot_dia = 27.6;
-mot_len = 40;
-mot_lead_clear = 12;
-mot_shft_dia = 4.8;
-
-mt_ht = mot_len + mot_lead_clear;
-mt_thick = 2;
-mt_chamfer = 1;
-mt_ch_ht = 4;
-mt_cutout = 6.5;
-mt_space_ht = mot_lead_clear;
-mt_space_thick = 3;
-mt_space_len = 5;
 
 
 mt1x = mot_dia/2;		mt1y = 0;
@@ -81,10 +68,7 @@ pot_tb_x = 8.7; // Pot indexing tab c/l from shaft c/l
   }
 }
 
-// base plate
-base_thick = 3;
-base_x = 40;
-base_y = 40;
+
 
 module base($fn=50)
 {

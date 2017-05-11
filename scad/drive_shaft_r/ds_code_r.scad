@@ -73,30 +73,6 @@ module hub_tabs()
 	hub_tab();
 
 }
-/* ***** circular chamfer *****
- * d = outer diameter
- * rad = chamfer radius
- * circular_chamfer(d, rad);
-*/
-module circular_chamfer(d, rad)
-{
-  ofs = (d/2 - rad);
-  rotate_extrude()
-  translate([ofs,0])
-   difference()
-   {
-     union()
-     {
-       square(size = [rad, rad]);
-     }
-     union()
-     {
-       translate ([0,rad])
-           circle(d = 2*rad);
-     }
-   }
-
-}
 
 module hub()
 {

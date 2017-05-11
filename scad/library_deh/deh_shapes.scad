@@ -170,7 +170,7 @@ module fillet(r,l)
      union()
      {
        translate ([r,r,0])
-           cylinder(d = 2*r, h = l, center = false);
+           cylinder(d = 2*r + 0.1, h = l, center = false);
        translate([r,0,0])
            cube([r,2*r,l],center = false);
        translate([0,r,0])
@@ -178,4 +178,26 @@ module fillet(r,l)
      }
    }
 }
-
+/* ***** circular chamfer *****
+ * d = outer diameter
+ * rad = chamfer radius
+ * circular_chamfer(d, rad);
+*/
+module circular_chamfer(d, rad)
+{
+  ofs = (d/2 - rad);
+  rotate_extrude()
+  translate([ofs,0])
+   difference()
+   {
+     union()
+     {
+       square(size = [rad, rad]);
+     }
+     union()
+     {
+       translate ([0,rad ])
+           circle(d = 2*rad + 0.1);
+     }
+   }
+}
