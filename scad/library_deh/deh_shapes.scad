@@ -201,3 +201,31 @@ module circular_chamfer(d, rad)
      }
    }
 }
+module circular_inner_chamfer(d, rad)
+{
+  circular_chamfer(d, rad);
+} 
+
+/* ***** circular chamfer *****
+ * d = inner diameter
+ * rad = chamfer radius
+ * circular_chamfer(d, rad);
+*/
+module circular_outer_chamfer(d, rad)
+{
+  ofs = (d/2 - rad);
+  rotate_extrude()
+  translate([ofs,0])
+   difference()
+   {
+     union()
+     {
+       square(size = [rad, rad]);
+     }
+     union()
+     {
+       translate ([rad,rad ])
+           circle(d = 2*rad + 0.1);
+     }
+   }
+}

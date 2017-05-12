@@ -2,7 +2,8 @@
 *  File: test_mtr_stand.scad
  * Author: deh
  * Latest edit: 20170510
- * v1 = add small wire hole
+ * v1 add small wire hole
+ * v2 add post/wedge for center hole
 */
 include <../library_deh/deh_shapes.scad>
 include <../library_deh/mag_mount.scad>
@@ -33,7 +34,7 @@ module id()
 
     translate([0,0, mb_thick]) 
       linear_extrude(0.5)
-        text("2017 05 08 v1",size = 3);
+        text("2017 05 11 v2",size = 3);
  }
 }
 
@@ -106,8 +107,15 @@ module mnt_tabs()
 
 module front_plate()
 {
-  translate([-mb_x/2,mb_y - mb_thick, ctr_line_ht - base_x/2])
-   cube([mb_x,mb_thick,base_y], center = false);
+  translate([-mb_x/2,mb_y - mb_thick, 0])
+   cube([mb_x,mb_thick,ctr_line_ht + base_y/2], center = false);
+
+  translate([5,mb_y-mb_thick-20,ctr_line_ht])
+   rotate([0,180,0])
+    wedge(10,20,20);
+
+  translate([-5,mb_y-mb_thick-20,ctr_line_ht])
+    cube([10,20,3],center=false);
 }
 
 module clip_top()
@@ -144,8 +152,9 @@ module screw_holes()
    translate([base_x - sh_ofs,base_y - sh_ofs,0])
     cylinder(d = sh_dia, h = 10, center = false);
 
+   // Rod/shaft in center supports non-motor end
    translate([base_x/2,base_y/2,0])
-    cylinder(d = me_rod_dia, h = 10, center = false);
+    cylinder(d = me_rod_dia, h = 40, center = false);
    
   }
  }
