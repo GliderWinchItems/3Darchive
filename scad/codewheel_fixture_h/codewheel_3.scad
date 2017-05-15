@@ -4,28 +4,51 @@
  * codewheel_3
  * #### Be sure to use latest openscad! ####
  * #### or rotate_extrude will not work ####
+ * V1 = add raised rim to assure minimum foto gap
  */
 
 include <../library_deh/deh_shapes.scad>
 include <../library_deh/mag_mount.scad>
+include <../drive_shaft/ds_common.scad>
 
 $fn = 100;
 
-rim_dia = 120;
+rim_dia = 130;
 rim_wid = 1;
-rim_thick = 2.0;
 
 hub_thick = 2;	//
-hub_hole_dia = mag20_stud_dia + 0.3; // Mounting hole
+hub_hole_dia = mag25_stud_dia + 0.3; // Mounting hole
 hub_disc_dia = 70;
 
-hub_washer_dia = mag20_washer_dia + 1.0;
+hub_washer_dia = mag25_washer_dia + 1.0;
 
 seg_dia_inner = hub_disc_dia;
 seg_dia_outer = rim_dia;
-seg_thick = rim_thick;	// Thickness of segments
+rs_seg_thick = 2;  // Thickness of segments
+
+cw_rim_thick = rs_seg_thick + 0.5; // 0.7mm ideal photodetector gap
 
 nsegs = 10;	// Number of segments
+
+// **** Id the part ***
+module id()
+{
+ translate([10,0,0])
+ {
+  font = "Liberation Sans:style=Bold Italic";
+  rotate([0,0,90])
+    translate([hub_disc_dia/2 - 8,0, rhub_thick1]) 
+     rotate([0,0,90])
+      linear_extrude(0.5)
+        text("codewheel_3",size = 3);
+
+  rotate([0,0,90])
+    translate([hub_disc_dia/2 - 4,0, rhub_thick1]) 
+     rotate([0,0,90])
+      linear_extrude(0.5)
+        text("2017 05 16 v1",size = 3);
+ }
+}
 
 
 module segment()
@@ -33,7 +56,7 @@ module segment()
    rotate_extrude(angle = 180/nsegs)
    {
      translate([seg_dia_inner/2,0,0])
-       square([(seg_dia_outer - seg_dia_inner)/2,seg_thick], center = false);
+       square([(seg_dia_outer - seg_dia_inner)/2,rs_seg_thick], center = false);
    }
 }
            
@@ -57,7 +80,9 @@ module total()
    segments();
 
    // Rim
-   tubedeh(rim_dia, (rim_dia - (rim_wid * 2)), rim_thick);
+   tubedeh(rim_dia, (rim_dia - (rim_wid * 2)), cw_rim_thick);
+echo (cw_rim_thick);
+   id();
 }
 
 

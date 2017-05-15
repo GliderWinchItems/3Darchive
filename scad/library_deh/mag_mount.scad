@@ -21,14 +21,14 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-16
 // Measured dimensions
  mag_thick = 4.82;	    // Magnet thickness (base to shell top)
  mag_shell_dia = 16.0;	    // Magnet shell OD
- mag_shell_flat_dia = 11;   // Dia of flat of magent
+ mag_shell_flat_dia = 11;   // Dia of flat of magnet
  mag_stud_dia = 2.8;        // Dia of mounting magnet studs (4-40)
  mag_stud_len = 8.0;        // Height of stud from magnet back
  mag_washer_thick = 1.1;    // Thickness of washer
  mag_nut_thick = 2.4;       // Stud nut (M3) thickness
  mag_nut_hex_flat = 5.41;   // Nut across flats
  mag_nut_hex_peak = 6.20;   // Nut across peaks (also dia of nut)
- mag_washer_dia = 7.1; // 9.5;      // Diameter of washer for magnet stud
+ mag_washer_dia = 7.1; // 9.5;// Diameter of washer for magnet stud
  mag_washer_dia_extra = 2;  // Washer slop
 
 /*
@@ -78,14 +78,18 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-25
     BHmax: 38 MGOe
   $4.20
 */
-// $$$$$ INCOMPLETE $$$$$$
- mag25_thick = 4.82;	    // Magnet thickness (base to shell top)
- mag25_shell_dia = 16.0;	    // Magnet shell OD
- mag25_stud_dia = 2.8;        // Dia of mounting magnet studs (4-40)
- mag25_stud_len = 7.95;       // Height of stud from magnet back
- mag25_washer_thick = 1.1;    // Thickness of washer
- mag25_nut_thick = 2.4;       // Nut for stud thickness
- mag25_washer_dia = 9.5;      // Diameter of washer for magnet stud
+// 25 mm M5
+ mag25_thick = 7.75;	      // Magnet thickness (base to shell top)
+ mag25_shell_dia = 25.17;     // Magnet shell OD
+ mag25_shell_flat_dia = 20;   // Dia of flat of magent
+ mag25_stud_dia = 4.82;       // Dia of mounting magnet studs (4-40)
+ mag25_stud_len = 9.3;        // Height of stud from magnet back
+ mag25_washer_thick = 0.97;   // Thickness of washer
+ mag25_nut_thick = 3.96;      // M5 Nut for stud thickness
+ mag25_nut_hex_flat = 7.93;   // M5 nut across flats
+ mag25_nut_hex_peak = 9.16;   // M5 nut across peaks (also dia of nut)
+ mag25_washer_dia = 9.8;      // Washer diameter of washer for magnet stud
+ mag25_washer_inner_dia = 5.3;// Washer hole diameter
  mag25_washer_dia_extra = 2;  // Washer slop
 
 // Cylindrical magnets

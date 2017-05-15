@@ -1,3 +1,9 @@
+/* **** deh_shapes.scad *****
+   * Library of useful shapes
+   * 20170512
+*/
+
+
 /*  ***** tubedeh *****
 d1 = outside diameter
 d2 = inside diameter

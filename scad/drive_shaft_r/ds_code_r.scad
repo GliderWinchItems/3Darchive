@@ -4,6 +4,9 @@
  * #### Be sure to use latest openscad! ####
  * #### or rotate_extrude will not work ####
  * v2 = add chamfer to segments + disc cutout
+ * v3 = increased diameter (foto_gap = 2;)
+ * v4 = increased diameter (foto_gap = 0;)
+ * v5 = add minimum gap rim (min_foto_gap = 0.5)
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -28,7 +31,7 @@ module id()
     translate([hub_disc_dia/2 - 2,0, rhub_thick1]) 
      rotate([0,0,90])
       linear_extrude(0.5)
-        text("2017 05 08 v2",size = 3);
+        text("2017 05 16 v5",size = 3);
  }
 }
 
@@ -91,6 +94,8 @@ echo (rhub_wt_ofs);
          // Disc from first step to cup wall
          tubedeh(rrim_dia, seg_dia_inner,rhub_thick1);
 
+	// Add small rim to assure minimum gap
+	tubedeh(rrim_gap_dia, rrim_dia-0.1,rrim_gap_thick);
 
          // Hub tabs for bolting halves together
          hub_tabs();
@@ -179,6 +184,8 @@ module total()
       segment_cutouts();
     }
   }
+echo(rrim_rad);
+echo(shaft_ledge);
 }
 
 total();
