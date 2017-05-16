@@ -17,7 +17,7 @@ rim_dia = 130;
 rim_wid = 1;
 
 hub_thick = 2;	//
-hub_hole_dia = mag25_stud_dia + 0.3; // Mounting hole
+hub_hole_dia = mag25_stud_dia + 0.2; // Mounting hole
 hub_disc_dia = 70;
 
 hub_washer_dia = mag25_washer_dia + 1.0;
@@ -37,16 +37,22 @@ module id()
  {
   font = "Liberation Sans:style=Bold Italic";
   rotate([0,0,90])
-    translate([hub_disc_dia/2 - 8,0, rhub_thick1]) 
+    translate([hub_disc_dia/2 - 12,0, hub_thick-0.1]) 
      rotate([0,0,90])
       linear_extrude(0.5)
         text("codewheel_3",size = 3);
 
   rotate([0,0,90])
-    translate([hub_disc_dia/2 - 4,0, rhub_thick1]) 
+    translate([hub_disc_dia/2 - 8,0, hub_thick-0.1]) 
      rotate([0,0,90])
       linear_extrude(0.5)
         text("2017 05 16 v1",size = 3);
+
+  rotate([0,0,90])
+    translate([-hub_disc_dia/2 + 20,0, hub_thick-0.1]) 
+     rotate([0,0,90])
+      linear_extrude(0.5)
+        text("TOP",size = 5);
  }
 }
 
