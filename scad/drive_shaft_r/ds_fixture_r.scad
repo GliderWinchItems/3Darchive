@@ -4,6 +4,8 @@
  * Date of latest: 20170507 v3
  * v2 = higher walls for CAN cable clearance
  * v3 = move mag mnts to position sensor further out
+ * v4 = 16mm M3 or M4 stud provision, bigger mag post dia
+ * v5 = minor adjustment to mag mnt post
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -12,6 +14,34 @@ include <../codewheel_fixture_h/cwH_common.scad>
 include <../drive_shaft/ds_common.scad>
 
  $fn=50;
+
+/*
+ * Define mag mount stud 
+ * Comment in/out mag mount set
+ * Do not forget ID text change.
+ */
+
+/*
+// 16mm with M3 stud
+magx_shell_dia = mag_shell_dia;
+magx_stud_len = mag_stud_len;
+magx_stud_dia = mag_stud_dia;
+magx_washer_dia = mag_washer_dia;
+magx_washer_thick = mag_washer_thick;
+magx_nut_hex_peak = mag_nut_hex_peak;
+magx_nut_thick = mag_nut_thick;
+echo ("mag16_M3 specified");
+*/
+
+// 16mm with M4 stud
+magx_shell_dia = mag16_M4_shell_dia;
+magx_stud_len = mag16_M4_stud_len;
+magx_stud_dia = mag16_M4_stud_dia;
+magx_washer_dia = mag16_M4_washer_dia;
+magx_washer_thick = mag16_M4_washer_thick;
+magx_nut_hex_peak = mag16_M4_nut_hex_peak;
+magx_nut_thick = mag16_M4_nut_thick;
+echo ("mag16_M4 specified");
 
 // **** Id the part ***
 module id()
@@ -24,17 +54,13 @@ module id()
 
  translate([10,-28, base_thick]) 
   linear_extrude(2)
-   text("2017 05 07 v3",size = 3);
+   text("2017 05 18 v5  M4",size = 3);
  }
 }
 
 // Magnet mount dimensions
 include <../library_deh/mag_mount.scad>
 
- // Thickness of base for washer recess
- mag_stud_z = (mag_washer_thick +mag_nut_thick);
- mag_wash_recess_z = mag_stud_len - mag_stud_z;    
- mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
 
  module wedge(l, w, h)
  {
@@ -57,12 +83,7 @@ include <../library_deh/mag_mount.scad>
  mag_spacing_x	= 45;	// Distance x: magnet to y-axis mag pair C/L
  mag_ofs = -45;		// Position triangular base under enclosure box
 
- // Thickness of base for washer recess
- mag_stud_z = (mag_washer_thick +mag_nut_thick);
- mag_wash_recess_z = mag_stud_len - mag_stud_z;    
- mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
-
-
+ 
 // Tabs for holding pc board cover down
 
  cm_od = 10;	// Diameter of cover mounting post
@@ -92,7 +113,7 @@ wh_dia = 13; // Wire hole diameter in triangular base
 spacer_thick = 7;	// Spacer between magnet base and box
 cover_depth = 11.5;	// Width/depth of cover lip over box
 
-tab_hole = mag_stud_dia + 0.3;	// Magnet stud hole in triangular base
+tab_hole = magx_stud_dia + 0.3;	// Magnet stud hole in triangular base
 
 // Triangular mag-mount base
    eb_ofs_x = (shell_x + spacer_thick) + tab_thick;
@@ -103,8 +124,6 @@ tab_hole = mag_stud_dia + 0.3;	// Magnet stud hole in triangular base
 
 module pc_shell()
 {
-
-
    // Base plate
    translate([shell_x/2,0,0])
       rounded_rectangle(shell_x,shell_y,base_thick,shell_rad);
@@ -129,7 +148,6 @@ tk = thickness of rim wall
    
    // Posts for screw mounting of pc board
    translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) pc_posts4();
-
 }
 
 // PC board mounting
@@ -178,7 +196,6 @@ module cable_cutout()
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
 }
 
-
    // Cutout for reflective photosensors
 module ps_cutout()
 {
@@ -222,26 +239,24 @@ module cover_mnt_tabs()
    translate([cm_ofs_x2,0,0])
      rotate([0,0,-90])
       cover_mnt_tab();
-
 }
 
-pcs_mag_dia = mag_stud_dia + 0.5;// Magnet stud dia
-pcs_mag_stud_len = mag_stud_len + 0.5;
+pcs_mag_dia = magx_stud_dia + 0.5; // Magnet stud dia
+pcs_mag_stud_len = magx_stud_len + 0.5;
 pcs_del = 8;	//  Adjustment of axle direction of mag mnts
 pcs_mag_ofs_x =  -50 - pcs_del;	// Position of sensor end magnet
 pcs_mag_ofs_x1 = -15 - pcs_del; 	// Position of sensor end magnet pair
 pcs_mag_ofs_y1 = 25;  	// Position of engine end magnet pair
 
 mag_bot_thick = 1;	// thickness of bottom-to-washer
-mag_post_dia = mag_washer_dia + 2;	// OD of magnet post
-mag_post_ht = mag_stud_len + 1;	 // Height of mag post
+mag_post_dia = magx_washer_dia + 4;	// OD of magnet post
+mag_post_ht = magx_stud_len + 1;	 // Height of mag post
 
-po_hex_nut = mag_nut_hex_peak + 0.4; // Dia for hex nut pocket
-po_hex_nut_ht = mag_nut_thick + .25; // Depth of pocket
+po_hex_nut = magx_nut_hex_peak + 0.4; // Dia for hex nut pocket
+po_hex_nut_ht = magx_nut_thick + .25; // Depth of pocket
 
 module mag_mnt_post()
 {
-echo (mag_post_dia);
        cylinder(d = mag_post_dia, h = mag_post_ht, center = false);
 }
 module mag_mnt_post_hole()
@@ -251,15 +266,14 @@ module mag_mnt_post_hole()
 
    // Washer pocket
    translate([0,0,mag_bot_thick])
-     cylinder(d = mag_washer_dia, h = mag_washer_thick + .25, center = false);
+     cylinder(d = magx_washer_dia + 0.5, h = magx_washer_thick + .3, center = false);
 
    // Nut pocket
-   translate([0,0,mag_bot_thick + mag_washer_thick - 0.1])
+   translate([0,0,mag_bot_thick + magx_washer_thick - 0.1])
       linear_extrude(height = po_hex_nut_ht, center=false)
          circle(d = po_hex_nut, $fn=6);      
 }
 // Additions
-mag_bar_x = 7;
 module mag_mnt_posts()
 {
    // This one is outside shell
@@ -267,8 +281,8 @@ module mag_mnt_posts()
     mag_mnt_post();
 
    // so, connect it to the shell
-   translate([pcs_mag_ofs_x ,-mag_post_dia/2,0])
-     cube([mag_post_dia+pcs_del,mag_post_dia,mag_post_ht],center = false);
+   translate([pcs_mag_ofs_x-.1 ,-mag_post_dia/2,0])
+     cube([mag_post_dia+pcs_del-3,mag_post_dia,mag_post_ht],center = false);
 
    // These two are inside shell
    translate([pcs_mag_ofs_x1,pcs_mag_ofs_y1,0])

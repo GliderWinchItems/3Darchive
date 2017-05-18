@@ -18,7 +18,7 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-16
     BHmax: 38 MGOe
    $2.49
 */
-// Measured dimensions
+// Measured dimensions -- 16 mm ** M3 ** stud (default)
  mag_thick = 4.82;	    // Magnet thickness (base to shell top)
  mag_shell_dia = 16.0;	    // Magnet shell OD
  mag_shell_flat_dia = 11;   // Dia of flat of magnet
@@ -31,10 +31,23 @@ http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-16
  mag_washer_dia = 7.1; // 9.5;// Diameter of washer for magnet stud
  mag_washer_dia_extra = 2;  // Washer slop
 
+// Measured dimensions 16 mm -- ** M4 ** stud
+ mag16_M4_thick = 5.21;	     // Magnet thickness (base to shell top)
+ mag16_M4_shell_dia = 16.0;	     // Magnet shell OD
+ mag16_M4_shell_flat_dia = 11.7;  // Dia of flat of magnet
+ mag16_M4_stud_dia = 3.64;        // Dia of mounting magnet studs (4-40)
+ mag16_M4_stud_len = 8.18;        // Height of stud from magnet back
+ mag16_M4_nut_thick = 2.98;       // Stud nut (M4) thickness
+ mag16_M4_nut_hex_flat = 6.85;    // Nut across flats
+ mag16_M4_nut_hex_peak = 7.89;    // Nut across peaks (also dia of nut)
+ mag16_M4_washer_thick = 0.85;    // Thickness of washer
+ mag16_M4_washer_dia = 8.68;      // Diameter of washer for magnet stud
+ mag16_M4_washer_inner_dia = 5.3; // Washer hole diameter
+ mag16_M4_washer_dia_extra = 0.5; // Washer slop
+
+
 /*
 http://www.kjmagnetics.com/proddetail.asp?prod=MM-C-20
-
-
     Dimensions:
         D=20mm (0.79")
         M=4mm (0.16") (M4 Coarse Male threaded stud)
