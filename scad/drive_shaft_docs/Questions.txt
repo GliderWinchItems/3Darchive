@@ -1,0 +1,75 @@
+
+
+A.  Drive shaft encoder
+
+The encoder wheel clamps around the drive shaft, using
+four 6-32 x 3/4 screws with lock nuts.  The parts were
+made using a nominal drive shaft diameter of 3.00 inches.
+A millimeter either way is noticeable, so it is likely that
+an adjustment of the diameter used to print the parts will
+be needed.
+
+The photodetectors are based on reflection and sense the
+presence/absence of the segment.  The ideal spacing is
+35 mils (0.7 mm, i.e. ~ 1 mm).  100 mils (2.5 mm) has the
+response down to 0.3 from the peak.
+
+If the tolerances will be too close to be practical for 
+the reflective type photodetectors the interrupt type might
+help.
+
+1.  How well does encoder fit the shaft diameter?
+
+    -  Too tight or too loose?
+    -  Drive shaft counterweight cutout position correct?
+    -  Wobble or eccentricity?
+
+2.  What is the gap between the encoder segments and 
+    the bottom of the enclosure?
+    
+    -  If touching, will unscrewing the magnet studs 
+       provide a small gap (ideal 1 mm)?  The stud
+       length allows about a 3 mm adjustment.
+       
+3.  Do the segments show through the window?
+
+    When mounted, the cutout in the electronics enclosure 
+    for the photodetectors should be covered when the
+    encoder segments pass by.
+
+B. Fairlead encoders
+
+Similar to drive sensors the photodetectors for the
+two fairlead encoders require close tolerance.
+
+The "frame" mounts between the fairlead sheave bearings
+with magnets.  For the magnet studs, the washers & nuts 
+were inserted as the part was being printed.
+
+The frame has a small bump on the long cross-bar that
+marks the midpoint.  That should be in line laterally, 
+with a line between the bearing centers, and the 
+and longitudinally halve way bewteen the bearing blocks.
+
+The electronics enclosure mounts to the frame with self-
+tapping screws.
+
+1.  Diameter of the encoder discs OK?
+   
+    The two photodetector windows should see the 
+    encoder segments cover the window as they
+    come by.
+
+2.  Height
+
+    Gap too large--
+
+    The encoder discs can be raised by placing a spacer
+    between the encoder disc hub and the mag mount.
+
+    Gap too small--
+
+    The spaces between the electronics enclosure and the
+frame can be inserted.
+
+
