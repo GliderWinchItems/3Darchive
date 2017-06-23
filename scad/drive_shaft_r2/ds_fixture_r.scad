@@ -10,8 +10,8 @@
 
 include <../library_deh/deh_shapes.scad>
 include <../library_deh/mag_mount.scad>
-include <../codewheel_fixture_h/cwH_common.scad>
 include <../drive_shaft/ds_common.scad>
+include <../drive_shaft/ds_fixture_common.scad>
 
  $fn=50;
 
@@ -21,7 +21,6 @@ include <../drive_shaft/ds_common.scad>
  * Do not forget ID text change.
  */
 
-/*
 // 16mm with M3 stud
 magx_shell_dia = mag_shell_dia;
 magx_stud_len = mag_stud_len;
@@ -30,9 +29,9 @@ magx_washer_dia = mag_washer_dia;
 magx_washer_thick = mag_washer_thick;
 magx_nut_hex_peak = mag_nut_hex_peak;
 magx_nut_thick = mag_nut_thick;
-echo ("mag16_M3 specified");
-*/
+echo ("mag M3 specified");
 
+/*
 // 16mm with M4 stud
 magx_shell_dia = mag16_M4_shell_dia;
 magx_stud_len = mag16_M4_stud_len;
@@ -42,6 +41,10 @@ magx_washer_thick = mag16_M4_washer_thick;
 magx_nut_hex_peak = mag16_M4_nut_hex_peak;
 magx_nut_thick = mag16_M4_nut_thick;
 echo ("mag16_M4 specified");
+*/
+
+magx_stud_dia = mag_stud_dia;
+echo (magx_stud_dia);
 
 // **** Id the part ***
 module id()
@@ -150,19 +153,6 @@ tk = thickness of rim wall
    translate([pcps_ofs_x+pc_slop/2,pcps_ofs_y,base_thick]) pc_posts4();
 }
 
-// PC board mounting
- pcps_space_y = 25.4;  	// Distance between holes lengthwise
- pcps_space_x = 38.4;  	// Distance between holes across board 
- pcps_frm_top = 29.0;  	// Top hole from top of board
- pcps_frm_side = 6.3;	// side to hole
- pcps_post_dia = 7.0;	// Post diameter
-
- pcps_screw_dia = 2.6;	// Screw diameter
- pcps_screw_ht = 5;	// Screw thread length
-
- pcps_post_ht = 5+1+4;	// PC mounting post height
- pcps_ofs_y = pclen/2 - pcps_frm_top;
- pcps_ofs_x = shell_wall + pcps_frm_side;
 
 module pc_posts_pair()
 {
@@ -178,18 +168,8 @@ module pc_posts4()
      pc_posts_pair();
 }
 
-// CAN bus cable cutout in wall
-cc_wid = 6.5;		// Telephone type cable width
-cc_thick = 10;	// Thickness
-cc_frm_top =  5;		// Offset from top of side
-cc_frm_side = 8;	// Offset from side
-cc_sense_dia = 4;	// Sensor cable dia
-
 module cable_cutout()
 {
- cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
- cc_ofs_x = 20 + 14;
- cc_ofs_y = -25;
    // Two telephone type cables
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
     rotate([0,90,90])
@@ -220,11 +200,6 @@ module cover_mnt_tab()
       rotate([0,0,-90])
         eye_bar(cm_od,cm_id,cm_len,shell_ht - cov_ofs);
 }
-
-cm_ofs_y = -30;
-cm_ofs_x1 = cm_len + shell_wall;
-cm_ofs_x2 = shell_x + cm_len + shell_wall;
-cm_ofs_dy = 15;
 
 module cover_mnt_tabs()
 {

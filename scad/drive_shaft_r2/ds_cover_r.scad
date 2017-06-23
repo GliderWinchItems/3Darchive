@@ -5,31 +5,11 @@
  */
 
 include <../library_deh/deh_shapes.scad>
-include <cwH_common.scad>
+include <../drive_shaft/ds_fixture_common.scad>
 
  $fn=50;
 
 
-// Tabs for holding pc board cover down
-bt_wid = 10;
-bt_hole_dia = 3.2;  // Screw hold dia
-bt_thick = 3;	// Thickness
-bt_len = 10;	// Length
-bt_w_ht = 6;	// Stiffner height
-
-/* ------------------------------------------------------------------- */
-cvr_thick = 2;	// Cover top thickness
-cvr_wall = 5 + cvr_thick;
-cvr_slop = 0.5;
-cvr_len_x = ww_len_x + shell_wall + cvr_slop;
-cvr_len_y = ww_len_y + shell_wall + cvr_slop;
-
-cc_ofs_cz = cvr_wall + 3;  // Offset for cable cutout
-
-win_len_x = 50;
-win_len_y = 30;
-win_r = 5.0;  	// Recess rim for gluing in clear window
-win_r_z = cvr_thick/2; 	// Z offset for recess rim
 
 module window()
 {
