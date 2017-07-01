@@ -1,4 +1,4 @@
-/* ds_code.scad
+/* ds_code_r.scad
  * Codewheel for drive shaft--reflective
  * Date: 20170506
  * #### Be sure to use latest openscad! ####
@@ -7,7 +7,8 @@
  * v3 = increased diameter (foto_gap = 2;)
  * v4 = increased diameter (foto_gap = 0;)
  * v5 = add minimum gap rim (min_foto_gap = 0.5)
- * v6 = remove tabs, add hose clamp and splines
+ * v6 = remove tabs, add hose clamp and splines (6/22/2017)
+ * v7 = Open slot hose clamp
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -32,7 +33,7 @@ module id()
     translate([hub_disc_dia/2 - 2,0, hs_hub_thick1]) 
      rotate([0,0,90])
       linear_extrude(0.5)
-        text("2017 06 18 v6",size = 3);
+        text("2017 06 18 V7",size = 3);
  }
 }
 
@@ -61,7 +62,7 @@ module hose_clamp(ofs_z)
 {
    hs_dia = shaft_dia + hs_hub_thick2;
    translate([0,0,ofs_z])
-	tubedeh(hs_dia+1,(hs_dia-clmp_recess_depth),clmp_recess_wid);
+	tubedeh(hs_dia+clmp_thick,(hs_dia-clmp_recess_depth),clmp_recess_wid);
 }
 
 module weight_cutout()
@@ -81,16 +82,15 @@ module screw_hole(z)
 
 module hub_tab()
 {
-   difference()
-   {
-     cube([(hub_disc_dia-shaft_dia)/2,hub_tab_thick, rhub_len],center = false);
+       dia = 18;
+       tb_ofs_x = hs_hub_thick2 + 4;
+       tb_ofs_y = hub_tab_thick;
+       tb_ofs_z = hs_hub_thick2 + 5;
 
-     union()
-     {
-        screw_hole(rht_ofs_z1);
-        screw_hole(rht_ofs_z2);
-     }
-   }
+       translate([tb_ofs_x, tb_ofs_y, tb_ofs_z])
+        rotate([0,90,0])
+         rotate([90,0,0]) 
+           eye_bar(dia,ht_screw_dia,(dia/2),hub_tab_thick);
 }
 
 module hub_tabs()
@@ -141,7 +141,9 @@ module hub()
          weight_cutout();
 	
 	 // Hose clamp recesses
-	 hose_clamp(15);
+	 hose_clamp(13);
+
+	 hose_clamp(32);
       }
    }
 }
@@ -236,8 +238,6 @@ module total()
       segment_cutouts();
     }
   }
-echo(rrim_rad);
-echo(shaft_ledge);
 }
 
 total();
