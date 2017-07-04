@@ -103,17 +103,17 @@ base_rnd = 10;	// Base plate corner rounding radius
  pcleng = 50;       // X axis direction length
  pc_y = base_len;   // y positioning
 
- iso_len   = 50.3;	// Length: two RJ 45 jacks parallel
+ iso_len   = 50.2;	// Length: two RJ 45 jacks parallel
  iso_wid   = 46.3;      // Width
  iso_thick = 1.6;	// PC board thickness
- iso_slop  = 0.1;	// Allowance for board variation
+ iso_slop  = 0.0;	// Allowance for board variation
  iso_lip   = 1.2;	// Ledge width for board seating
  iso_ridge_ht = 1.55;	// Ridge ht for seat
  iso_ridge_wid= 1.5;	// Ridge width for seat
  iso_post_ht = 6.0;	// Height of lip above base
 
- iso_osd_y = iso_wid + iso_slop; // Board y
- iso_osd_x = iso_len + iso_slop; // Board x
+ iso_osd_y = iso_wid + iso_slop - 0.5; // Board y
+ iso_osd_x = iso_len + iso_slop - 0.5; // Board x
  iso_side  = iso_lip + iso_ridge_wid;
 
 

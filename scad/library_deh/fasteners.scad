@@ -13,6 +13,7 @@ nut_thick_632 = 2.77;	// thickess
 
 // 4-40
 screw_dia_s440 = 2.72;	// shaft diameter
+screw_dia_s440_z = 1.90; // Dia at tip
 screw_dia_ph = 5.42;	// pan-head diamter
 screw_dia_pht = 1.7;	// pan-head thickness
 nut_dia_440 =  7.12;	// peak-peak 
