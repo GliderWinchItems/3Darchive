@@ -144,7 +144,7 @@ module iso_post()
 
 // Post with recess for corner of POD board
 dis_post_y = 10;
-dis_post_ht = pod_post_ht;
+dis_post_ht = pod_post_ht - 3;
  module dis_post()
  {
     difference()
@@ -186,7 +186,7 @@ module side_rail(a, r, len, ht1, ht2)
 
 module side_rails()
 {
-   h1 = pod_post_ht;	// Height of seat
+   h1 = dis_post_ht;	// Height of seat
    h2 = h1 + p_ridge; // Height with ridge
    r0 = [0,0,0];
    r1 = [0,0,180];
@@ -228,7 +228,7 @@ ee = 15;
        {
           rotate( 90) pod_post();
           translate([-pod_post_y,-pod_post_y,  0])
-            cube([pod_post_y, pod_post_y, pod_post_ht + p_ridge],false);
+            cube([pod_post_y, pod_post_y, dis_post_ht + p_ridge],false);
        }
        union()
        {
@@ -250,16 +250,19 @@ ee = 15;
  }
 
 // Clip to wedge board under
+dis_post_q = pod_post_q;
+
 module pod_clip(pclen,pcwid)
 {
    // Main support post
-   cube([pclen,pcwid,pod_post_ht],false);
+   cube([pclen,pcwid,dis_post_ht],false);
 
    // Ridge on top of support post
-   translate([0,0,pod_post_ht])
-      cube([pclen,pod_post_q, 3],false);
+   translate([0,0,dis_post_ht])
+      cube([pclen,dis_post_q, 3],false);
+
    // Overhang
-   translate([pclen, 4 + 2, pod_post_ht + 2.2 + 3])
+   translate([pclen, 4 + 2, dis_post_ht + 2.2 + 2])
       rotate([0,90,180])
          wedge_trunc(6,2,2.5,0.65,pclen);
 }
@@ -282,7 +285,7 @@ module pod_clips()
 
    translate([pcleng/2, pc_y,0])
       rotate([0,0,180]) 
-         pod_clip(pcleng, pcwide);
+         pod_clip(pcleng, 3);
 }
 
 // Rounded corner
@@ -362,8 +365,8 @@ module pod_clip_jack_cutout()
          cube([10,30,60], false);
     
     // USB connector cutout in clip
-            translate([-8,135,base_ht+ 3 ])
-         cube([10,30,60], false);
+            translate([-9,135,base_ht+ 3 ])
+         cube([12,30,60], false);
 
     // Header pins cutout in clip
             translate([-dis_wid/2 + 2,135,base_ht + 4 ])
