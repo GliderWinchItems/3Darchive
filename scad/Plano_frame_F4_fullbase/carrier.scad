@@ -91,7 +91,7 @@ usb_len = 15;	// Length of usb cutout
 /* Discovery board USB jack cutout */
 module usb_cutout()
 {
-   translate([-usb_wid/2,45,0])
+   translate([-usb_wid/2,49,0])
      cube([usb_wid,usb_len, 8],false);
 
 }
@@ -182,7 +182,7 @@ module strain_cutouts()
     rotate([0,0,90])
      strain_cutout();
 
-   translate([-31,37,0])
+   translate([-31,36,0])
     rotate([0,0,90])
      strain_cutout();
 
@@ -192,7 +192,7 @@ can_len = 20;
 can_ofs = 3;
 module can_cutout()
 {
-   translate([-can_wid/2+can_ofs,8,0])
+   translate([-can_wid/2+can_ofs,8-1,0])
      cube([can_wid,can_len,dis_post_ht],false);
 
 }
@@ -206,8 +206,31 @@ module iso_cutouts()
     cylinder(d = 10, h = dis_post_ht, center = false);
 
   translate([-4,30,0])
-    cube([14,14,dis_post_ht],false);
+    cube([14,16,dis_post_ht],false);
 
+  translate([-15.5,34,0])
+    cube([12,16,dis_post_ht],false);
+
+  // LED spy hole
+  translate([-16,24,0])
+   rounded_rectangle(2,10,dis_post_ht,1);
+  
+  // iso rectangle 
+  translate([-19,28.5,0])
+     cube([36.8,20,dis_post_ht+2],false);
+
+  // Corners
+  translate([-25.5,2,0])
+      cube([20,15,dis_post_ht],false);
+
+}
+module stiffeners()
+{
+  translate([-19.0,27.2,dis_post_ht])
+   cube([39,1.5,8],false);
+
+//  translate([-24,47.5,dis_post_ht])
+//   cube([50,1.5,4],false);
 
 }
 
@@ -219,10 +242,11 @@ module base()
         {
             pod_4posts();
             t_bars();            
+            stiffeners();
         }
         union()
         {
-            usb_cutout();
+//            usb_cutout();
             rj11_cutouts();
 //            header_carriers();
             strain_cutouts();

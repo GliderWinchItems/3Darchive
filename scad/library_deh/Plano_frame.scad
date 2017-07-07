@@ -110,7 +110,7 @@ base_rnd = 10;	// Base plate corner rounding radius
  iso_lip   = 1.2;	// Ledge width for board seating
  iso_ridge_ht = 1.55;	// Ridge ht for seat
  iso_ridge_wid= 1.5;	// Ridge width for seat
- iso_post_ht = 6.0;	// Height of lip above base
+ iso_post_ht = 3.6;//6.0;	// Height of lip above base
 
  iso_osd_y = iso_wid + iso_slop - 0.5; // Board y
  iso_osd_x = iso_len + iso_slop - 0.5; // Board x

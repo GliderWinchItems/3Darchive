@@ -10,6 +10,8 @@ include <../library_deh/fasteners.scad>
 
  $fn=100;
  
+//iso_post_ht = 3;
+
 RJ_cutout_y = pc_y - p_ridge - dis_len + RJ_length + RJ_slop - RJ_cutout_length;
 
 // Position of corner posts
@@ -156,8 +158,8 @@ dis_post_ht = pod_post_ht - 3;
        }
        union()
        {
-            translate([dis_post_y/2, -dis_post_y/2, 14])
-                cylinder(h = 13, d1 = screw_dia_s440, d2 = screw_dia_s440_z, center = false);
+            translate([dis_post_y/2, -dis_post_y/2, -0.01])
+                cylinder(h = 20, d = screw_dia_s440_z, center = false);
        }
        
      }      
@@ -196,6 +198,89 @@ module side_rails()
 
    side_rail([ dis_wid/2, sid_rail_y , 0],r0,sid_len,h1,h2);
    side_rail([ dis_wid/2, sid_rail_y2, 0],r0,sid_len,h1,h2);
+}
+angle = atan((9.6)/82.2);
+
+// Basic side rail shape: wedge on rectangle
+module side_rail_shape(len, ht1, ht2, thick)
+{
+  ax1 =  0;	ay1 =    0;
+  ax2 =  0;	ay2 =  ht1;
+  ax3 =  len;	ay3 =  ht2;
+  ax4 =  len;	ay4 =    0;
+rotate([0,0,-90]) 
+rotate([90,0,0])
+ linear_extrude(thick)
+ {
+     polygon(points = [
+     [ax1,ay1], 
+     [ax2,ay2], 
+     [ax3,ay3], 
+     [ax4,ay4]
+              ] );
+  }
+}
+/* Side rail: right & left
+   len = length
+   wid = width
+   ht = height of short end (not inluding lip/ridge)
+   angle = pre-defined slope (degrees)
+   p_ridge = pre-defined lip (ridge)
+   Reference: junction of inside and outside & short end 
+*/
+module side_rail_r(len,wid,ht,cut_len)
+{
+   ht2 = ht + len * sin(angle);
+   difference()
+   {
+      union()
+      {
+        translate([wid,0,0])
+          side_rail_shape(len,ht,ht2,wid);
+
+       side_rail_shape(len,ht+p_ridge,ht2+p_ridge,wid);
+      }
+      union()
+      { // Cutout in middle
+         translate([-wid, -len/2 - cut_len/2, 1.5])
+           cube([2*wid,cut_len, ht2+p_ridge+.01],false);
+      }
+     }
+}
+
+// Side rail: left
+module side_rail_l(len,wid,ht,cut_len)
+{
+   ht2 = ht + len * sin(angle);
+   difference()
+   {
+      union()
+      {
+        side_rail_shape(len,ht,ht2,wid);
+
+        translate([wid,0,0])
+          side_rail_shape(len,ht+p_ridge,ht2+p_ridge,wid);
+      }
+      union()
+      { // Cutout in middle
+         translate([-wid, -len/2 - cut_len/2, 1.5])
+           cube([2*wid,cut_len, ht2+p_ridge+.01],false);
+      }
+   }
+}
+// Both side rails 
+module side_rails_angle()
+{
+   ra_y = pc_y -15;
+   ra_x = dis_wid/2;
+   ht1 = 10; 	// Height of short end
+   cut = 50;	// Length of cutout
+echo(ra_y);
+   translate([ ra_x,ra_y,base_ht])
+     side_rail_l(76,sid_wid,ht1, cut);
+
+   translate([-ra_x,ra_y,base_ht])
+     side_rail_r(76,sid_wid,ht1, cut);
 }
 
   module pod_4posts()
@@ -262,9 +347,9 @@ module pod_clip(pclen,pcwid)
       cube([pclen,dis_post_q, 3],false);
 
    // Overhang
-   translate([pclen, 4 + 2, dis_post_ht + 2.2 + 2])
+   translate([pclen, 4 + 2, dis_post_ht + 4.5])
       rotate([0,90,180])
-         wedge_trunc(6,2,2.5,0.65,pclen);
+         wedge_trunc(6,5,3,0.4,pclen);
 }
 
 // Truncated wedge type of polygon
@@ -288,15 +373,6 @@ module pod_clips()
          pod_clip(pcleng, 3);
 }
 
-// Rounded corner
-module rounded_corner(dia, height, width)
-{
-     translate([dia/2,0,0])
-     {
-        cylinder(h = height + .1,d = dia + .1, center = false);
-        translate([0,-dia/2,-.01])cube([(dia/2+.01),(width + .01),(height + .01)],false);
-     }
-}
 
 module mag_stud_hole(mhx, mhy)
 {
@@ -348,8 +424,8 @@ module lightening_holes()
 //    rect_rounded(55,20,base_ht + 0.1,7);
 
   // Cutout under CAN & switcher board
-  translate([-22,13.5,0])
-    rect_rounded(44,39,base_ht + 0.1,6);
+  translate([-23.7,10.9,0])
+    cube([47,43.0,base_ht + 0.1],false);
 }
 
 module iso_cutout()
@@ -400,9 +476,8 @@ module base_punched()
       {
          pod_clips();
          pod_4posts();
-	 side_rails();
          base_plate();
-
+	 side_rails_angle();
          // Eye-ball in the translations of the following
          translate([-26.5,3,0])    
          {
@@ -428,7 +503,7 @@ module base_punched()
                  pod_post_s, pod_post_sd);
 
          }
-         stiffeners();
+//         stiffeners();
       }
       union()
       {
