@@ -24,7 +24,7 @@ dis_post_ht = 3;
 
 module clamp(len)
 {
-   c_ht1 = 5.5;//3;
+   c_ht1 = 5.0;//4.0;//5.5;//3;
    c_w1 = 3;
    c_w2 = 7;
    c_z2 = 0 + c_ht1;
@@ -41,7 +41,7 @@ module clamp(len)
 module clamps()
 {
   len = 5;
-  ofs = -1;
+  ofs = 1;//-1;
   translate([-15,ofs,dis_post_ht])
    clamp(len);
    
@@ -87,6 +87,10 @@ tbr_wid = 5;
  {
      translate([-dis_wid/2+ofs+1.5,-tbr_wid,0])
        cube([dis_wid - dis_post_y-1,tbr_wid, dis_post_ht],false);
+
+     translate([-20, -.01 ,0])
+       cube([40,3, dis_post_ht],false);
+
       
  }
 
