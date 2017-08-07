@@ -21,6 +21,7 @@ module tubedeh(d1,d2,ht)
 /* ***** rounded_bar *****
  * rectangular bar with rounded end
 bar with one end rounded
+rounded_bar(d, l, h)
 d = diameter of rounded end, and width of bar
 l = length of bar from center of rounded end to end
 h = thickness (height) of bar

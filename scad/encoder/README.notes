@@ -2,6 +2,8 @@ README.notes
 
 1.  Encoder driven by induction motor ~3600 rpm
 
+Both edges on TIM3 IC
+
 Scope on encoder phase that goes to TIM3 IC
 
 Rise time on turn-off: approx 5 us
