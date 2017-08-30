@@ -37,6 +37,7 @@ module rounded_bar(d, l, h)
 }
 /* ***** eyebar *****
  * rounded bar with hole in rounded end
+ * module eye_bar(d1, d2, len, ht)
 d1 = outside diameter of rounded end, and width of bar
 d2 = diameter of hole in end of bar
 */
