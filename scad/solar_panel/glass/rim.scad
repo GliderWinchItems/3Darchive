@@ -1,6 +1,6 @@
 /* scad/solar/panel/glass/rim.scad
  * Mounting rim for "those ancient" glass solar panels
- * Date of latest: 2017/08/27
+ * Date of latest: 20170827
  */
 
 include <../../library_deh/deh_shapes.scad>

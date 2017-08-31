@@ -1,6 +1,6 @@
 /* scad/solar/panel/glass/lid.scad
  * Top lid for "those ancient" glass solar panels
- * Date of latest: 2017/08/28
+ * Date of latest: 20170828
  */
 
 include <../../library_deh/deh_shapes.scad>
