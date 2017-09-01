@@ -3,16 +3,8 @@
  * Date of latest: 20170830
  */
 
-include <../library_deh/deh_shapes.scad>
-
-bb_sq = (3.75 * 25.4);	// Square bearing block size
-
-/* Base plate */
-bp_wid = 22;	// Width of base plate foot around bearing block
-bp_sq = bb_sq + 2*bp_wid;	//  Side length
-bp_in = bb_sq + 3;	//  Bearing block cutout length
-bp_thick = 4;	// Base plate thickness
-bp_rad = 3;	// Nice looking radius on corner
+include <fairlead_common.scad>
+include <encoder_plate.scad>
 
 $fn = 50;
 
@@ -26,17 +18,6 @@ module base_plate()
    }
 }
 
-pt_theta = 40;	// Angle of bend in posts (deg)
-bd_ofs = 30;	// Radius for rotate extrude of bend
-
-vp_dia = 26;	// Vertical Post main diameter
-vp_ht = 6;	// Vertical post height
-sc_x = 0.6;	// Scale x--squish cylinder to ellipse
-sc_y = 1.0;	// Scale y--width 
-
-ofs_x = bp_sq/2 - vp_dia/2; // Position post over base
-vp_r = (vp_dia * sc_x)/2;
-vp_ofs_x = ofs_x-bd_ofs + vp_r;
 
 module vert_post(ht)
 {
@@ -76,8 +57,7 @@ module total_posts()
     rotate([0,0,180]) total_post(vp_ht);
 }
 
-tf_sq = 110;
-tf_ofs_z = 36;
+/* Skim off tops of posts to make a flat surface */
 module top_surface()
 {
    translate([-tf_sq/2,-tf_sq/2,tf_ofs_z])
@@ -98,6 +78,46 @@ module slant_post()
   }
 }
 
+/* This piece goes on top of the posts */
+/* Encoder plate with mounts on top of this. */
+module top_piece()
+{
+    ww = ep_sq * 2;
+    difference()
+    {
+        translate([0,0,ep_thick/2])
+         rotate([0,0,45])
+          cube([ep_sq,ep_sq,ep_thick],center=true);
+
+        union()
+        {
+          translate([0,0,-1])
+           cylinder(d = en_r_dia, h = 50, center = true);
+
+          for (i = [0+45 : 90 : 360+45])
+          {
+            rotate([0,0,i])
+             translate([65,0,-1]) 
+              cylinder(d = 66, h = 50, center = true);
+          }
+
+          difference()
+          {
+            translate([0,0,ep_thick/2])
+              cube([ww,ww,ep_thick],center=true);
+            union()
+            {
+              translate([0,0,ep_thick/2])
+                cube([ep_sq,ep_sq,ep_thick],center=true);            
+            }
+          }
+	  rotate([0,0,45])
+            vposts(5);	
+        }
+    }
+    
+}
+
 module total()
 {
    difference()
@@ -111,5 +131,14 @@ module total()
      {
      }
    }
+    
+translate([0,0,37+8])
+  top_piece();
+
+
+translate([0,0,60])
+ rotate([0,0,45])
+  totalplate();   
+
 }
 total();
