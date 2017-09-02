@@ -6,7 +6,7 @@
  */
 
 include <../library_deh/deh_shapes.scad>
-include <../library_deh/mag_mount.scad>
+include <fairlead_common.scad>
 
 $fn = 50;
 
@@ -18,12 +18,10 @@ enc_d = 38.5;   // Diameter of encoder body
 
 ac_base = 3;
 
-tp_base = 3.01;
-
 vp_d = 8;   // Dia of vertical post
 vp_h = 2.8; // Dia of hole for mounting screw
 vp_ht = 3; // Height of posts
-vp_sc_h = 10; // Depth of screw hole
+vp_sc_h = 10; // Depth of screw holeinclude <../library_deh/mag_mount.scad>
 
 module topbase()
 {

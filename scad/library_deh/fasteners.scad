@@ -30,6 +30,7 @@ screw_dia_pht = 6.7;	// pan-head diameter
 washer_od_6 = 9.46;	// Washer outer diameter	
 washer_id_6 = 4.04;	// Washer inner diameter
 washer_thick = 1.04;	// Washer thickness
+washer_thick_6 = 1.04;	// Washer thickness
 
 // M3
 nut_dia_M3 = 6.5; 
