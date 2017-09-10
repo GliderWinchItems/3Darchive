@@ -1,0 +1,30 @@
+README.fairlead
+
+09/10/2017
+
+Parts for mounting an encoder connected to the shaft
+of the sheaves on the fairlead.
+
+Stud Magnet on end of sheave shaft connects to the 
+encoder via a flexible piece of tubing.  
+
+The encoder mounts on a plate with enlarged holes to
+facilitate alignment.
+
+The encoder plate mounts on a larger plate that bolts
+on top of the posts of the stand.
+
+adapt.scad adapts the magnet stud to the ID for the
+flexible tube.  It has a M4 washer and nut embedded 
+for the magnet stud (which can be 16 or 20 mm.  25 mm
+size has a M5 stud so the "magx" statements to select
+this size would be changed (see library_deh/mag_mount).
+
+
+"true" ad "false" parameters in the stand.scad code
+select the parts to be included.  The plates for the
+encoder mounting can be viewed on above the stand posts
+for visualization purposes, or on ground-level for
+printing.
+
+

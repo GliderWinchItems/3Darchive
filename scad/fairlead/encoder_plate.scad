@@ -14,13 +14,10 @@ ac_d = 77.3;    // Diameter of AC motor
 pst_d = 10.7+.3; // Diameter of hole for AC motor posts
 psc_d = 66.7;   // Diameter of four screw holes on AC motor posts
 
-enc_d = 38.5;   // Diameter of encoder body
-
 ac_base = 3;
 
 vp_d = 8;   // Dia of vertical post
 vp_h = 2.8; // Dia of hole for mounting screw
-vp_ht = 3; // Height of posts
 vp_sc_h = 10; // Depth of screw holeinclude <../library_deh/mag_mount.scad>
 
 module topbase()
@@ -48,8 +45,6 @@ module vposts(dia)
      }
      cylinder(d=20.5,h=10,center=false);
 }
-
-en_r = 15.1; // Encoder mtg hole radius
 
 module emtg()
 {

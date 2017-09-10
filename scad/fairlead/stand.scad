@@ -1,6 +1,8 @@
 /* scad/fairlead/stand.scad
  * Encoder support stand for fairlead
  * Date of latest: 20170830
+ *
+ * 2017 09 10 v1: M4 stud, 6-23 post, 4-40 encoder plate 
  */
 
 include <fairlead_common.scad>
@@ -8,20 +10,52 @@ include <encoder_plate.scad>
 
 $fn = 50;
 
+// **** Id the part ***
+module id()
+{
+ id_x = vp_dia;
+ id_y = bp_sq/2 - 1;
+ {
+  font = "Liberation Sans:style=Bold Italic";
+  translate([id_x - 6,-id_y, bp_thick]) 
+  linear_extrude(2)
+   text("fairlead/stand",size = 5);
+
+ translate([-id_x - 31,-id_y, bp_thick]) 
+  linear_extrude(2)
+   text("2017 09 10 v1",size = 5);
+ }
+}
+
 module base_plate()
 {
    difference()
-   {   // Ties posts together at base
+   {   
+     union()
+     { // Ties posts together at base
         rounded_rectangle(bp_sq, bp_sq, bp_thick, bp_rad);
+
+       // Vertical stiffner
+        translate([0,0,bp_thick])
+         rounded_rectangle(bp_vsq, bp_vsq, bp_ht, bp_rad);
+        
+     }
+     union()
+     {
        // Cutout: surrounds bearing block
         rounded_rectangle(bp_in, bp_in, bp_thick, bp_rad);
+
+       // Vertical stiffner cutout
+        translate([0,0,bp_thick])
+         rounded_rectangle(bp_vsqm, bp_vsqm, bp_ht, bp_rad);
+     }
    }
 }
 
 /* Short vertical section clears bearing block square base */
 module vert_post(ht)
 {
- 
+echo("ht",ht);
    translate([vp_ofs_x+bd_ofs,0,0]) // Center on base outer band
     scale([sc_x, sc_y, 1.0])  // Elliptical cross-section
      cylinder(d = vp_dia, h = ht, center=false);
@@ -36,7 +70,8 @@ module bend_post(theta)
     scale([sc_x,sc_y])
      circle(r = vp_dia/2);
 }
-/* Composite: vertical | bend | slanted & flat-topped */
+/* Single post composite of three pieces--
+  vertical | bend | slanted & flat-topped */
 module total_post()
 {
   translate([-vp_r/2,0,0])
@@ -67,17 +102,18 @@ module top_surface()
      cube([tf_sq,tf_sq,100],center=false);
 }
 
+/* Slanted part of a post with top sliced flat */
 module slant_post()
 {
   difference()
   {
      translate([vp_ofs_x,0,vp_ht])
-      rotate([0,-pt_theta,0])
+      rotate([0,-pt_theta,0])    // Tilt the same as the bend
        translate([bd_ofs,0,0])
-        scale([sc_x, sc_y, 1.0])
+        scale([sc_x, sc_y, 1.0]) // Elliptical cross section
          cylinder(d = vp_dia, h = 90, center=false);
 
-     top_surface();
+     top_surface(); // Flat top 
   }
 }
 /* Holes and embedded nuts & washers to hold top_piece to stand posts */
@@ -96,6 +132,7 @@ module top_bolt()
      cylinder(d = tb_nut_dia, h = tb_nut_thick, center=false, $fn = 6);
 
 }
+/* Bolt holes w nut & washer for top of stand posts */
 module top_bolts()
 {
    for (i = [0 : 90 : 360])
@@ -105,9 +142,57 @@ module top_bolts()
          top_bolt();
    }
 }
+/* Base magnet */
+module base_magnet()
+{
+   // Stud hole
+   hole_ht = magbx_stud_len + 4; 
+/*
+echo ();
+echo("hole",hole_ht);
+echo("magbx_stud_len",magbx_stud_len);
+echo("bp_thick",bp_thick);
+echo("magbx_washer_thick",magbx_washer_thick);
+echo("magbx_nut_thic",magbx_nut_thick);
+*/
+   cylinder(d = magbx_stud_dia, h = hole_ht, center=false);
+
+   // Washer
+   translate([0,0,bx_washer_ofs_z]) // 
+     cylinder(d = magbx_washer_dia, h = magbx_washer_thick, center=false);
+
+   // Nut
+   translate([0,0,bx_nut_ofs_z])
+     cylinder(d = magbx_nut_hex_peak, h = magbx_nut_thick, center=false, $fn = 6);
+}
+module base_magnets()
+{
+   for (i = [0 : 90 : 360])
+   {
+     rotate([0,0,i])
+       translate([vp_ofs_x+bd_ofs-vp_r/2,0,0])
+         base_magnet();
+   }
+}
 
 /* This piece goes on top of the posts */
 /* Encoder plate with mounts on top of this. */
+module top_piece_nut_washer()
+{
+echo ("te_ofs_washer_z",te_ofs_washer_z);
+echo ("te_ofs_nut_z",te_ofs_nut_z);
+   // Bolt hole
+   cylinder(d = te_dia, h = ep_thick+5, center=false);
+
+   // Washer
+   translate([0,0,te_ofs_washer_z]) // 
+     cylinder(d = te_washer_dia, h = te_washer_thick, center=false);
+
+   // Nut
+   translate([0,0,te_ofs_nut_z])
+     cylinder(d = te_nut_dia, h = te_nut_thick, center=false, $fn = 6);   
+
+}
 module top_piece()
 {
     ww = ep_sq * 2;
@@ -144,8 +229,12 @@ module top_piece()
           }
 
           // Large holes for encoder plate mtg
-	  rotate([0,0,45])
-            vposts(5);	
+          for (i = [0 : 90 : 360])
+          {
+            rotate([0,0,i])
+             translate([vp_d + enc_d/2,0,0])
+               top_piece_nut_washer();
+          }
 
           for (i = [0 : 90 : 360])
           {
@@ -157,32 +246,59 @@ module top_piece()
     } 
 }
 
+module TOPVIZUALIZE(SW)
+{
+  if (SW)
+  {
+   translate([0,0,30])
+   {
+     // Temporary for visualization
+     translate([0,0,80]) // Height above stand post tops
+      top_piece();
+
+     // Encoder plate, temporary
+     translate([0,0,100]) // Height above stand post tops
+      rotate([0,0,45])
+       totalplate();   
+   }
+  }
+}
+/* Switches for printing and visualization */
+PRINTSTAND = true;
+PRINTTOP_PIECE = false;
+PRINTENCODERPLATE = false;
+
 module total()
 {
+ if (PRINTSTAND)
+ {
    difference()
    {
      union()
      {
        base_plate();
        total_posts();
+       id();
      }
      union()
      {
        top_bolts();
+       base_magnets();
      }
    }
-
-translate([0,0,30])
-{
-// Temporary for visualization
-translate([0,0,90-13])
-  top_piece();
-
-// Encoder plate, temporary
-translate([0,0,100])
- rotate([0,0,45])
-  totalplate();   
-}
-
+// #### Place plates on top for visualization ####
+   TOPVIZUALIZE(false);  
+ }
+   if (PRINTENCODERPLATE)
+   {
+     translate([0,89,0])
+       totalplate();   
+   }
+   if (PRINTTOP_PIECE)
+   {
+     translate([0,0,0])
+       top_piece();
+   }
+//top_piece_nut_washer();
 }
 total();

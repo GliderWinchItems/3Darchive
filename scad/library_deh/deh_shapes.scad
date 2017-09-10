@@ -97,14 +97,32 @@ module rounded_rim(l,w,h,rad,tk)
 }
 
 /* ***** wedge *****
-l = length
-w = width
-h = height/thickness
+ * l = length
+ * w = width
+ * h = height/thickness
+ * wedge(l, w, h)
 */
  module wedge(l, w, h)
  {
    polyhedron(
       points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
+       faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]] );
+ }
+/* **** wedge_isoceles) ****
+ * l - z axis length
+ * w - y axis length 
+ * h - x axis length
+ * reference: [0, w/2, 0]
+ * wedge_isoceles(l, w, h);
+ */
+
+module wedge_isoceles(l, w, h)
+ {
+  translate([0,0,l])
+   rotate([0,90,0])
+    translate([0,-w/2,0])
+     polyhedron(
+      points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w/2,h], [l,w/2,h]],
        faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]] );
  }
 /* ***** rounded_triangle *****
@@ -139,6 +157,7 @@ module rounded_triangle(l1,l2,l3,h,rad)
  * l2 = side 2
  * l3 = side 3
  * h  = height/thickness
+ * triangle(l1,l2,l3,h);
  */
 module triangle(l1,l2,l3,h)
 {
