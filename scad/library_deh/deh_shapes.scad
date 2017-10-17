@@ -8,6 +8,7 @@
 d1 = outside diameter
 d2 = inside diameter
 ht = height
+module tubedeh(d1,d2,ht)
 reference is center of tube, bottom
 */
 module tubedeh(d1,d2,ht)
