@@ -25,7 +25,7 @@ module id()
 */
 
  rotate([0,0,95])
- translate([gs_tube_od/2 - 1,0, 51]) 
+ translate([gs_tube_od/2 - 1,0, 48]) 
   rotate([0,90,0])
     linear_extrude(2)
       text("2017 10 11 V1",size = 5);
