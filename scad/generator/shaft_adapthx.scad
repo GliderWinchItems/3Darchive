@@ -23,7 +23,7 @@ mm_ht45 = flex_len;
 mm_ht56 = 1;
 
 
-mm_dia1 = eb_post_id - 0.8;;	
+mm_dia1 = eb_post_id - 1.2;;	
 mm_dia4 = flex_id;
 mm_dia5 = flex_id;
 mm_dia6 = flex_id - 2;
@@ -52,7 +52,7 @@ module holes()
 {
 
   // Hex bolt head
-    cylinder(d = bl_dia, h = bl_ht, center= false, $fn = 6);
+    cylinder(d = bl_dia + 0.5, h = bl_ht, center= false, $fn = 6);
 }
 
 
