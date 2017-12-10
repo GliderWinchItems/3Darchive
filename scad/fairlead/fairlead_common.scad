@@ -69,7 +69,7 @@ gal_thick = .41;       // 30 gauge galvanized sheet thickness
 dbl_tape_thick = 1.13; // Double stick tape thickness
 
 /* Encoder coupling */
-tp_base = 3.01;	     // Thickness of encoder mounting plate
+tp_base = 5; //3.01;	     // Thickness of encoder mounting plate
 en_shaft_len = 17.5 - tp_base;  // Length encoder shaft protrudes beyond mtg plate
 en_flex = 18;        // Length Flexible coupling: encoder-stud shaft
 mag_adapt_len = 18;  // Length of mag stud-flexible coupling length

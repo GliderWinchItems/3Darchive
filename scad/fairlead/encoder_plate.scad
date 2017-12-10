@@ -33,7 +33,7 @@ module vpost(dia)
     ofs_z = vp_ht - vp_sc_h;
     
     translate([ofs_x,0,0])
-                    cylinder( d=dia, h=10, center=false);
+                    cylinder( d=dia, h=20, center=false);
 }
 
 module vposts(dia)
@@ -55,6 +55,24 @@ module emtg()
             cylinder(d = 3.5,h = 10, center=false);
      }
         
+}
+module totalplatespacer()
+{
+   difference()
+   {
+      union()
+      { 
+	m = (vp_d*1) + enc_d;
+        thick = 5;
+	rounded_rectangle(m,m,thick,vp_d/2);
+      }
+      union()
+      {
+        cylinder(r=20, h=tp_base, center=false);
+       vposts(3.3);
+       emtg();
+      }
+   }
 }
 
 module totalplate()

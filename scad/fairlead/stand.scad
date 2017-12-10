@@ -3,6 +3,7 @@
  * Date of latest: 20170830
  *
  * 2017 09 10 v1: M4 stud, 6-23 post, 4-40 encoder plate 
+ * 2017 12 09 v2: Added spacer to go under encoder plate
  */
 
 include <fairlead_common.scad>
@@ -23,7 +24,7 @@ module id()
 
  translate([-id_x - 31,-id_y, bp_thick]) 
   linear_extrude(2)
-   text("2017 09 10 v1",size = 5);
+   text("2017 12 09 v2",size = 5);
  }
 }
 
@@ -267,9 +268,16 @@ module TOPVIZUALIZE(SW)
 PRINTSTAND = true;
 PRINTTOP_PIECE = false;
 PRINTENCODERPLATE = false;
+PRINTTPSPACER = false; //true;
 
 module total()
 {
+ if (PRINTTPSPACER)
+ {
+   translate([0,-120,0])
+     totalplatespacer();
+ }
+
  if (PRINTSTAND)
  {
    difference()
