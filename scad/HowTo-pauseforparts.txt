@@ -1,0 +1,36 @@
+HowTo-pauseforparts.txt
+12/12/2017
+
+In Slic3r--
+
+1.  Vizualization|Show Single Layer
+
+Step to layer for insert and note layer number.
+
+2.  Edit G-Code
+
+3.  Search tab
+    Enter: ;Layer change
+
+4.  Search to step to insertion point
+
+5.  Enter: M226 and M25, e.g.--
+
+G1 X23.964 Y153.079 E36.73013
+;Layer change
+G1 E30.73013 F1800.00000
+M226
+M25
+G92 E0
+
+6.  When printing halts
+
+  a.  Press Pause on panel
+  b.  Insert parts
+  c.  Press Continue on panel
+
+  Don't insert parts without pressing Pause as
+  it is easy to move the table and the x/y will
+  be off for the remainder of the print.
+
+

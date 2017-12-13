@@ -126,11 +126,11 @@ module top_bolt()
 
    // Washer
    translate([0,0,-tb_washer_ofs_z]) // 
-     cylinder(d = tb_washer_dia, h = tb_washer_thick, center=false);
+     cylinder(d = tb_washer_dia + .4, h = tb_washer_thick + 0.25, center=false);
 
    // Nut
    translate([0,0,-tb_nut_ofs_z])
-     cylinder(d = tb_nut_dia, h = tb_nut_thick, center=false, $fn = 6);
+     cylinder(d = tb_nut_dia + .65, h = tb_nut_thick +0.25, center=false, $fn = 6);
 
 }
 /* Bolt holes w nut & washer for top of stand posts */
@@ -154,17 +154,17 @@ echo("hole",hole_ht);
 echo("magbx_stud_len",magbx_stud_len);
 echo("bp_thick",bp_thick);
 echo("magbx_washer_thick",magbx_washer_thick);
-echo("magbx_nut_thic",magbx_nut_thick);
+echo("magbx_nut_thick",magbx_nut_thick);
 */
-   cylinder(d = magbx_stud_dia, h = hole_ht, center=false);
+   cylinder(d = magbx_stud_dia + 0.2, h = hole_ht, center=false);
 
    // Washer
    translate([0,0,bx_washer_ofs_z]) // 
-     cylinder(d = magbx_washer_dia, h = magbx_washer_thick, center=false);
+     cylinder(d = magbx_washer_dia + 0.4, h = magbx_washer_thick + 0.35, center=false);
 
    // Nut
    translate([0,0,bx_nut_ofs_z])
-     cylinder(d = magbx_nut_hex_peak, h = magbx_nut_thick, center=false, $fn = 6);
+     cylinder(d = magbx_nut_hex_peak + 0.6, h = magbx_nut_thick + 0.3, center=false, $fn = 6);
 }
 module base_magnets()
 {
