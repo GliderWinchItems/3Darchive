@@ -31,7 +31,8 @@ module id()
 module base_plate()
 {
    difference()
-   {   
+   {
+echo ("bp_sq", bp_sq);   
      union()
      { // Ties posts together at base
         rounded_rectangle(bp_sq, bp_sq, bp_thick, bp_rad);
@@ -43,6 +44,7 @@ module base_plate()
      }
      union()
      {
+echo ("bp_in",bp_in);
        // Cutout: surrounds bearing block
         rounded_rectangle(bp_in, bp_in, bp_thick, bp_rad);
 
@@ -126,11 +128,11 @@ module top_bolt()
 
    // Washer
    translate([0,0,-tb_washer_ofs_z]) // 
-     cylinder(d = tb_washer_dia + .4, h = tb_washer_thick + 0.25, center=false);
+     cylinder(d = tb_washer_dia + .65, h = tb_washer_thick + 0.4, center=false);
 
    // Nut
    translate([0,0,-tb_nut_ofs_z])
-     cylinder(d = tb_nut_dia + .65, h = tb_nut_thick +0.25, center=false, $fn = 6);
+     cylinder(d = tb_nut_dia + .65, h = tb_nut_thick + 0.4, center=false, $fn = 6);
 
 }
 /* Bolt holes w nut & washer for top of stand posts */
@@ -184,15 +186,15 @@ echo ("te_ofs_washer_z",te_ofs_washer_z);
 echo ("te_ofs_nut_z",te_ofs_nut_z);
    // Bolt hole
    cylinder(d = te_dia, h = ep_thick+5, center=false);
-
+/* Insertion of washer & nut requires thicker piece
    // Washer
    translate([0,0,te_ofs_washer_z]) // 
-     cylinder(d = te_washer_dia, h = te_washer_thick, center=false);
+     cylinder(d = te_washer_dia + 0.4, h = te_washer_thick + 0.4, center=false);
 
    // Nut
    translate([0,0,te_ofs_nut_z])
-     cylinder(d = te_nut_dia, h = te_nut_thick, center=false, $fn = 6);   
-
+     cylinder(d = te_nut_dia + 0.65, h = te_nut_thick + 0.4, center=false, $fn = 6);   
+*/
 }
 module top_piece()
 {
@@ -265,9 +267,9 @@ module TOPVIZUALIZE(SW)
   }
 }
 /* Switches for printing and visualization */
-PRINTSTAND = true;
-PRINTTOP_PIECE = false;
-PRINTENCODERPLATE = false;
+PRINTSTAND = false;//true;
+PRINTTOP_PIECE = true;//false;
+PRINTENCODERPLATE = true;//false;
 PRINTTPSPACER = false; //true;
 
 module total()

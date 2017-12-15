@@ -11,11 +11,11 @@ include <../library_deh/fasteners.scad>
 
 /* Bearing block */
 bb_sq = (3.75 * 25.4);// Square bearing block size
-bp_wid = 18;	      // Width of base plate foot around bearing block
+bp_wid = 19;	      // Width of base plate foot around bearing block
 bp_sq = bb_sq + 2*bp_wid; //  Outer side length
 bp_rad = 3;	      // Nice looking radius on corner
-bp_sq_tol = 3;        // Tolerance: gap between base and bearing block
-bp_in = bb_sq -bp_rad*2 + bp_sq_tol;  // Inside length (surrounds bearing block)
+bp_sq_tol = 3+2;        // Tolerance: gap between base and bearing block
+bp_in = bb_sq + bp_sq_tol;  // Inside length (surrounds bearing block)
 bp_thick = 4;	      // Base plate thickness
 bp_shafttop = 40;     // Fairlead plate to top of sheave shaft
 
@@ -25,7 +25,7 @@ bp_vwid = 4;       // Width of vertical stiffener
 bp_vsqm = bp_vsq - bp_vwid; // Side of inner cutout
 bp_ht = 10;        // Height (above footer) 
 
-pt_theta = 15;	// Angle of bend in posts (deg)
+pt_theta = 17.5;	// Angle of bend in posts (deg)
 bd_ofs = 30;	// Radius for rotate extrude of bend
 
 vp_dia = 26;	// Vertical Post main diameter
@@ -33,7 +33,7 @@ vp_ht = 17;	// Vertical post height
 sc_x = 0.6;	// Scale x--squish cylinder to ellipse
 sc_y = 1.0;	// Scale y--width 
 
-ofs_x = bp_sq/2 - vp_dia/2; // Position post over base
+ofs_x = bp_sq/2 - vp_dia/2 + 2; // Position post over base
 vp_r = (vp_dia * sc_x)/2;   // x axis radius
 vp_ofs_x = ofs_x-bd_ofs + vp_r; // Position adjusted for ellipse
 
@@ -69,7 +69,7 @@ gal_thick = .41;       // 30 gauge galvanized sheet thickness
 dbl_tape_thick = 1.13; // Double stick tape thickness
 
 /* Encoder coupling */
-tp_base = 5; //3.01;	     // Thickness of encoder mounting plate
+tp_base = 2;//5; //3.01;	     // Thickness of encoder mounting plate
 en_shaft_len = 17.5 - tp_base;  // Length encoder shaft protrudes beyond mtg plate
 en_flex = 18;        // Length Flexible coupling: encoder-stud shaft
 mag_adapt_len = 18;  // Length of mag stud-flexible coupling length
@@ -79,7 +79,7 @@ fp_ofs = gal_thick + dbl_tape_thick + magbx_thick;
 zbp_shafttop = bp_shafttop - fp_ofs;
 
 /* Encoder top plate piece, ties posts together */
-ep_thick = 6;
+ep_thick = 4;//6;
 
 /* #### Height from bottom of base to flat top of posts #### */
 /* Total height from top of galvanized sheet to top of posts */
