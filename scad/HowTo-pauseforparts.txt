@@ -29,8 +29,11 @@ G92 E0
   b.  Insert parts
   c.  Press Continue on panel
 
-  Don't insert parts without pressing Pause as
-  it is easy to move the table and the x/y will
-  be off for the remainder of the print.
+  Don't insert parts without pressing Pause as unless
+  Pause is pressed the motors are disabled making it 
+  easy to move the table and the x/y willbe off for 
+  the remainder of the print.
+
+
 
 

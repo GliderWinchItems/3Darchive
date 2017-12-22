@@ -79,7 +79,7 @@ fp_ofs = gal_thick + dbl_tape_thick + magbx_thick;
 zbp_shafttop = bp_shafttop - fp_ofs;
 
 /* Encoder top plate piece, ties posts together */
-ep_thick = 4;//6;
+ep_thick = 3;//6;
 
 /* #### Height from bottom of base to flat top of posts #### */
 /* Total height from top of galvanized sheet to top of posts */
