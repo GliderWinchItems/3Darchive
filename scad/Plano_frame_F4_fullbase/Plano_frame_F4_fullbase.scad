@@ -2,6 +2,7 @@
  * Plano box with Discovery F4 and CAN module
  * Author: deh
  * Latest edit: 201700701
+ * V1 2017 12 30: Capture 4-40 nuts for magnet stud
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -9,7 +10,19 @@ include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 
  $fn=100;
+
+// **** Id the part ***
+module id()
+{
+ {
+  font = "Liberation Sans:style=Bold Italic";
+ translate([-25, 2, base_ht]) 
+  linear_extrude(1.0)
+   text("2017 12       30  V1",size = 4);
+ }
+}
  
+
 //iso_post_ht = 3;
 
 RJ_cutout_y = pc_y - p_ridge - dis_len + RJ_length + RJ_slop - RJ_cutout_length;
@@ -372,17 +385,31 @@ module pod_clips()
       rotate([0,0,180]) 
          pod_clip(pcleng, 3);
 }
-
-
+// Mounting Magnet stud post
+module mag_stud_post(whx,why)
+{
+	translate([whx,why,0])
+		cylinder(d= 10, h = 6, center=false);
+}
+// Mountin Magnet posts (plural)
+module mag_stud_posts()
+{
+   mag_stud_post(0,plano_mag_bot_ofs);
+   mag_stud_post((plano_mag_top_x),
+                 (plano_mag_bot_ofs + plano_mag_top_y));
+   mag_stud_post((-plano_mag_top_x),
+                 (plano_mag_bot_ofs + plano_mag_top_y));
+}
+// Mounting Magnet stud hole
 module mag_stud_hole(mhx, mhy)
 {
    translate([mhx,mhy,0])
     {
-        // Magnet stud hole
-        cylinder(h = (base_ht + .1), d = plano_mag_stud, center = false);
-        // Recess for washer and nut
-        translate([0,0,mag_stud_z])
-            cylinder(h = mag_wash_recess_z, d = mag_wash_recess_dia, center = false);
+       // Magnet stud hole
+        cylinder(h = (base_ht + 8), d = 2.6 + 0.4, center = false);
+       // Recess for 4-40 nut
+        translate([0,0,2])
+            cylinder(h = 2.5 + 0.6, d = 7.5 + .6, center = false, $fn=6);
     }
 }
 
@@ -404,7 +431,6 @@ module mag_stud_holes()
                  (plano_mag_bot_ofs + plano_mag_top_y));
    mag_stud_hole((-plano_mag_top_x),
                  (plano_mag_bot_ofs + plano_mag_top_y));
-
 }
 
 module RJ45_cutout()
@@ -477,8 +503,10 @@ module base_punched()
          pod_clips();
          pod_4posts();
          base_plate();
-	 side_rails_angle();
-         // Eye-ball in the translations of the following
+mag_stud_posts();
+id();
+	      side_rails_angle();
+       // Eye-ball in the translations of the following
          translate([-26.5,3,0])    
          {
            // Some local positioning
@@ -490,18 +518,17 @@ module base_punched()
            translate([0,5,0]) /* Tweak position */
              iso_post();
 
-	   translate([-iso_xtop,iso_y, 0])
+	        translate([-iso_xtop,iso_y, 0])
              iso_post_s(iso_blkl+.1,
                  iso_blkw+.1,
                  iso_blkh + iso_ridge_ht - .75,
                  pod_post_s,pod_post_sd);
 
-	   translate([iso_xbot,iso_y,0])
+	        translate([iso_xbot,iso_y,0])
              iso_post_s(iso_blkl+.1,
                  iso_blkw+.1,
                  iso_blkh + iso_ridge_ht - .75,
                  pod_post_s, pod_post_sd);
-
          }
 //         stiffeners();
       }

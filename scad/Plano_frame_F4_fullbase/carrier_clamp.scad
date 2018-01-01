@@ -93,6 +93,14 @@ tbr_wid = 5;
 
       
  }
+module stiffner()
+{
+  wid = 53;
+  thk = 2;
+	translate([-wid/2,-3,dis_post_ht])
+		cube([wid,thk,2],center=false);
+
+}
 
 module base()
 {
@@ -102,7 +110,8 @@ module base()
         {
             pod_4posts();
             c_bar(); 
-            clamps();           
+            clamps();   
+				stiffner();        
         }
         union()
         {

@@ -29,7 +29,7 @@ module id()
   font = "Liberation Sans:style=Bold Italic";
  translate([-32,38, dis_post_ht]) 
   linear_extrude(1)
-   text("v1",size = 3);
+   text("V 1",size = 3);
  }
 }
 

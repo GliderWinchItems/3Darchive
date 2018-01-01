@@ -1,4 +1,4 @@
-1/7/2017
+﻿1/7/2017
 Notes: 3-D printer workshop at USF
 
 jnussbaum@mail.usf.edu
@@ -6,7 +6,7 @@ anthonyross@mail.usf.edu
 
 - Patents are expiring and low cost machines will be encorporating the features.
 
-- Include mico-drill for cleaning the nozzle--probably never will need.  Easy to break.  
+- Include micro-drill for cleaning the nozzle--probably never will need.  Easy to break.  
   Easy to scratch nozzle hole and that causes thread to curl.
 
 - Leveling bed:  The most important part of the setup and the largest cause of failures of the printed part.
@@ -32,7 +32,7 @@ Something said that I didn't catuch about AIO Robotics
 
 -  If there is a jam the feed gear digs into the filament and the teeth clog up so it won't feed.
    Use a dental pick (cheap online) to clean the teeth.  Probably not needed.  Long periods where
-   the head is set too clos to the bed plate might cause this.
+   the head is set too close to the bed plate might cause this.
 
    Most likely with PLA.  Not so much with ABS.
 
@@ -48,7 +48,7 @@ Something said that I didn't catuch about AIO Robotics
    Not much quality control for cheap China products.
    Lots of types with fillers such as wood, conductive, thermochromatic.  Metal doesn't quite match sheen
      of metal, but is stronger than filament w/o metal.
-     Filler needs to be much smaller than nozzel dia.
+     Filler needs to be much smaller than nozzle dia.
    Replacement nozzles are cheap.
    Don't buy filament that does not specify the dia tolerance, or tolerance more than 0.05 mm
    Standard spec: 1.75 +/- 0.05 mm
@@ -64,12 +64,12 @@ Something said that I didn't catuch about AIO Robotics
   ABS: Good engineering material
    Warps a lot.  Best for strength
    Some machines have the whole thing in a heated enclosure.  Some outfit has a patent so some enclose 
-     everything but the front to get around the patent and let the use close the front.  The Chinese just
+     everything but the front to get around the patent and let the user close the front.  The Chinese just
      ignore the patent.  Hold 50C would be good enough in a box.
-   Warpage isn't much of problem for parts maybe an inch across.  A bit 6" box would be a big problem.
+   Warpage isn't much of problem for parts maybe an inch across.  A big 6" box would be a big problem.
    Not resistant to acetone.  
    "vapor polishing"
-      Part in bottle at room temp will take about 2 hrs.
+      Put part in bottle at room temp will take about 2 hrs.
       Avoid youtube demos--most use a crock-pot and heat the acetone.  Part polishes in about 15 secs
         if you don't blow yourself up.
       Polishing other plastics requires chemicals too toxic for home use.
@@ -87,7 +87,7 @@ Something said that I didn't catuch about AIO Robotics
 
   Nylon: 260C nozzle is too hot for this machine.  Limit it to 240C
 
--  Thing universe--the google of 3D
+-  Thingiverse--the google of 3D
 
 -  stl files
    Developed in the '80s.  amf format is the coming type.  Allows for color selection and other things.
