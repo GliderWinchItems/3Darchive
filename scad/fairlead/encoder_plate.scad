@@ -58,17 +58,17 @@ module emtg()
 }
 module totalplatespacer()
 {
+   thick = 3;
    difference()
    {
       union()
       { 
-	m = (vp_d*1) + enc_d;
-        thick = 5;
-	rounded_rectangle(m,m,thick,vp_d/2);
+			m = (vp_d*1) + enc_d;
+			rounded_rectangle(m,m,thick,vp_d/2);
       }
       union()
       {
-        cylinder(r=20, h=tp_base, center=false);
+        cylinder(r=20, h=15, center=false);
        vposts(3.3);
        emtg();
       }

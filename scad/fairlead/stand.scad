@@ -268,9 +268,9 @@ module TOPVIZUALIZE(SW)
 }
 /* Switches for printing and visualization */
 PRINTSTAND = false;//true;
-PRINTTOP_PIECE = true;//false;
-PRINTENCODERPLATE = true;//false;
-PRINTTPSPACER = false; //true;
+PRINTTOP_PIECE = false;
+PRINTENCODERPLATE = false;
+PRINTTPSPACER = true; //true;
 
 module total()
 {

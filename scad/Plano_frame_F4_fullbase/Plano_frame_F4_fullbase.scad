@@ -406,10 +406,10 @@ module mag_stud_hole(mhx, mhy)
    translate([mhx,mhy,0])
     {
        // Magnet stud hole
-        cylinder(h = (base_ht + 8), d = 2.6 + 0.4, center = false);
+        cylinder(h = (base_ht + 8), d = 2.6 + 0.6, center = false);
        // Recess for 4-40 nut
         translate([0,0,2])
-            cylinder(h = 2.5 + 0.6, d = 7.5 + .6, center = false, $fn=6);
+            cylinder(h = 2.4 + 0.3, d = 7.1 + .4, center = false, $fn=6);
     }
 }
 

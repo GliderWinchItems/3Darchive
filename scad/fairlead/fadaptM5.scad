@@ -101,11 +101,11 @@ module holes()
 
   // Washer
   translate([0,0,mm_ht12])
-    cylinder(d = magx_washer_dia + 0.5, h = magx_washer_thick, center=false);
+    cylinder(d = magx_washer_dia + 0.7, h = magx_washer_thick + .4, center=false);
 
   // Nut
   translate([0,0,mm_ht12+magx_washer_thick])
-    cylinder(d = ss_nut_dia, h = magx_nut_thick, center= false, $fn = 6);
+    cylinder(d = ss_nut_dia + 0.5, h = magx_nut_thick + 0.5, center= false, $fn = 6);
 
   // Stud base (has a slightly larger dia boss)
   cylinder(d = ss_stud_base_dia, h = ss_stud_base_ht, center=false);

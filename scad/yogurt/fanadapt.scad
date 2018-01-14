@@ -12,9 +12,9 @@ holedia = 4 + 0.6;	// Hole diameter
 fandia = 58;	// Dia of fan opening
 cookdia = 185;	// Slow cooker diameter
 
-thick = 6;
+thick = 10;
 
-$fn = 100;
+$fn = 200;
 
 module mounting_hole(mx,my)
 {
@@ -36,7 +36,7 @@ module adapt()
 			cylinder(d=fandia, h = thick + 15, center=true);
 			
 			// Cooker case
-			translate([0,0,-(cookdia/2 -  3)])
+			translate([0,0,-(cookdia/2 -  6)])
 				rotate([0,90,0])
 					cylinder(d = cookdia, h = odsq + 10, center=true);
 
