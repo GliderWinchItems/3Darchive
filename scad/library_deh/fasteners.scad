@@ -16,7 +16,7 @@ screw_dia_s440 = 2.72;	// shaft diameter
 screw_dia_s440_z = 1.90; // Dia at tip
 screw_dia_ph = 5.42;	// pan-head diamter
 screw_dia_pht = 1.7;	// pan-head thickness
-nut_dia_440 =  7.12;	// peak-peak 
+nut_dia_440 =  7.12;	// peak-peak +--*+-+
 nut_thick_440 = 2.41;	// thickess
 nut_dia_440L = 8.88;	// Lock nut diameter
 nut_thick_440L = 4.6;	// Lock nut thickness
@@ -25,6 +25,11 @@ nut_thick_440L = 4.6;	// Lock nut thickness
 screw_dia_sod620 = 3.5;	// Outer diameter of threads
 screw_dia_sth620 = 2.6;	// Self tap hole
 screw_dia_pht = 6.7;	// pan-head diameter
+
+// #4
+washer_od_4 = 8.0;		// Washer outer diameter
+washer_id_4 = 3.2;		// Washer inner diameter
+washer_thick_4 = .94;	// Washer thickness
 
 // #6
 washer_od_6 = 9.46;	// Washer outer diameter	
