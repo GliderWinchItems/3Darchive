@@ -2,6 +2,19 @@
 file: ridged_screw_hole.scad
 2018 01 18
 */
+/*
+All results are translated so that inside edges of the ridges are aligned with the axis, so a 
+square or rectangle will have the corner centered on the x,y origin.
+
+Modules----
+module corner_ridged_rectangle(xlen,ylen,zlen,rht,rwdx,rwdy)
+module corner_ridged_square(slen,zlen,rht,rwds)
+module corner_ridged_square_w_screw(slen,zlen,rht,rwds,scd1,scd2,sch,scofx,scofy)
+module corner_ridged_rectangle_w_screw(xlen,ylen,zlen,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy)
+module ridged_rectangular_w_clip(xlen,ylen,zlen,rht,rwdy,clen)
+*/
+
+include <deh_shapes.scad>
 
 /*  ***** corner_ridged_rectangle *****
 * xlen = x axis direction length
@@ -33,7 +46,7 @@ module corner_ridged_rectangle(xlen,ylen,zlen,rht,rwdx,rwdy)
     }        
 }
 
-/*  ***** corner_ridged_square *****
+/*  ***** corner_ridged_square_w_screw *****
 * slen = length x & y axis directions
 * zlen = z axis, height to ledge
 * rht  = ridge thickness
@@ -116,4 +129,38 @@ echo("R","scofx",scofx,"scofy",scofy,"hy",hy,"hx",hx);
 module ridge_screw_hole_square(slen,rwdx,rwdy,scd1,scd2,sch,scofx,scofy)
 {
     ridge_screw_hole_rectangle(slen,slen,rwdx,rwdy,scd1,scd2,sch,scofx,scofy);
+}
+
+/*
+pst_ldg = 6 + bfthick;	// Height of pc board ledge from bottom
+pst_wid = 3;	// Width of post
+pcb_thick = 2.0;	// Thickness of pcb
+clip_ht = 3;
+pst_w2 = 1;	// Width where pcb contacts edge
+*/
+
+/*  ***** ridged_rectangular_w_clip *****
+* xlen = x axis direction length
+* ylen = y axis direction length
+* zlen = z axis, height to ledge
+* rht  = height of ridge (pcb thickness)
+* rwdy = ridge width, y direction
+* clen = clip length
+* Orientation: ridge runs in y-axis direction 
+* Note: ledge with is (xlen - rwdy)
+*/
+//         ridged_rectangular_w_clip(  3,  15,   5, 1.5, 1,   3 );	// Test
+module ridged_rectangular_w_clip(xlen,ylen,zlen,rht,rwdy,clen)
+{
+	corner_ridged_rectangle(xlen,ylen,zlen,rht,rwdy,0);
+
+	// Clip overhang
+	cofsx = clen - rwdy;	// Offsets for wedge
+ 	cofsy = ylen;
+	cofsz = zlen+rht+clen - rwdy;
+	translate([cofsx,cofsy,cofsz])
+		rotate([0,180,0])
+		rotate([0,0,-90])
+		wedge(ylen,clen,clen);
+
 }

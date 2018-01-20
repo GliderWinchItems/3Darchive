@@ -7,6 +7,7 @@
 include <../library_deh/deh_shapes.scad>
 include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
+include <../library_deh/ridged_screw_hole.scad>
 
  $fn=100;
 
