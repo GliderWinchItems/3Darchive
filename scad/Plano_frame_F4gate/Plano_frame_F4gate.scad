@@ -41,6 +41,10 @@ magxbottom_ofs_y = 9-1.5;	// Offset from bottom of tab
 magxbottom_pstdia = 10;	// Eyebar (post) diameter
 magxbottom_pstht = 6.3;	// Post height
 
+scr_d1 = screw_dia_sod620;// = 3.5;	// Outer diameter of threads
+scr_d2 = screw_dia_sth620;// = 2.6;	// Self tap hole
+scr_ht = 8;	// Depth
+
 
 corner_cut = 7;	// Rounded corner dia
 side_cut = 4;	// Rounded inside bottom dia
@@ -161,8 +165,25 @@ pcb_thick = 2.0;	// Thickness of pcb
 clip_ht = 3;
 pst_w2 = 1;	// Width where pcb contacts edge
 
+
+/*  ***** ridged_rectangular_w_clip *****
+* xlen = x axis direction length
+* ylen = y axis direction length
+* zlen = z axis, height to ledge
+* rht  = height of ridge (pcb thickness)
+* rwdy = ridge width, y direction
+* clen = clip length
+* Orientation: ridge runs in y-axis direction 
+* Note: ledge with is (xlen - rwdy)
+*/
+//         ridged_rectangular_w_clip(  3,  15,   5, 1.5, 1,   3 );	// Test
+//module ridged_rectangular_w_clip(xlen,ylen,zlen,rht,rwdy,clen)
+
 module pcb_post(len)
 {
+	ridged_rectangular_w_clip(pst_wid,len,pst_ldg,pcb_thick,pst_w2,clip_ht);
+
+/*
 	pht = pst_ldg + clip_ht + pcb_thick;
 
 	// Base->bottom edge of pcb, i.e. "ledge"
@@ -177,10 +198,14 @@ module pcb_post(len)
 		rotate([0,180,0])
 		rotate([0,0,-90])
 		wedge(len,clip_ht,clip_ht);
+*/
 }
 module pcb_post_ridged(len)
 {
-rdg = 1;
+rdg_wid = 1; rdg_ht = 2;
+	rotate([0,0,180])
+		ridged_rectangle(len,pst_wid,pst_ldg,rdg_ht,rdg_wid);
+/*
  translate([0,-(pst_wid-rdg),0])
  {
 	difference()
@@ -191,6 +216,7 @@ rdg = 1;
 			cube([len+.2,pst_wid,5],center=false);
 	}
  }
+*/
 }
 
 /* Post for screw instead of overhang clip */
@@ -210,13 +236,36 @@ scp_y = 6;
  }
 }
 
+module ridged_screw_post()
+{
+rdg_ht = 1.5;
+scofs = -1.6;
+slen = 8;
+rwds = slen-3.5;;
+
+/*  ***** corner_ridged_square_w_screw *****
+* slen = length x & y axis directions
+* zlen = z axis, height to ledge
+* rht  = ridge thickness
+* rwds = ridge width, x & y directions
+* scd1 = screw diameter at top
+* scd2 = screw diameter at bottom of screw
+* sch  = screw hole height
+* scofx = screw hole center offset from inside ridge corner, x
+* scofy = screw hole center offset from inside ridge corner, y
+*/
+//corner_ridged_square_w_screw(  10,  5, 1.5,  4,  3.2,  1.2,  3,  -1.4,  -1.4  ); // test
+//corner_ridged_square_w_screw(slen,zlen,rht,rwds,scd1,scd2,sch,scofx,scofy)
+	corner_ridged_square_w_screw(slen,pst_ldg,rdg_ht,rwds,scr_d1,scr_d2,scr_ht,scofs,scofs);
+}
+
 module pcb_posts()
 {
 	/* Side posts	*/
 	len = 10;	// Length
 	yofs = 15;	// Offset from bottom of base
-	left = -dis_wid/2 - pst_w2;
-	right = dis_wid/2 + pst_wid - pst_w2;
+	left = -dis_wid/2;// - pst_w2;
+	right = dis_wid/2;// + pst_wid - pst_w2;
 	// Left side
 	translate([left,yofs,0])
 		pcb_post(len);	
@@ -253,10 +302,10 @@ module pcb_posts()
 		rotate([0,0,90])
 			pcb_post(lenbot);	
 
-
+	/* Top right corner post w screw */
 	translate([right,yofs2,0])
-		rotate([0,0,0])
-			ridged_screw_post(5);
+		rotate([0,0,180])
+			ridged_screw_post();
 
 }
 
@@ -466,20 +515,6 @@ module top_mags()
 
 
 }
-/* Ridged screw post */
-module ridged_screw_post(len)
-{
-		union()
-		{
-//			translate([-len/2,0,0])
-//				pcb_post_ridged(len);	
-			translate([0,0,0])
-//				rotate([0,0,-90])
-					pcb_post_ridged(len);	
-			
-		}
-}
-
 
 module total()
 {
@@ -517,8 +552,6 @@ module total()
 	}
 mag_tab_bot();
 
-translate([70,0,0])
-	ridged_screw_post(5);
 }
 
 total();

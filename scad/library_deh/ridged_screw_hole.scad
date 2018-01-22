@@ -7,6 +7,7 @@ All results are translated so that inside edges of the ridges are aligned with t
 square or rectangle will have the corner centered on the x,y origin.
 
 Modules----
+module ridged_rectangle(xlen,ylen,zlen,rht,rwdy)
 module corner_ridged_rectangle(xlen,ylen,zlen,rht,rwdx,rwdy)
 module corner_ridged_square(slen,zlen,rht,rwds)
 module corner_ridged_square_w_screw(slen,zlen,rht,rwds,scd1,scd2,sch,scofx,scofy)
@@ -15,6 +16,18 @@ module ridged_rectangular_w_clip(xlen,ylen,zlen,rht,rwdy,clen)
 */
 
 include <deh_shapes.scad>
+
+/*  ***** ridged_rectangle *****
+* xlen = x axis direction length
+* ylen = y axis direction length
+* zlen = z axis, height to ledge
+* rht  = ridge thickness
+* rwdy = ridge width, y direction
+*/
+module ridged_rectangle(xlen,ylen,zlen,rht,rwdy)
+{
+	corner_ridged_rectangle(xlen,ylen,zlen,rht,0,rwdy);
+}
 
 /*  ***** corner_ridged_rectangle *****
 * xlen = x axis direction length
@@ -57,7 +70,7 @@ module corner_ridged_square(slen,zlen,rht,rwds)
     corner_ridged_rectangle(slen,slen,zlen,rht,rwds,rwds);
 }
 
-/*  ***** corner_ridged_square *****
+/*  ***** corner_ridged_square_w_screw *****
 * slen = length x & y axis directions
 * zlen = z axis, height to ledge
 * rht  = ridge thickness
@@ -120,8 +133,8 @@ module ridge_screw_hole_rectangle(xlen,ylen,rwdx,rwdy,scd1,scd2,sch,scofx,scofy)
 {
     hx =  scofx;
     hy =   scofy;
-echo("R","rwdx",rwdx,"rwdy",rwdy);
-echo("R","scofx",scofx,"scofy",scofy,"hy",hy,"hx",hx);
+//echo("R","rwdx",rwdx,"rwdy",rwdy);
+//echo("R","scofx",scofx,"scofy",scofy,"hy",hy,"hx",hx);
     translate([hx,hy,0])
         cylinder(d1=scd2,d2=scd1,h=sch,center=false,$fn=25);    
 }
