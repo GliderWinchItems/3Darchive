@@ -23,6 +23,8 @@ include <deh_shapes.scad>
 * zlen = z axis, height to ledge
 * rht  = ridge thickness
 * rwdy = ridge width, y direction
+* NOTE: to convert from right orientation use
+* mirror([1,0,0]) for left orientation
 */
 module ridged_rectangle(xlen,ylen,zlen,rht,rwdy)
 {
@@ -98,7 +100,8 @@ module corner_ridged_square_w_screw(slen,zlen,rht,rwds,scd1,scd2,sch,scofx,scofy
 * ylen = y axis direction length
 * zlen = z axis, height to ledge
 * rht  = ridge thickness
-* rwds = ridge width, x & y directions
+* rwdx = ridge width, x directions
+* rwdy = ridge width, y directions
 * scd1 = screw diameter at top
 * scd2 = screw diameter at bottom of screw
 * sch  = screw hole height
@@ -107,7 +110,9 @@ module corner_ridged_square_w_screw(slen,zlen,rht,rwds,scd1,scd2,sch,scofx,scofy
 */
 //translate([20,0,0])
 //                                xlen ylen zlen rht dx dy   scd1 scd2  sch  scofx scofy
-//corner_ridged_rectangle_w_screw(6,  12,    5, 1.5, 5, 4,    3.2, 2.2,   4,  -1.5,  -2.0); // Test
+//corner_ridged_rectangle_w_screw(6,  12,    5, 1.5, 5, 4,    3.2, 2.2,   4,  -1.5,  -2.0); // Test right
+//translate([-6,0,0])
+//corner_ridged_rectangle_w_screw(6,  12,    5, 1.5, -3, 4,    3.2, 2.2,   4,  -1.5+6,  -2.0); // Test left
 module corner_ridged_rectangle_w_screw(xlen,ylen,zlen,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy)
 {
     difference()

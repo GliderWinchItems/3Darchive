@@ -37,9 +37,11 @@ magx_washer_thick = washer_thick_4 + .3;	// Washer thickness
 
 screw_hole = screw_dia_sth620;
 
-magxbottom_ofs_y = 9-1.5;	// Offset from bottom of tab
+magxbottom_ofs_y = 9;	// Offset from bottom of tab
 magxbottom_pstdia = 10;	// Eyebar (post) diameter
 magxbottom_pstht = 6.3;	// Post height
+
+frame_ofsy = 2;
 
 scr_d1 = screw_dia_sod620;// = 3.5;	// Outer diameter of threads
 scr_d2 = screw_dia_sth620;// = 2.6;	// Self tap hole
@@ -239,24 +241,11 @@ scp_y = 6;
 module ridged_screw_post()
 {
 rdg_ht = 1.5;
-scofs = -1.6;
-slen = 8;
-rwds = slen-3.5;;
+scofx = 0.5;	scofy = -2.5;
+xlen = 5;	ylen = 9;
+rwdx = xlen-3;	rwdy = ylen-3;
 
-/*  ***** corner_ridged_square_w_screw *****
-* slen = length x & y axis directions
-* zlen = z axis, height to ledge
-* rht  = ridge thickness
-* rwds = ridge width, x & y directions
-* scd1 = screw diameter at top
-* scd2 = screw diameter at bottom of screw
-* sch  = screw hole height
-* scofx = screw hole center offset from inside ridge corner, x
-* scofy = screw hole center offset from inside ridge corner, y
-*/
-//corner_ridged_square_w_screw(  10,  5, 1.5,  4,  3.2,  1.2,  3,  -1.4,  -1.4  ); // test
-//corner_ridged_square_w_screw(slen,zlen,rht,rwds,scd1,scd2,sch,scofx,scofy)
-	corner_ridged_square_w_screw(slen,pst_ldg,rdg_ht,rwds,scr_d1,scr_d2,scr_ht,scofs,scofs);
+	corner_ridged_rectangle_w_screw(xlen,ylen,pst_ldg,rdg_ht,rwdx,rwdy,scr_d1,scr_d2,scr_ht,scofx,scofy);
 }
 
 module pcb_posts()
@@ -305,6 +294,12 @@ module pcb_posts()
 	/* Top right corner post w screw */
 	translate([right,yofs2,0])
 		rotate([0,0,180])
+			ridged_screw_post();
+
+	/* Top left corner post w screw */
+translate([left,yofs2,0])
+		rotate([0,0,180])
+	mirror([1,0,0])
 			ridged_screw_post();
 
 }
@@ -526,7 +521,7 @@ module total()
 			translate([ftd_ofs_x,40,0])
 				ftdi_post();
 
-			translate([side_ofs,0,0])
+			translate([side_ofs,frame_ofsy,0])
 				pcb_posts();
 
 			translate([0,plano_sw_ofs,0])
@@ -542,7 +537,7 @@ module total()
 		{
 			base_radx();
 
-			translate([side_ofs,0,0])
+			translate([side_ofs,frame_ofsy,0])
 				base_cutouts();
 
 			// Bottom tab
