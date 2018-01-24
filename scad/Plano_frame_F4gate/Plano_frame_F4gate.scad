@@ -9,6 +9,8 @@ include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/ridged_screw_hole.scad>
 
+include <F4g_cap.scad>
+
  $fn=100;
 
 big = 10;	// Big z in direction 
@@ -37,14 +39,14 @@ magx_washer_thick = washer_thick_4 + .3;	// Washer thickness
 
 screw_hole = screw_dia_sth620;
 
-magxbottom_ofs_y = 9;	// Offset from bottom of tab
+magxbottom_ofs_y = 9 - 1.5;	// Offset from bottom of tab
 magxbottom_pstdia = 10;	// Eyebar (post) diameter
 magxbottom_pstht = 6.3;	// Post height
 
 frame_ofsy = 2;
 
-scr_d1 = screw_dia_sod620;// = 3.5;	// Outer diameter of threads
-scr_d2 = screw_dia_sth620;// = 2.6;	// Self tap hole
+scr_d1 = 3.1; 	// Self tap 4-40 screw OD at top
+scr_d2 = 2.1;	// Self tap 4-40 screw OD at bottom
 scr_ht = 8;	// Depth
 
 
@@ -57,9 +59,15 @@ module id()
 {
  {
   font = "Liberation Sans:style=Bold Italic";
- translate([-75, 2, base_ht]) 
+ translate([38, 63, bfthick]) 
+  rotate([0,0,90])
   linear_extrude(1.0)
-   text("2018 01       09  V1",size = 4);
+   text("Plano_F4gate",size = 3.5);
+
+ translate([32, 63, bfthick]) 
+  rotate([0,0,90])
+  linear_extrude(1.0)
+   text("2018 01 22  V1",size = 3.5);
  }
 }
 
@@ -72,7 +80,7 @@ module base()
 module base_radx()
 {
 xc = (plano_wid_bot/2 - side_cut);
-      // Corner notches
+      // Corner notches bottom
 			translate([plano_wid_bot/2-corner_cut,0,0])    // Right corner
 				rotate([0,-90,-90])
 					wedge(bfthick, corner_cut, corner_cut);
@@ -80,6 +88,16 @@ xc = (plano_wid_bot/2 - side_cut);
 			translate([-plano_wid_bot/2,corner_cut,0])    // Left corner
 				rotate([0,-90,180])
 					wedge(bfthick, corner_cut, corner_cut);
+
+     // Corner notches top
+			translate([plano_wid_bot/2,plano_len-corner_cut,-.05])    // Right corner
+				rotate([0,-90,0])
+					wedge(bfthick+.1, corner_cut, corner_cut);
+
+			translate([-plano_wid_bot/2+corner_cut,plano_len,-.05])    // Left corner
+				rotate([0,-90,90])
+					wedge(bfthick+.1, corner_cut, corner_cut);
+
 
       // Bottom edge to avoid case radius at bottom
          translate([-xc-0.1,0,0])    // Left side
@@ -100,6 +118,9 @@ xc = (plano_wid_bot/2 - side_cut);
                 wedge( bflen, side_cut, side_cut);
 
          translate([-bflen/2,plano_len,0])    // Trim off little end piece
+				cube([bflen,2,10],center=false);
+
+         translate([-bflen/2,-1.5,0])    // Trim off little end piece
 				cube([bflen,2,10],center=false);
 }
 
@@ -185,40 +206,16 @@ module pcb_post(len)
 {
 	ridged_rectangular_w_clip(pst_wid,len,pst_ldg,pcb_thick,pst_w2,clip_ht);
 
-/*
-	pht = pst_ldg + clip_ht + pcb_thick;
-
-	// Base->bottom edge of pcb, i.e. "ledge"
-	cube([pst_wid,len,pst_ldg],center=false);
-
-	// Ledge to start of 45 deg clip overhang
-	translate([0,0,pst_ldg])
-		cube([pst_w2,len,pcb_thick+clip_ht],center=false);
-
-	// Clip overhang
-	translate([clip_ht+pst_w2,len,pst_ldg+pcb_thick+clip_ht-0.5])
-		rotate([0,180,0])
-		rotate([0,0,-90])
-		wedge(len,clip_ht,clip_ht);
-*/
+	translate([-1,len,bfthick-.05])
+		rotate([0,-90,0])
+		rotate([90.0,0])
+ 			fillet (4,len);	
 }
 module pcb_post_ridged(len)
 {
 rdg_wid = 1; rdg_ht = 2;
 	rotate([0,0,180])
 		ridged_rectangle(len,pst_wid,pst_ldg,rdg_ht,rdg_wid);
-/*
- translate([0,-(pst_wid-rdg),0])
- {
-	difference()
-	{
-		translate([-len/2,0,0])
-			cube([len,pst_wid, pst_ldg + pcb_thick],center=false);
-		translate([-len/2-.01,-rdg,pst_ldg])
-			cube([len+.2,pst_wid,5],center=false);
-	}
- }
-*/
 }
 
 /* Post for screw instead of overhang clip */
@@ -252,17 +249,23 @@ module pcb_posts()
 {
 	/* Side posts	*/
 	len = 10;	// Length
-	yofs = 15;	// Offset from bottom of base
+	yofs = 4;	// Offset from bottom of base
 	left = -dis_wid/2;// - pst_w2;
 	right = dis_wid/2;// + pst_wid - pst_w2;
 	// Left side
 	translate([left,yofs,0])
+   {
 		pcb_post(len);	
+
+	}
 
 	// Right side
 	translate([right,yofs+len,0])
-	rotate([0,0,180])
-		pcb_post(len);	
+	{
+		rotate([0,0,180])
+			pcb_post(len);	
+
+	}
 
 	/* Top post	*/
 	wid = 5;	// Length (width, in this orientation)
@@ -279,15 +282,16 @@ module pcb_posts()
 		screw_post(8);
 
 	/* Bottom left */
-	lenbot = 5;	// Bottom post length
-	xofs3 = -15+lenbot;
-	translate([xofs3,0,0])
+	lenbot = 8;	// Bottom post length
+	ytrim = 2.5; // Tweak added
+	xofs3 = -12+lenbot;
+	translate([xofs3,ytrim,0])
 		rotate([0,0,90])
 			pcb_post(lenbot);	
 
 	/* Bottom right */
-	xofs4 = 15+lenbot;
-	translate([xofs4,0,0])
+	xofs4 = 12+lenbot;
+	translate([xofs4,ytrim,0])
 		rotate([0,0,90])
 			pcb_post(lenbot);	
 
@@ -330,6 +334,12 @@ echo(ftd_tot_wid,"ftd_tot_wid");
 			{
 				translate([0,0,0])
 					cube([ftd_tot_wid, ftd_tot_len, ftd_tot_ht],center=false);
+
+				translate([0.05,ftd_tot_len,-.05])
+					rotate([0,-90,0])
+					rotate([90.0,0])
+			 			fillet (4,ftd_tot_len);	
+
 			}
 			union()
 			{
@@ -543,9 +553,23 @@ module total()
 			// Bottom tab
 			translate([0,magxbottom_ofs_y,0])	// Offset from bottom
 				washer_nut(washer_backing);	// Washer & nut
+
+			// Left side trim
+			translate([-plano_wid_top/2-9,0,0])
+				cube([10,150,20],center=false);
 		}
 	}
-mag_tab_bot();
+	difference()
+	{
+		mag_tab_bot();
+		base_radx();
+	}
+	id();
+
+/* Separate part: End clamp piece */
+//translate([-5.5,102.5,14.5])
+//rotate([180,0,180])
+// F4gtotal();
 
 }
 
