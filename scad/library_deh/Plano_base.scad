@@ -38,17 +38,22 @@ include <../library_deh/Plano_frame.scad>
  // Diameter of recess
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
 **************************************************************/
-
 pl_len = plano_len;
 pl_wid = plano_wid;
 
 pl_cc = base_rnd;	// Rounded corner dia: corner_cut
 pl_sc = 4;			// Rounded inside bottom dia: side_cut
 
-mgp_ofs_yb	= 9-1.5;	// Bottom-center mag y offset
-mgp_ofs_ht	= 4;
+/* Mounting for bottom magnet */
+mgp_ofs_yb = 9-1.5;	// Bottom-center mag y offset
+mgp_del = 2.5;	// Raise and shorten to avoid sticking into chamfer
 
-mgp_od = 12;	// Mag mount post outside diameter
+
+/* Mounting for top pair of magnets */
+tm_ofs_x = 29;		// Offset from centerline
+tm_ofs_y = 142;	// Offset from bottom
+
+mgp_od = 10;	// Mag mount post outside diameter
 mgp_ht = 8;		// Mag stud length
 mgp_floor = 2;	// Thickness between box floor and washer bottom
 
@@ -58,13 +63,17 @@ mgp_wash_dia = washer_od_4 + 0.5;	// 4-40 Washer OD
 mgp_stud_dia = mag_stud_dia + 0.6; // Stud diameter
 mgp_nut_pk   = nut_dia_440 + 0.6;	// Nut peak-peak
 mgp_nut_thk  = nut_thick_440;
-module mag_post_add()
+
+module mag_post_add(a,ht)
 {
-	cylinder(d=mgp_od,h=mgp_ht,center=false);	
+	translate(a)
+	cylinder(d=mgp_od,h=ht,center=false);	
 }
 
-module mag_post_del()
+module mag_post_del(a)
 {
+ translate(a)
+ {
 	translate([0,0,-.05])	// Stud hole
 		cylinder(d=mgp_stud_dia,h=mgp_ht+1,center=false);
 
@@ -73,15 +82,26 @@ module mag_post_del()
 
 	translate([0,0,mgp_floor+mgp_wash_thk]) // Hex nut
 		cylinder(d=mgp_nut_pk,h=mgp_nut_thk,center=false, $fn=6);
-
+ }
 }
 module mag_posts_add()
 {
+	// Bottom center mag post
+	mag_post_add([0,mgp_ofs_yb,mgp_del],mgp_ht-mgp_del);
 
+	// Top mag (tm) posts
+	mag_post_add([-tm_ofs_x,tm_ofs_y,0],mgp_ht);
+	mag_post_add([ tm_ofs_x,tm_ofs_y,0],mgp_ht);	
 }
+
 module mag_posts_del()
 {
+	// Bottom center mag post
+	mag_post_del([0,mgp_ofs_yb,0]);
 
+	// Top mag (tm) posts
+	mag_post_del([-tm_ofs_x,tm_ofs_y,0]);
+	mag_post_del([ tm_ofs_x,tm_ofs_y,0]);	
 }
 
 /* Additions 
@@ -89,14 +109,24 @@ module mag_posts_del()
  */
 module plano_base_add(thick)
 {
-	rounded_rectangle(pl_wid-pl_cc,pl_len-pl_cc,thick,pl_cc);
-}
+	/* **** base plate, chamfered, and rounded corners ****/
+//pl_cc = base_rnd;	// Rounded corner dia: corner_cut
+//pl_sc = 4;			// Rounded inside bottom dia: side_cut
+//pl_len = plano_len;
+//pl_wid = plano_wid;
 
+	rad = pl_cc-pl_sc;	
+	composite_chamfered_rectangle(pl_wid,pl_len,thick,pl_sc,rad);
+
+	mag_posts_add();
+
+}
 /* Deletions (used in a final 'difference()' */
-module plano_base_del()
+module plano_base_del(thk)
 {
-
+	mag_posts_del();
 }
+
 /* ***** chamfered_corner **********************
  * cx, cy form triangle for bottom chamfer
  * rad = z axis radius for corner
@@ -164,7 +194,7 @@ module rounded_rectangles2(wid,slen,ht,cut,rad)
  * slen = length, y direction
  * ht   = height (or thickness if you prefer)
  * cut  = x & y direction of chamfer
- * rad  = z axis, radius of corner rounding
+ * rad  = z axis, radius of corner rounding less cut
  * NOTE: this places a rounded rectangular cube on top
  *   of a rounded rectangle with a bottom chamfer,
  *   i.e. this is a "base" for a Plano box.
@@ -177,7 +207,7 @@ module composite_chamfered_rectangle(wid,slen,ht,cut,rad)
     translate([0,0,cut])
         rounded_rectangles2(wid,slen,ht-cut,cut,rad);
 }
-composite_chamfered_rectangle(66,86,5,4,3); // test this module
+//composite_chamfered_rectangle(66,86,5,4,3); // test this module
 
 module test()
 {
@@ -188,4 +218,4 @@ module test()
 		plano_base_del(thk);
 	}
 }
-//test();
+test();
