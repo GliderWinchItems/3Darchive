@@ -206,7 +206,7 @@ module pcb_post(len)
 {
 	ridged_rectangular_w_clip(pst_wid,len,pst_ldg,pcb_thick,pst_w2,clip_ht);
 
-	translate([-1,len,bfthick-.05])
+	translate([-1+.05,len,bfthick-.05])
 		rotate([0,-90,0])
 		rotate([90.0,0])
  			fillet (4,len);	
