@@ -5,7 +5,16 @@
  */
 
 include <../library_deh/deh_shapes.scad>
-/* ***** side_post_right ***********
+
+/* Modules in this file
+module angled_post_side_right(wid,slen,theta,ht1,rdg,ldg)
+module angled_post_side_left(wid,slen,theta,ht1,rdg,ldg)
+
+
+*/
+
+
+/* ***** angled_post_side_right ***********
  * wid = width (x direction)
  * slen = slant length
  * theta = angle
@@ -14,7 +23,7 @@ include <../library_deh/deh_shapes.scad>
  * ldg = pcb ledge width
  * NOTE: x,y (0,0) reference is lower end at inside ridge wall
  */
-module side_post_right(wid,slen,theta,ht1,rdg,ldg)
+module angled_post_side_right(wid,slen,theta,ht1,rdg,ldg)
 {
 	ht2 = slen * sin(theta);
 	ht3 = ht1  + ht2 + rdg / cos(theta);
@@ -46,12 +55,62 @@ module side_post_right(wid,slen,theta,ht1,rdg,ldg)
 
 }
 
-//side_post_right(3,12,20,4,2,2);	// Test module
-side_post_left(3,12,20,4,2,2);	// Test module
+//angled_post_side_right(3,12,20,4,2,2);	// Test module
 
-module side_post_left(wid,slen,theta,ht1,rdg,ldg)
+module angled_post_side_left(wid,slen,theta,ht1,rdg,ldg)
 {
 	mirror([1,0,0])
-		side_post_right(wid,slen,theta,ht1,rdg,ldg);
+		angled_post_side_right(wid,slen,theta,ht1,rdg,ldg);
 
 }
+//angled_post_side_left(3,12,20,4,2,2);	// Test module
+
+/* ***** angled_post_side_bottom ***********
+ * Angled notch is upward pointing
+ * wid = width (x direction)
+ * len = length (y direction)
+ * theta = angle: pcb
+ * ht  = height of ledge at bottom corner of pcb
+ * rdg = pcb board thickness
+ * ldg = pcb ledge width
+ * clht= clip height (overhang vertical height)
+ * sigma = added angle of upper overhang
+ * NOTE: theta+sigma must be > 40 degrees w/o support structures
+ * NOTE: x,y (0,0) reference is lower end at inside ridge wall
+ */
+module angled_post_bottom(wid,len,theta,ht,rdg,ldg,clht,sigma)
+{
+	x1 = wid - ldg;
+	x2 = x1 - rdg * sin(theta);
+	y4 = rdg * cos(theta);
+	gamma = theta + sigma;
+	yy = ldg * tan(theta);
+	x3 = clht / tan(gamma);
+	a = ht;
+
+	translate([-x1,len,0])
+	{
+		difference()
+		{
+//			cube([wid,len,ht3],center=false);
+
+			rotate([90,0,0])
+			linear_extrude(height=len, center=false)
+				polygon(points=[
+					[0,0],
+					[0,clht+a],
+					[x3,clht+a],
+					[x2,y4+a],
+					[x1,0+a],
+					[wid,yy+a],
+					[wid,0]]);
+
+			union()
+			{
+			}
+		}
+	}	
+}
+angled_post_bottom(4,8,25,5,2,2.5,4,20);
+
+
