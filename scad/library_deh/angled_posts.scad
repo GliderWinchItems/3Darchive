@@ -5,10 +5,13 @@
  */
 
 include <../library_deh/deh_shapes.scad>
+include <../library_deh/ridged_screw_hole.scad>
 
 /* Modules in this file
 module angled_post_side_right(wid,slen,theta,ht1,rdg,ldg)
 module angled_post_side_left(wid,slen,theta,ht1,rdg,ldg)
+module angled_post_bottom(wid,len,theta,ht,rdg,ldg,clht,sigma)
+
 
 
 */
@@ -65,7 +68,7 @@ module angled_post_side_left(wid,slen,theta,ht1,rdg,ldg)
 }
 //angled_post_side_left(3,12,20,4,2,2);	// Test module
 
-/* ***** angled_post_side_bottom ***********
+/* ***** angled_post_bottom ***********
  * Angled notch is upward pointing
  * wid = width (x direction)
  * len = length (y direction)
@@ -111,6 +114,59 @@ module angled_post_bottom(wid,len,theta,ht,rdg,ldg,clht,sigma)
 		}
 	}	
 }
-angled_post_bottom(4,8,25,5,2,2.5,4,20);
+//angled_post_bottom(4,8,25,5,2,2.5,4,20);  // Test
+
+/* ***** angled_post_ridged_corner ***********
+* xlen = x axis direction length
+* ylen = y axis direction length
+* zlen = z axis, height to ledge
+* tpht = slant height of cocked top
+* rht  = ridge thickness
+* rwdx = ridge width, x directions
+* rwdy = ridge width, y directions
+* scd1 = screw diameter at top
+* scd2 = screw diameter at bottom of screw
+* sch  = screw hole height
+* scofx = screw hole center offset from inside ridge corner, x
+* scofy = screw hole center offset from inside ridge corner, y
+ */
+module angled_post_ridged_corner(xlen,ylen,theta,zlen,tpht,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy) 
+{
+	// Find height of ledge corner after tilting
+	ht1 = (ylen-rwdy) * sin(theta);
+	ht2 = tpht * cos(theta);
+	ht3 = zlen - ht1 - ht2;
+echo("angled_post_ridged_corner:ht1,ht2,ht3",ht1,ht2,ht3);
+
+	tx = rwdx;
+
+	ty6 = tpht * sin(theta);
+   ty7 = (ylen-rwdy) * cos(theta);
+   ty8 = ty7 - ty6;
+
+ translate([-tx,ty8,0])
+ {
+	translate([0,0,ht3])
+   {
+		// Top ridged part tilted
+		rotate([-theta,0,0])
+		translate([rwdx,rwdy-ylen,0])
+		corner_ridged_rectangle_w_screw
+			(xlen,ylen,tpht,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy);
+
+		// Rounded wedge transition to vertical post
+		translate([xlen,0,0.05])
+  		rotate([90,0,-90])
+  			rotate_extrude(angle=25)
+				square([ylen,xlen],center=false);
+   }
+
+		// Bottom post
+		translate([0,-ylen,0])
+			cube([xlen,ylen,ht3+.1],center=false);
+ }
+}
+//                       xlen,ylen,theta, zlen, tpht, rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy
+  //angled_post_ridged_corner(6,   12,  15,    8,  3.5, 1.5,  5,  4, 3.2, 2.2,  4, -1.5, -2.0); // Test
 
 

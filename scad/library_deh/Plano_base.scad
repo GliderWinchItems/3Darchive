@@ -5,8 +5,10 @@
  */
 
 include <../library_deh/deh_shapes.scad>
+include <../library_deh/deh_shapes2.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/Plano_frame.scad>
+include <../library_deh/discovery_posts.scad>
 
 /*********************************************************
 // Stud magnet relative postions.
@@ -38,8 +40,10 @@ include <../library_deh/Plano_frame.scad>
  // Diameter of recess
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
 **************************************************************/
-pl_len = plano_len;
-pl_wid = plano_wid;
+plano_wid_top = 83;	// Inside width at rim
+plano_wid_bot = 81;	// Inside width near bottom before radius
+pl_len = 157;	// Inside length of Plano box
+pl_wid = plano_wid_bot;
 
 pl_cc = base_rnd;	// Rounded corner dia: corner_cut
 pl_sc = 4;			// Rounded inside bottom dia: side_cut
@@ -115,6 +119,7 @@ module plano_base_add(thick)
 //pl_len = plano_len;
 //pl_wid = plano_wid;
 
+echo("pl_wid",pl_wid,"pl_len",pl_len);
 	rad = pl_cc-pl_sc;	
 	composite_chamfered_rectangle(pl_wid,pl_len,thick,pl_sc,rad);
 
@@ -127,95 +132,21 @@ module plano_base_del(thk)
 	mag_posts_del();
 }
 
-/* ***** chamfered_corner **********************
- * cx, cy form triangle for bottom chamfer
- * rad = z axis radius for corner
-*/ 
-module chamfered_corner(cx,cy,rad)
-{
-    rotate_extrude(angle=90)
-        translate([rad,0,0])
-            polygon(points=[[0,0],[0,cy],[cx,cy]]);    
-}
-/* ***** chamfered_rectangle *******************
- * wid  = width, x direction 
- * slen = length, y direction
- * cut  = x & y direction of chamfer
- * rad  = z axis, radius of corner rounding
-*/
-module chamfered_rectangle(wid,slen,cut,rad)
-{
-    ofs = cut+rad;
-  hull()
-  {  
-    translate([-wid/2+ofs,ofs,0])
-      rotate([0,0,180])
-        chamfered_corner(cut,cut,rad);
-
-    translate([ wid/2-ofs,ofs,0])
-      rotate([0,0,-90])
-        chamfered_corner(cut,cut,rad);
-
-    translate([-wid/2+ofs,slen-ofs,0])
-      rotate([0,0,90])
-        chamfered_corner(cut,cut,rad);
-    
-    translate([ wid/2-ofs,slen-ofs,0])
-      rotate([0,0,0])
-        chamfered_corner(cut,cut,rad);
-  } 
-}
-/* ***** rounded_rectangles2 ********************
- * wid  = width, x direction 
- * slen = length, y direction
- * ht   = height (or thickness if you prefer)
- * cut  = x & y direction of chamfer
- * rad  = z axis, radius of corner rounding
-*/
-module rounded_rectangles2(wid,slen,ht,cut,rad)
-{
-    ofs=rad+cut;
- hull()
- {    
-    translate([-wid/2+ofs,ofs,0])
-        cylinder(r=ofs,h=ht,center=false);
-
-    translate([ wid/2-ofs,ofs,0])
-        cylinder(r=ofs,h=ht,center=false);
-
-    translate([-wid/2+ofs,slen-ofs,0])
-        cylinder(r=ofs,h=ht,center=false);
-    
-    translate([ wid/2-ofs,slen-ofs,0])
-        cylinder(r=ofs,h=ht,center=false);
- }
-/* ***** composite_chamfered_rectangle **************
- * wid  = width, x direction 
- * slen = length, y direction
- * ht   = height (or thickness if you prefer)
- * cut  = x & y direction of chamfer
- * rad  = z axis, radius of corner rounding less cut
- * NOTE: this places a rounded rectangular cube on top
- *   of a rounded rectangle with a bottom chamfer,
- *   i.e. this is a "base" for a Plano box.
-*/
-}
-module composite_chamfered_rectangle(wid,slen,ht,cut,rad)
-{
-    chamfered_rectangle(wid,slen,cut,rad);
-    
-    translate([0,0,cut])
-        rounded_rectangles2(wid,slen,ht-cut,cut,rad);
-}
-//composite_chamfered_rectangle(66,86,5,4,3); // test this module
-
-module test()
+module base_test()
 {
 	thk = 5;	// Thickness
 	difference()
 	{
-		plano_base_add(thk);
-		plano_base_del(thk);
+		union()
+		{
+			plano_base_add(thk);
+				translate([0,8,thk-0.01])
+					discovery_posts_angled();	// Test
+		}
+		union()
+		{
+			plano_base_del(thk);
+		}
 	}
 }
-test();
+base_test();
