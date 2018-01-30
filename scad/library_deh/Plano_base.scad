@@ -85,6 +85,7 @@ module mag_post_del(a)
 		cylinder(d=mgp_wash_dia,h=mgp_wash_thk,center=false);
 
 	translate([0,0,mgp_floor+mgp_wash_thk]) // Hex nut
+	  rotate([0,0,30])
 		cylinder(d=mgp_nut_pk,h=mgp_nut_thk,center=false, $fn=6);
  }
 }
@@ -113,14 +114,19 @@ module mag_posts_del()
  */
 module plano_base_add(thick)
 {
-	/* **** base plate, chamfered, and rounded corners ****/
-//pl_cc = base_rnd;	// Rounded corner dia: corner_cut
-//pl_sc = 4;			// Rounded inside bottom dia: side_cut
-//pl_len = plano_len;
-//pl_wid = plano_wid;
 
-echo("pl_wid",pl_wid,"pl_len",pl_len);
+echo("plano_base_add","pl_wid",pl_wid,"pl_len",pl_len,"thick",thick);
 	rad = pl_cc-pl_sc;	
+/* ***** composite_chamfered_rectangle **************
+ * wid  = width, x direction 
+ * slen = length, y direction
+ * ht   = height (or thickness if you prefer)
+ * cut  = x & y direction of chamfer
+ * rad  = z axis, radius of corner rounding less cut
+ * NOTE: this places a rounded rectangular cube on top
+ *   of a rounded rectangle with a bottom chamfer,
+ *   i.e. this is a "base" for a Plano box.
+*/
 	composite_chamfered_rectangle(pl_wid,pl_len,thick,pl_sc,rad);
 
 	mag_posts_add();
@@ -132,15 +138,17 @@ module plano_base_del(thk)
 	mag_posts_del();
 }
 
-module base_test()
+
+
+module base_with_F4posts()
 {
 	thk = 5;	// Thickness
 	difference()
 	{
 		union()
 		{
-			plano_base_add(thk);
-				translate([0,8,thk-0.01])
+			plano_base_add(thk+1);
+				translate([-3.5,8,thk-0.01])
 					discovery_posts_angled();	// Test
 		}
 		union()
@@ -149,4 +157,4 @@ module base_test()
 		}
 	}
 }
-base_test();
+//base_with_F4posts();

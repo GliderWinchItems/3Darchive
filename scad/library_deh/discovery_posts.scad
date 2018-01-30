@@ -12,12 +12,12 @@ include <../library_deh/ridged_screw_hole.scad>
 //include <../library_deh/Plano_frame.scad>
 
 /* Discovery board dimensions */
-disc_wid = 65.9 + 0.5;  // Overall width
+disc_wid = 65.9 + 0.0;  // Overall width
 disc_len = 97.3 + 0.5;  // Overall length
-disc_thick = 2.0;
+disc_thick = 1.6;	// Discovery board thickness
 
-brd_theta = 6.0;	// Slope of board
-brd_ht = 8.0; // Height of low end bottom of board from bottom of post
+brd_theta = 4.5;	// Slope of board
+brd_ht = 6.5; // Height of low end bottom of board from bottom of post
 
 /* ***** angled_post_bottom ***********
  * Angled notch is upward pointing
@@ -34,11 +34,11 @@ brd_ht = 8.0; // Height of low end bottom of board from bottom of post
  */
 /* **** Bottom post common dimensions ****** */
 bot_wid = 4;
-bot_rht = disc_thick;
+bot_rdg = disc_thick;
 bot_ldg = 1.5;
 bot_rwdy = 2.0;
 bot_clen = 4;
-bot_sig = 50 - brd_theta;
+bot_sig = 45 - brd_theta;
 
 bot_ofs_x = 8;	// Offset from centerline
 bot_len = 8;
@@ -51,9 +51,9 @@ module bottom_post(len,xofs)
 {
     translate([xofs,0,0])
 	rotate([0,0,90])
-//angled_post_bottom(      4,   8,       25,     5,         2,    2.5,       4,      20);  // Test
-//                      (wid, len,    theta,    ht,       rdg,    ldg,    clht,  sigma)
-  angled_post_bottom(bot_wid, len,brd_theta,brd_ht,disc_thick,bot_ldg,bot_clen,bot_sig);
+//angled_post_bottom(      4,   8,       25,     5,      2,    2.5,       4,      20);  // Test
+//                      (wid, len,    theta,    ht,    rdg,    ldg,    clht,  sigma)
+  angled_post_bottom(bot_wid, len,brd_theta,brd_ht,bot_rdg,bot_ldg,bot_clen,bot_sig);
 }
 
 /* ***** angled_post_side_right ***********
@@ -68,8 +68,8 @@ module bottom_post(len,xofs)
 
 /* Common dimensions of side posts */
 sid_wid = 4;
-sid_rdg = 2;
-sid_ldg = 2;
+sid_rdg = 3;
+sid_ldg = 3;
 
 module side_post(len,yofs)
 {
@@ -97,14 +97,15 @@ angled_post_side_right(sid_wid,sid_slen,brd_theta,sid_ht1,sid_rdg,sid_ldg);
 module top_corner_post()
 {
 	xofs = disc_wid/2;		// Position from bottom of board
-	xlen = 6;	ylen = 12; 
+	xlen = 5;	ylen = 14; 
 	zlen = brd_ht + disc_len * sin(brd_theta);	// Height at top position
-	tpht = 4;	rht = 2.0;	// Slant post height; ridge thickness
-	rwdx = 3.75;	rwdy = 4;	// Ridge widths
-	scd1 = 3.2;	scd2 = 2.2; sch = 4;	// Screw dimensions top dia, bot dia, depth
-	scofx = -1.5; scofy = -2.0;	// Screw positioning from inside ridge corner
+	tpht = 4;	rht = 1.7;	// Slant post height; ridge thickness
+	rwdx = 1;	rwdy = 6;	// Ridge widths
+	scd1 = 3.2;	scd2 = 2.2; sch = 5;	// Screw dimensions top dia, bot dia, depth
+	scofx = 1.5; scofy = -3.3;	// Screw positioning from inside ridge corner
 
-	translate([xofs,disc_len,0])
+	tc_ofs_y = disc_len * cos(brd_theta);
+	translate([xofs,tc_ofs_y,0])
 	rotate([0,0,180])
 //                        xlen, ylen,theta,zlen,tpht, rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy
 //                          (6,   12,  15,   8, 3.5,1.5,   5,   4, 3.2, 2.2,  4, -1.5, -2.0); // Test
@@ -119,24 +120,24 @@ angled_post_ridged_corner(xlen,ylen,brd_theta,zlen,tpht,rht,rwdx,rwdy,scd1,scd2,
  * NOTE: x centered, y = 0 is bottom 
  */
 /* Bottom pair of posts */
-bot_ofs_x = 8;	// Offset from centerline
+bot_ofs_x1 = 4;	// Offset from centerline
+bot_ofs_x2 = 10;	// Offset from centerline
 bot_len = 8;
 
 /* Side pair of posts */
-sid_slen = 10;
-sid_yofs = 15;
+sid_slen = 8;
+sid_yofs = 3;
 
 module discovery_posts_angled()
 {
-	bottom_post(bot_len,-bot_ofs_x);       	// Bottom left
-	bottom_post(bot_len, bot_ofs_x+bot_len);  // Bottom right
+	bottom_post(bot_len,-bot_ofs_x1);       	// Bottom left
+	bottom_post(bot_len, bot_ofs_x2+bot_len);  // Bottom right
 
 	side_post(sid_slen,sid_yofs);		// Left side
 	mirror([1,0,0])
 		side_post(sid_slen,sid_yofs);	// Right side
 
 	top_corner_post();
-
 	mirror([1,0,0])
 		top_corner_post();
 }
