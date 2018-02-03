@@ -120,8 +120,8 @@ angled_post_ridged_corner(xlen,ylen,brd_theta,zlen,tpht,rht,rwdx,rwdy,scd1,scd2,
  * NOTE: x centered, y = 0 is bottom 
  */
 /* Bottom pair of posts */
-bot_ofs_x1 = 4;	// Offset from centerline
-bot_ofs_x2 = 10;	// Offset from centerline
+bot_ofs_x1 = 2;	// Offset from centerline, left
+bot_ofs_x2 = 10;	// Offset from centerline, right
 bot_len = 8;
 
 /* Side pair of posts */

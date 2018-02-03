@@ -55,7 +55,7 @@ mgp_del = 2.5;	// Raise and shorten to avoid sticking into chamfer
 
 /* Mounting for top pair of magnets */
 tm_ofs_x = 29;		// Offset from centerline
-tm_ofs_y = 142;	// Offset from bottom
+tm_ofs_y = 142+4.5;	// Offset from bottom
 
 mgp_od = 10;	// Mag mount post outside diameter
 mgp_ht = 8;		// Mag stud length
