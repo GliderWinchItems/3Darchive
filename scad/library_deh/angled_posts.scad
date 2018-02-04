@@ -146,27 +146,40 @@ echo("angled_post_ridged_corner:ht1,ht2,ht3",ht1,ht2,ht3);
 
  translate([-tx,ty8,0])
  {
-	translate([0,0,ht3])
-   {
+  difference()
+  {
+	union()
+	{
+	  translate([0,0,ht3])
+     {
 		// Top ridged part tilted
 		rotate([-theta,0,0])
 		translate([rwdx,rwdy-ylen,0])
-		corner_ridged_rectangle_w_screw
-			(xlen,ylen,tpht,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy);
+		corner_ridged_rectangle        (xlen,ylen,tpht,rht,rwdx,rwdy);
+//		corner_ridged_rectangle_w_screw(xlen,ylen,tpht,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy);
 
 		// Rounded wedge transition to vertical post
 		translate([xlen,0,0.05])
   		rotate([90,0,-90])
-  			rotate_extrude(angle=25)
+  			rotate_extrude(angle=theta)
 				square([ylen,xlen],center=false);
-   }
-
+     }
 		// Bottom post
 		translate([0,-ylen,0])
 			cube([xlen,ylen,ht3+.1],center=false);
+   }
+	{
+	    hx =  rwdx + scofx;
+	    hy = -(ylen-rwdy) - tpht*tan(theta) + scofy;
+		 ht4 = zlen + rht - sch - (ylen-rwdy)*sin(theta);
+	 	 rotate([-theta,0,0])
+	    	translate([hx,hy,ht4])
+	        cylinder(d1=scd2,d2=scd1,h=sch,center=false,$fn=25);   
+	}
+  } 
  }
 }
-//                       xlen,ylen,theta, zlen, tpht, rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy
-  //angled_post_ridged_corner(6,   12,  15,    8,  3.5, 1.5,  5,  4, 3.2, 2.2,  4, -1.5, -2.0); // Test
+//                       xlen,ylen,theta, zlen, tpht, rht,rwdx,rwdy,scd1,scd2,sch,scofx, scofy
+//  angled_post_ridged_corner(6,   12,  30,    8,    2, 1.5,   5,   4, 3.2, 1.8,  6, -1.5, -2.0); // Test
 
 

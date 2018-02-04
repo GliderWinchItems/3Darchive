@@ -101,14 +101,14 @@ module top_corner_post()
 	zlen = brd_ht + disc_len * sin(brd_theta);	// Height at top position
 	tpht = 4;	rht = 1.7;	// Slant post height; ridge thickness
 	rwdx = 1;	rwdy = 6;	// Ridge widths
-	scd1 = 3.2;	scd2 = 2.2; sch = 5;	// Screw dimensions top dia, bot dia, depth
+	scd1 = 3.2;	scd2 = 2.2; sch = 8;	// Screw dimensions top dia, bot dia, depth
 	scofx = 1.5; scofy = -3.3;	// Screw positioning from inside ridge corner
 
 	tc_ofs_y = disc_len * cos(brd_theta);
 	translate([xofs,tc_ofs_y,0])
 	rotate([0,0,180])
-//                        xlen, ylen,theta,zlen,tpht, rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy
-//                          (6,   12,  15,   8, 3.5,1.5,   5,   4, 3.2, 2.2,  4, -1.5, -2.0); // Test
+//                        xlen, ylen,   theta,zlen,tpht,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy
+//                          (6,  12,       15,   8, 3.5,1.5,   5,   4, 3.2, 2.2,  4, -1.5, -2.0); // Test
 angled_post_ridged_corner(xlen,ylen,brd_theta,zlen,tpht,rht,rwdx,rwdy,scd1,scd2,sch,scofx,scofy);
 }
 

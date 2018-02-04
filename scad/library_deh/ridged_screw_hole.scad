@@ -138,8 +138,9 @@ module ridge_screw_hole_rectangle(xlen,ylen,rwdx,rwdy,scd1,scd2,sch,scofx,scofy)
 {
     hx =  scofx;
     hy =   scofy;
-//echo("R","rwdx",rwdx,"rwdy",rwdy);
-//echo("R","scofx",scofx,"scofy",scofy,"hy",hy,"hx",hx);
+//echo("ridge_screw_hole_rectangle","rwdx",rwdx,"rwdy",rwdy);
+//echo("ridge_screw_hole_rectangle","scofx",scofx,"scofy",scofy,"hy",hy,"hx",hx);
+//echo ("ridge_screw_hole_rectangle",sch);
     translate([hx,hy,0])
         cylinder(d1=scd2,d2=scd1,h=sch,center=false,$fn=25);    
 }

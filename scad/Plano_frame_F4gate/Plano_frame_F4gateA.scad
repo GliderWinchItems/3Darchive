@@ -6,7 +6,8 @@
  * VA1 = Version Angled #1.
  * VA2 = Version Angled: move side posts lower; fixed length
  * VA3 = Minor tweaks: pcb wid & length, bot left post, overall len (scli3r scale 98.5)
- * vA4 = Top mags +4.5; switcher +0.5; (slic3r scale 99.0)
+ * vA4 = 20180129: Top mags +4.5; switcher +0.5; (slic3r scale 99.0)
+ * VA5 = 20180203: Increased radius of ftdi wall; fixed corner post screw hole 
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -74,7 +75,7 @@ module id()
  translate([32,yofs, bfthick]) 
   rotate([0,0,90])
   linear_extrude(1.0)
-   text("20180129  VA4",size = 3.0);
+   text("20180204 VA5",size = 3.0);
  }
 }
 
@@ -159,6 +160,7 @@ ftd_tot_len = 20;
 ftd_ic_len = 12;	// IC length
 ftd_tot_ht = 18.6;
 ftd_ofs_x = plano_wid_bot/2 - ftd_tot_wid;
+ftd_rad = 6; 		// fillet radius
 
 module ftdi_post(xofs,yofs)
 {
@@ -175,7 +177,7 @@ echo(ftd_tot_wid,"ftd_tot_wid");
 				translate([0.05,ftd_tot_len,-.05])
 					rotate([0,-90,0])
 					rotate([90.0,0])
-			 			fillet (4,ftd_tot_len);	
+			 			fillet (ftd_rad,ftd_tot_len);	
 
 			}
 			union()
