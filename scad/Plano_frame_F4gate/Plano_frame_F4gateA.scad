@@ -8,6 +8,7 @@
  * VA3 = Minor tweaks: pcb wid & length, bot left post, overall len (scli3r scale 98.5)
  * vA4 = 20180129: Top mags +4.5; switcher +0.5; (slic3r scale 99.0)
  * VA5 = 20180203: Increased radius of ftdi wall; fixed corner post screw hole 
+ * VA6 = 20180204: Begin work on 6P carrier integration with the above
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -17,6 +18,8 @@ include <../library_deh/ridged_screw_hole.scad>
 include <../library_deh/Plano_base.scad>
 
 include <F4g_capA.scad>
+include <carrier_6P.scad>
+
 
  $fn=100;
 
@@ -66,7 +69,7 @@ module id()
 {
  {
   font = "Liberation Sans:style=Bold Italic";
-	yofs = 67;
+	yofs = 5;
  translate([38,yofs, bfthick]) 
   rotate([0,0,90])
   linear_extrude(1.0)
@@ -75,7 +78,7 @@ module id()
  translate([32,yofs, bfthick]) 
   rotate([0,0,90])
   linear_extrude(1.0)
-   text("20180204 VA5",size = 3.0);
+   text("20180204 VA6",size = 3.0);
  }
 }
 
@@ -282,6 +285,32 @@ module sw_screw_holes(sx)
 sw_ofs_y = 105;	// Switcher frame y axis offset
 sw_ofs_z = 2;		// Switcher frame z axis offset
 
+
+/* 6P carrier mountint posts */
+crr_post_ht = 10;	// 6P carrier mounting post height
+
+module crr_frm_post(fx,fy)
+{
+	psch=6;	// Screw depth
+	translate([fx,fy,0])
+		difference()
+		{
+			cylinder(r=crr_rad,h=crr_post_ht,center=false);
+			translate([0,0,crr_post_ht-psch])
+				cylinder(d1=2.2,d2=3.0,h=psch,center=false);
+		}
+}
+module crr_frm_posts()
+{
+	ofs_x  = plano_wid_bot/2 - crr_ofs_r; 
+	ofs_y1 = crr_ofs_r;
+	ofs_y2 = crr_len - crr_ofs_r; 
+	crr_frm_post( ofs_x,ofs_y1);
+	crr_frm_post(-ofs_x,ofs_y1);
+	crr_frm_post( ofs_x,ofs_y2);
+	crr_frm_post(-ofs_x,ofs_y2);
+}
+
 module total()
 {
 	difference()
@@ -300,6 +329,10 @@ module total()
 
 			// Switch frame
 			switch_frame_add(0,sw_ofs_y,sw_ofs_z);
+
+			translate([0,plano_len-crr_len,bfthick])
+				crr_frm_posts();
+				
 		}
 		union()
 		{
@@ -315,7 +348,9 @@ module total()
 	}
 	id();
 }
+
 total();
+
 // Test switcher frame
 module xtest()	
 {
@@ -328,3 +363,8 @@ module xtest()
 //xtest();
 
 //F4gtotal();
+
+// 6P carrier
+//translate([0,plano_len,18])
+// rotate([0,0,180])
+//  crr_total();
