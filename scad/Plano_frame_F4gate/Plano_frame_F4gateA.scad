@@ -70,7 +70,7 @@ module id()
  translate([38,yofs, bfthick]) 
   rotate([0,0,90])
   linear_extrude(1.0)
-   text("Plano_F4gate",size = 3.0);
+   text("Plano_frame_F4gateA",size = 3.0);
 
  translate([32,yofs, bfthick]) 
   rotate([0,0,90])
