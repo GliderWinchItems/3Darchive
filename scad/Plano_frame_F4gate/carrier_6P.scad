@@ -337,8 +337,8 @@ module iso_cutouts()
 //   rounded_rectangle(2,10,dis_post_ht,1);
   
   // iso rectangle 
-  translate([-23.5,28.5,0])
-     cube([41,20,dis_post_ht+2],false);
+  translate([-24.0,28.5,0])
+     cube([45,20,dis_post_ht+2],false);
 
   // Corners
 //  translate([-25.5,2,0])
@@ -353,13 +353,13 @@ module stiffeners()
 {
    twk2 = 5;
   translate([-18.5-twk2,27.2,dis_post_ht])
-   cube([44,1.5,8],false);
+   cube([46,1.5,4],false);
 
   translate([-18-twk2,10,dis_post_ht])
-   cube([1.5,18,6],false);
+   cube([1.5,18,4],false);
 
-  translate([18.5,28,dis_post_ht])
-   cube([1.5,18,6],false);
+  translate([18.5+2.5,28,dis_post_ht])
+   cube([1.5,18,4],false);
 }
 
 module crr_total()

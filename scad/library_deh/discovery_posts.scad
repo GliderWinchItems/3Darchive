@@ -67,16 +67,16 @@ module bottom_post(len,xofs)
  */
 
 /* Common dimensions of side posts */
-sid_wid = 4;
-sid_rdg = 3;
-sid_ldg = 3;
+sid1_wid = 6;
+sid1_rdg = 3;
+sid1_ldg = 3;
 
 module side_post(len,yofs)
 {
 	sid_ht1 = brd_ht + yofs * sin(brd_theta);
 	xofs = disc_wid/2;
 	translate([-xofs,yofs,0])
-angled_post_side_right(sid_wid,sid_slen,brd_theta,sid_ht1,sid_rdg,sid_ldg);
+angled_post_side_right(sid1_wid,len,brd_theta,sid_ht1,sid1_rdg,sid1_ldg);
 }
 
 /* ***** angled_post_ridged_corner ***********
@@ -97,10 +97,10 @@ angled_post_side_right(sid_wid,sid_slen,brd_theta,sid_ht1,sid_rdg,sid_ldg);
 module top_corner_post()
 {
 	xofs = disc_wid/2;		// Position from bottom of board
-	xlen = 5;	ylen = 14; 
+	xlen = 6;	ylen = 14; 
 	zlen = brd_ht + disc_len * sin(brd_theta);	// Height at top position
 	tpht = 4;	rht = 1.7;	// Slant post height; ridge thickness
-	rwdx = 1;	rwdy = 6;	// Ridge widths
+	rwdx = 2;	rwdy = 6;	// Ridge widths
 	scd1 = 3.2;	scd2 = 2.2; sch = 8;	// Screw dimensions top dia, bot dia, depth
 	scofx = 1.5; scofy = -3.3;	// Screw positioning from inside ridge corner
 

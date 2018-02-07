@@ -9,6 +9,7 @@
  * vA4 = 20180129: Top mags +4.5; switcher +0.5; (slic3r scale 99.0)
  * VA5 = 20180203: Increased radius of ftdi wall; fixed corner post screw hole 
  * VA6 = 20180204: Begin work on 6P carrier integration with the above
+ * VA7 = 20180205: Moved Discovery brd 1mm towards center, fixed side posts
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -69,7 +70,7 @@ module id()
 {
  {
   font = "Liberation Sans:style=Bold Italic";
-	yofs = 5;
+	yofs = 67;
  translate([38,yofs, bfthick]) 
   rotate([0,0,90])
   linear_extrude(1.0)
@@ -78,7 +79,7 @@ module id()
  translate([32,yofs, bfthick]) 
   rotate([0,0,90])
   linear_extrude(1.0)
-   text("20180204 VA6",size = 3.0);
+   text("20180204 VA7",size = 3.0);
  }
 }
 
@@ -89,7 +90,7 @@ hdr_of = 32.5;	// Offset from bottom edge of pcb
 hdr_ht = 1;		// Base thickness under header
 hdr_wid = 7;	// Header width (including tolerances)
 hdr_spc = 46;	// Spacing of headers (inside dimension)
-side_ofs = -4.0;	// Offset of board recess and posts from y axis centerline
+side_ofs = -3.0;	// Offset of board recess and posts from y axis centerline
 brd_ofs_y = 6;	// pcb offset in y direction from bottom
 
 /* 2x25 50 pin header recess */
@@ -287,7 +288,7 @@ sw_ofs_z = 2;		// Switcher frame z axis offset
 
 
 /* 6P carrier mountint posts */
-crr_post_ht = 10;	// 6P carrier mounting post height
+crr_post_ht = 6;	// 6P carrier mounting post height
 
 module crr_frm_post(fx,fy)
 {

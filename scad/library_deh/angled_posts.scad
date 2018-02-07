@@ -57,7 +57,7 @@ module angled_post_side_right(wid,slen,theta,ht1,rdg,ldg)
 	}
 
 }
-
+//translate([50,0,0])
 //angled_post_side_right(3,12,20,4,2,2);	// Test module
 
 module angled_post_side_left(wid,slen,theta,ht1,rdg,ldg)
