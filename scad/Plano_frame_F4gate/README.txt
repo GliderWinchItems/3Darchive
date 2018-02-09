@@ -1,5 +1,5 @@
 README.txt
-02/02/2017
+02/02/2018
 
 Plano_frame_F4gate
 
@@ -41,4 +41,8 @@ angled_posts
   Posts that deal with the board being held at
 and angle
 
-  
+02/08/2018
+
+Use 0.99 for the scale factor in slic3r to adjust for the
+printer calibration.
+
