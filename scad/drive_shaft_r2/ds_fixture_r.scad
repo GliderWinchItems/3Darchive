@@ -43,8 +43,7 @@ magx_nut_thick = mag16_M4_nut_thick;
 echo ("mag16_M4 specified");
 */
 
-magx_stud_dia = mag_stud_dia;
-echo (magx_stud_dia);
+echo ("magx_stud_dia",magx_stud_dia,"magx_stud_len",magx_stud_len);
 
 // **** Id the part ***
 module id()
@@ -57,7 +56,7 @@ module id()
 
  translate([10,-28, base_thick]) 
   linear_extrude(2)
-   text("2017 05 18 v5  M4",size = 3);
+   text("2017 05 18 v5  M3",size = 3);
  }
 }
 
@@ -324,7 +323,7 @@ module total()
        translate([-39.35,-14.8,0])
          shell_complete();
     
-       mag_mnt_posts();
+ //      mag_mnt_posts();
     }
     union()
     {

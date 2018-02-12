@@ -49,3 +49,9 @@ washer_thick_M3 = .57;	// Washer thickness
 nut_dia_M4 = 7.86;
 nut_flat_M4 = 6.75;
 nut_thick_M4 = 2.96;
+
+// #2 6 self drilling Philips Screw (MSC: 124751)
+screw_dia1_ss6 = 3.5;	// Self-tapping: dia at threads
+screw_dia2_ss6 = 2.8;	// Self-tapping: dia at drilling end
+screw_dia_he_ss6 = 6.7;	// Self-tapping: dia of pan head
+

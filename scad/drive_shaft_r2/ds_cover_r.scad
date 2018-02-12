@@ -1,7 +1,8 @@
 /* File: cwH_cover.scad
- * Cover for PC board box cwH_fixture.scad
+ * Cover for PC board box ../drive_shat_r2/ds_fixture.scad
  * Author: deh
  * Latest edit: 20170428
+ * V0 = 20150208 hack of earlier code
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -9,58 +10,70 @@ include <../drive_shaft/ds_fixture_common.scad>
 
  $fn=50;
 
+oshell_x = shell_x + 2*shell_wall + 0.3;
+oshell_y = shell_y + 2*shell_wall + 0.3;
 
+wndw_x = 65;
+wndw_y = 40;
 
 module window()
 {
-      rounded_rectangle(win_len_x, win_len_y, 20, shell_rad);
+	rotate([0,0,90])
+      rounded_rectangle(wndw_x, wndw_y, 20, shell_rad);
       
+	rotate([0,0,90])
       translate([0,0,win_r_z])
-        rounded_rectangle(win_len_x+win_r, win_len_y+win_r, 20, shell_rad);       
+        rounded_rectangle(wndw_x+win_r, wndw_y+win_r, 20, shell_rad);       
 
 }
 
-// Cover has to fit over cwH_fixture, so increase the dimensions
 cw_slop = 0.8;	// Slop is short for clearance
-cw_len_x = ww_len_x + (shell_wall*2) + cw_slop;
-cw_len_y = ww_len_y + (shell_wall*2) + cw_slop;
 
 module walls()
 {
   // Top, when installed, but bottom on scad
   difference()
   {
-    rounded_rectangle(cw_len_x, cw_len_y, cvr_thick, shell_rad);
+    rounded_rectangle(oshell_x, oshell_y, cvr_thick, shell_rad);
     union()
     {
-      // Cutouts for clear plastic windows
-      translate([ 10,-35,-.01])
+      // Cutout for clear plastic windows
+      translate([ 5,0,-.01])
        window();
 
-      translate([-10, 35,-.01])
-       window();
     }
   }
 
   // Walls/rim of cover
   difference()
   {
-    rounded_rim(cw_len_x, cw_len_y, cvr_wall, shell_rad, cvr_thick);
-
-    // Cable cutout/notch for one telephone type cable
-    translate([-(70-cc_ofs_x), 70-15, 10])
-      cable_cutout();
+    rounded_rim(oshell_x, oshell_y, cvr_wall, shell_rad, cvr_thick);
   }
 
   // Mounting tabs
+	translate([-29,0,0])
     cover_mnt_tabs();
 }
-
-module cable_cutout()
+/*
+module cover_mnt_tab()
 {
-   // One telephone type cables
-    rotate([0,90,90])
-     rounded_rectangle(cc_thick,cc_wid,20,1.5);
+      rotate([0,0,-90])
+        eye_bar(cm_od,cm_id2,cm_len,shell_ht - cov_ofs);
+}
+*/
+module cover_mnt_tabs()
+{
+   translate([-cm_ofs_x1, shell_y/2 - cm_ofs_dy,0])
+     rotate([0,0,90])
+      cover_mnt_tab();
+
+   translate([-cm_ofs_x1, -shell_y/2 + cm_ofs_dy,0])
+     rotate([0,0, 90])
+      cover_mnt_tab();
+
+   translate([cm_ofs_x2,0,0])
+     rotate([0,0,-90])
+      cover_mnt_tab();
 }
 
 module cover_mnt_tab()
@@ -68,31 +81,11 @@ module cover_mnt_tab()
       rotate([0,0,-90])
         eye_bar(cm_od,cm_id2,cm_len - (shell_wall + cw_slop) ,cvr_wall);
 }
-cm_ofs_y = -30;
-cm1_ofs_x =  ww2_ofs_x - cm_len;
-cm2_ofs_x = -ww2_ofs_x + cm_len - shell_wall;
-
-module cover_mnt_tabs()
-{
-   translate([cm1_ofs_x,cm_ofs_y,0])
-     rotate([0,0,90])
-      cover_mnt_tab();
-
-   translate([cm1_ofs_x,-cm_ofs_y,0])
-     rotate([0,0,90])
-      cover_mnt_tab();
-
-   translate([cm2_ofs_x + shell_wall,0,0])
-     rotate([0,0,-90])
-      cover_mnt_tab();
-}
 
 module total()
 {
    walls();
-   difference()
-   {
+//	cover_mnt_tabs();
 
-   }
 }
 total();
