@@ -2,6 +2,7 @@
  * Sensor board configured for engine: manifold and rpm
  * VE = version: V =vertical mounting position; E = engine
  * VE1 = Intial hack of ../scad/codewheel_fixture_v/cwV_fkxiture.scad
+ * VE2 20180216: Added holes in base for temperature and throttle cables
  * Author: deh
  * Latest edit: 20180213
  */
@@ -24,7 +25,7 @@ module id()
 
  translate([xtwk,-ytwk-6, base_thick]) 
   linear_extrude(2)
-   text("2018 02 13 VE 1",size = 3);
+   text("2018 02 16 VE 2",size = 3);
  }
 }
 /*
@@ -79,7 +80,7 @@ base_x		= mag_spacing_x + 2*base_rad;
 base_y		= mag_spacing_y + 2*base_rad;
 
 shell_wall = 2;	// Enclosure wall thickness
-shell_ht = 30+9;	;	// Enclosure wall height
+shell_ht = 30+9+13;	;	// Enclosure wall height
 
 shell_x = pcwid + 2*shell_wall;
 shell_y = pclen + 2*shell_wall;
@@ -136,7 +137,7 @@ module pc_shell()
         cube([shell_wall, shell_y, shell_ht]);
       translate([shell_x - 12, -shell_y/2,base_thick])
        rotate([0,0,90])
- 	cable_cutout();
+ 			cable_cutout();
    }
    
    // Posts for screw mounting of pc board
@@ -194,7 +195,7 @@ module pc_shell()
  pcps_space_y = 25.4;  	// Distance between holes lengthwise
  pcps_space_x = 38.4;  	// Distance between holes across board 
  pcps_frm_top = 29.0;  	// Top hole from top of board
- pcps_frm_side = 6.3;	// side to hole
+ pcps_frm_side = 6.3+0.3;	// side to hole
  pcps_post_dia = 7.0;	// Post diameter
 
  pcps_screw_dia = 2.6;	// Screw diameter
@@ -207,6 +208,7 @@ module pc_shell()
 module pc_posts_pair()
 {
    tube(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
+
    translate([0,-pcps_space_y,0])
       tube(pcps_post_dia,pcps_screw_dia,pcps_post_ht);
 }
@@ -234,6 +236,60 @@ module cable_cutout()
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
     rotate([0,90,90])
      rounded_rectangle(cc_thick,cc_wid,20,1.5);
+}
+
+// RPM coax cable cutout in wall
+rpm_y = 10;	//
+rpm_dia = 2.8;	// Dia of coax
+
+module rpm_cable_cutout()
+{
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_y = rpm_y-shell_y/2;
+ cc_ofs_x = shell_x - 5;
+   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+		rotate([180,0,0])
+  		  rotate([0,90,0])
+			rounded_bar(rpm_dia, 5, 20);
+}
+
+// Temp sensor cable cutout in wall
+tem_y = 50;		// Position along wall
+tem_dia = 2.0;	// Cable diameter
+module temp_cable_cutout()
+{
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_y = tem_y-shell_y/2;
+ cc_ofs_x = shell_x - 18;
+   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+		rotate([180,0,0])
+  		  rotate([0,90,0])
+			rounded_bar(tem_dia, 5, 20);
+
+ cc_ofs_x = shell_x + 5;
+   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+		rotate([0,90,0])
+			cylinder(d=8,h = 10,center=false);
+}
+
+// Throttle sensor cable cutout in wall
+thr_y = 70;		// Position along wall
+thr_dia = 2.0;	// Throttle cable dia
+module throttle_cable_cutout()
+{
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_y = thr_y-shell_y/2;
+ cc_ofs_x = shell_x - 18;
+   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+		rotate([180,0,0])
+  		  rotate([0,90,0])
+			rounded_bar(thr_dia, 5, 20);
+
+ cc_ofs_x = shell_x + 5;
+   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+		rotate([0,90,0])
+			cylinder(d=8,h = 10,center=false);
+
 }
 
 module rounded_line_ridge(rad, len, ht)
@@ -282,7 +338,7 @@ module ps_cutout()
 // Manifold pressure tubing hole
 mp_dia = 5.9;	// Dia of tubing
 mp_dia1 = 12;	// Dia chamfer for tubing
-mp_x = 17.9+2.0;
+mp_x = 17.9+2.6;
 mp_y = 2;	// y distance from nearest post pair
 module mp_hole()
 {
@@ -342,10 +398,22 @@ module total()
 
 		// Hole for manifold pressure sensor tubing
 		mp_hole();
+
+		// Cutout for rpm sensor coax
+		rpm_cable_cutout();
+
+		// Cutout for temperature sensor cable
+		temp_cable_cutout();
+
+		// Cutout for throttle sensor cable
+		throttle_cable_cutout();
+
     }
   }
 	id();	// Part ID
+
 }
 
 total();
+
 

@@ -2,11 +2,31 @@
  * Cover for PC board box with vertical position orientation
  * Author: deh
  * Latest edit: 20180213
+ * VE1 20180216:  initial thought to be OK
  */
 
 include <../library_deh/deh_shapes.scad>
+include <../library_deh/fasteners.scad>
 
  $fn=50;
+
+// **** Id the part ***
+module id()
+{
+ {
+	xtwk = -35; // Tweak x location
+	ytwk = -5.0; // Tweak y location
+	ztwk = 0;
+  font = "Liberation Sans:style=Bold Italic";
+  translate([xtwk,-ytwk, ztwk]) 
+  linear_extrude(0.5)
+   text("engine/cwV_cover",size = 3);
+
+ translate([xtwk+40,-ytwk, ztwk]) 
+  linear_extrude(0.5)
+   text("2018 02 16 VE 1",size = 3);
+ }
+}
 
 // PC board dimensions
 pc_slop = 4;
@@ -75,7 +95,7 @@ tab_ofs = shell_wall + shell_gap;
 shell_iofs = 5;
 shell_ix = pcwid-shell_iofs;  // Inner ridge location
 shell_iy = pclen-shell_iofs;
-shell_ih = 1.5;	// Height of inner ridge
+shell_ih = 2;	// Height of inner ridge
 shell_iw = 1; 	// Width of inner ridge
 shell_iix = shell_ix - 2*shell_iw;
 shell_iiy = shell_iy - 2*shell_iw;
@@ -93,10 +113,9 @@ cc_z = cc_thick + cc_frm_top;
 
 module pc_shell()
 {
-
    // Cover top
    translate([0,-shell_y/2,0])
-   cube([shell_x,shell_y,base_thick],false);
+   	cube([shell_x,shell_y,base_thick],false);
 
    // Ridge for O-ring type sealing
    difference()
@@ -105,7 +124,6 @@ module pc_shell()
          cube([shell_ix,shell_iy,shell_ih],false);
       translate([shell_or_x2,-shell_iiy/2,base_thick])
          cube([shell_iix,shell_iiy,shell_ih],false);
-
    }
 
    // Wall: +y end
@@ -117,10 +135,8 @@ module pc_shell()
      cube([shell_x, shell_wall, shell_ht]);
 
    // Wall: x=0 side
-
       translate([0, -shell_y/2, base_thick])
         cube([shell_wall, shell_y, shell_ht]);
-
 
    // Wall: +x side
    difference()
@@ -128,20 +144,37 @@ module pc_shell()
       translate([shell_x - shell_wall, -shell_y/2, base_thick])
         cube([shell_wall, shell_y, shell_ht]);
 
-    // Cable cutout
+    	// CAN cable cutout
       translate([shell_x - shell_wall-1, (shell_y/2 - cc_frm_side - cc_wid) , shell_ht - cc_z])
         cube([shell_wall + 2,cc_wid, 10],false);
+
+    	// RPM sensor coax cable cutout
+		rpm_y = 10+shell_wall;	//
+		rpm_wid = 2.8;	// Dia of coax
+      translate([shell_x - shell_wall-1, (shell_y/2 - rpm_y - rpm_wid), shell_ht - cc_z])
+        cube([shell_wall + 2,rpm_wid, 10],false);
+
+    	// Temperature sensor cable cutout
+		tem_y = 50+shell_wall;
+		tem_wid = 2.0;
+      translate([shell_x - shell_wall-1, (shell_y/2 - tem_y - tem_wid) , shell_ht - cc_z])
+        cube([shell_wall + 2,tem_wid, 10],false);
+
+    	// Throttle sensor cable cutout
+		thr_y = 70+shell_wall;		// Position along wall	
+		thr_wid = 2.0;
+      translate([shell_x - shell_wall-1, (shell_y/2 - thr_y - thr_wid) , shell_ht - cc_z])
+        cube([shell_wall + 2,thr_wid, 10],false);
    }
  
    // Tabs for mounting top cover
-
    translate([shell_x/2,-(shell_y/2 + cm_len - 0.05),0])
      rotate([0,0,180])
-	cover_mnt_tab();
+		 cover_mnt_tab();
 
    translate([shell_x/2, (shell_y/2 + cm_len - 0.05),0])
      rotate([0,0,0])
-	cover_mnt_tab();
+		 cover_mnt_tab();
 
 }
 module rounded_bar_end(l, w, h)
@@ -176,21 +209,15 @@ module rounded_rectangle(lo,wo,h,rad)
 // Window 
 module window()
 {
-  translate([43,-35,0])
-     rounded_rectangle(30,50, base_thick+3,6);    
-
-//  translate([15,-35,0])
-//         cube([30,50,base_thick+3],false);    
-
-//translate([-50,0,0])
-//     rounded_rectangle(30,15, base_thick+3, 3);    
+  translate([51,-35,0])
+     rounded_rectangle(38,70, base_thick+3,6);    
 }
 
 // Tabs for holding pc board cover down
 
  cm_od = 10;	// Diameter of cover mounting post
  cm_len = cm_od/2 + 0;
- cm_id = 2.6;	// Self-tapping screw hole diameter
+ cm_id = screw_dia1_ss6+0.4;	// Self-tapping screw hole diameter
  cm_wg = 5;	// Bottom wedge	
  cm_screw_head_dia = 9; // Screw head/washer diameter
  cm_recess = 8.5; 
@@ -231,7 +258,10 @@ module total()
    difference()
    {
       pc_shell();
-        window();
+      window();
    }
+rotate([0,-90,0])
+rotate([0,0,-90])
+id();
 }
 total();
