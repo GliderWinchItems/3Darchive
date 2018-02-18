@@ -229,7 +229,7 @@ cc_sense_dia = 4;	// Sensor cable dia
 
 module cable_cutout()
 {
- cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2 - 2;
  cc_ofs_x = 20;
  cc_ofs_y = -25;
    // Two telephone type cables
@@ -240,25 +240,25 @@ module cable_cutout()
 
 // RPM coax cable cutout in wall
 rpm_y = 10;	//
-rpm_dia = 2.8;	// Dia of coax
+rpm_dia = 3.0;	// Dia of coax
 
 module rpm_cable_cutout()
 {
- cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2 - 3;
  cc_ofs_y = rpm_y-shell_y/2;
  cc_ofs_x = shell_x - 5;
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
 		rotate([180,0,0])
   		  rotate([0,90,0])
-			rounded_bar(rpm_dia, 5, 20);
+			rounded_bar(rpm_dia, 8, 20);
 }
 
 // Temp sensor cable cutout in wall
 tem_y = 50;		// Position along wall
-tem_dia = 2.0;	// Cable diameter
+tem_dia = 2.6;	// Cable diameter
 module temp_cable_cutout()
 {
- cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2 - 3;
  cc_ofs_y = tem_y-shell_y/2;
  cc_ofs_x = shell_x - 18;
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
@@ -266,18 +266,18 @@ module temp_cable_cutout()
   		  rotate([0,90,0])
 			rounded_bar(tem_dia, 5, 20);
 
- cc_ofs_x = shell_x + 5;
-   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+ cc_ofs_x1 = shell_x + 5;
+   translate([cc_ofs_x1,cc_ofs_y,cc_ofs_z])
 		rotate([0,90,0])
 			cylinder(d=8,h = 10,center=false);
 }
 
 // Throttle sensor cable cutout in wall
 thr_y = 70;		// Position along wall
-thr_dia = 2.0;	// Throttle cable dia
+thr_dia = 2.8;	// Throttle cable dia
 module throttle_cable_cutout()
 {
- cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2;
+ cc_ofs_z = shell_ht - cc_frm_top + cc_thick/2 - 3;
  cc_ofs_y = thr_y-shell_y/2;
  cc_ofs_x = shell_x - 18;
    translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
@@ -285,8 +285,8 @@ module throttle_cable_cutout()
   		  rotate([0,90,0])
 			rounded_bar(thr_dia, 5, 20);
 
- cc_ofs_x = shell_x + 5;
-   translate([cc_ofs_x,cc_ofs_y,cc_ofs_z])
+ cc_ofs_x1 = shell_x + 5;
+   translate([cc_ofs_x1,cc_ofs_y,cc_ofs_z])
 		rotate([0,90,0])
 			cylinder(d=8,h = 10,center=false);
 

@@ -3,9 +3,12 @@
  * Author: deh
  * Latest edit: 20180213
  * VE1 20180216:  initial thought to be OK
+ * VE2 20180217:  chamfered rounded slots
+ * VE3 20180217:  id() doesn't print well even with scaffold
  */
 
 include <../library_deh/deh_shapes.scad>
+include <../library_deh/deh_shapes2.scad>
 include <../library_deh/fasteners.scad>
 
  $fn=50;
@@ -24,7 +27,7 @@ module id()
 
  translate([xtwk+40,-ytwk, ztwk]) 
   linear_extrude(0.5)
-   text("2018 02 16 VE 1",size = 3);
+   text("2018 02 17 VE 3",size = 3);
  }
 }
 
@@ -144,27 +147,37 @@ module pc_shell()
       translate([shell_x - shell_wall, -shell_y/2, base_thick])
         cube([shell_wall, shell_y, shell_ht]);
 
+	// Slot chamber and rounding
+	ql = 10; 	// Arbitrary length
+	qw = 1;		// Chamger width
+	qh = 1.5;	// Chamfer depth
+	qz = shell_ht + base_thick;	// Offset for chamfered_rounded_slot
+
     	// CAN cable cutout
-      translate([shell_x - shell_wall-1, (shell_y/2 - cc_frm_side - cc_wid) , shell_ht - cc_z])
+      translate([shell_x - shell_wall-1, (shell_y/2 - cc_frm_side - cc_wid) , shell_ht - cc_z-1])
         cube([shell_wall + 2,cc_wid, 10],false);
 
     	// RPM sensor coax cable cutout
 		rpm_y = 10+shell_wall;	//
-		rpm_wid = 2.8;	// Dia of coax
-      translate([shell_x - shell_wall-1, (shell_y/2 - rpm_y - rpm_wid), shell_ht - cc_z])
-        cube([shell_wall + 2,rpm_wid, 10],false);
+		rpm_wid = 3.2;	// Dia of coax
+		rpm_dep = 6.5;	// Depth of slot
+      translate([shell_x - shell_wall-1, (shell_y/2 - rpm_y - rpm_wid), qz] )
+			rotate([90,0,90])
+				chamfered_rounded_slot(rpm_wid,ql,rpm_dep,qw,qh);
 
     	// Temperature sensor cable cutout
 		tem_y = 50+shell_wall;
-		tem_wid = 2.0;
-      translate([shell_x - shell_wall-1, (shell_y/2 - tem_y - tem_wid) , shell_ht - cc_z])
-        cube([shell_wall + 2,tem_wid, 10],false);
+		tem_wid = 2.8; tem_dep = 7;
+      translate([shell_x - shell_wall-1, (shell_y/2 - tem_y - tem_wid),qz])
+			rotate([90,0,90])
+				chamfered_rounded_slot(tem_wid,ql,tem_dep,qw,qh);
 
     	// Throttle sensor cable cutout
 		thr_y = 70+shell_wall;		// Position along wall	
-		thr_wid = 2.0;
-      translate([shell_x - shell_wall-1, (shell_y/2 - thr_y - thr_wid) , shell_ht - cc_z])
-        cube([shell_wall + 2,thr_wid, 10],false);
+		thr_wid = 3.0;	thr_dep = 7;
+      translate([shell_x - shell_wall-1, (shell_y/2 - thr_y - thr_wid),qz])
+			rotate([90,0,90])
+				chamfered_rounded_slot(thr_wid,ql,thr_dep,qw,qh);
    }
  
    // Tabs for mounting top cover
@@ -258,10 +271,14 @@ module total()
    difference()
    {
       pc_shell();
-      window();
+		union()
+		{
+	      window();
+			translate([17,0,2.0])
+				rotate([0,0,90])
+					id();
+
+		}
    }
-rotate([0,-90,0])
-rotate([0,0,-90])
-id();
 }
 total();
