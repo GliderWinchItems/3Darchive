@@ -158,7 +158,8 @@ module pc_shell()
         cube([shell_wall + 2,cc_wid, 10],false);
 
     	// RPM sensor coax cable cutout
-		rpm_y = 10+shell_wall;	//
+		twk_y = -2;
+		rpm_y = 10+shell_wall+twk_y;	//
 		rpm_wid = 3.2;	// Dia of coax
 		rpm_dep = 6.5;	// Depth of slot
       translate([shell_x - shell_wall-1, (shell_y/2 - rpm_y - rpm_wid), qz] )
@@ -166,14 +167,14 @@ module pc_shell()
 				chamfered_rounded_slot(rpm_wid,ql,rpm_dep,qw,qh);
 
     	// Temperature sensor cable cutout
-		tem_y = 50+shell_wall;
+		tem_y = 50+shell_wall+twk_y;
 		tem_wid = 2.8; tem_dep = 7;
       translate([shell_x - shell_wall-1, (shell_y/2 - tem_y - tem_wid),qz])
 			rotate([90,0,90])
 				chamfered_rounded_slot(tem_wid,ql,tem_dep,qw,qh);
 
     	// Throttle sensor cable cutout
-		thr_y = 70+shell_wall;		// Position along wall	
+		thr_y = 70+shell_wall+twk_y;		// Position along wall	
 		thr_wid = 3.0;	thr_dep = 7;
       translate([shell_x - shell_wall-1, (shell_y/2 - thr_y - thr_wid),qz])
 			rotate([90,0,90])
