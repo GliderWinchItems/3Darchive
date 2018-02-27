@@ -20,13 +20,14 @@ module id()
 	xtwk = -35; // Tweak x location
 	ytwk = -5.0; // Tweak y location
 	ztwk = 0;
+/*
   font = "Liberation Sans:style=Bold Italic";
   translate([xtwk,-ytwk, ztwk]) 
-  linear_extrude(0.5)
+  linear_extrude(0.75)
    text("engine/cwV_cover",size = 3);
-
+*/
  translate([xtwk+40,-ytwk, ztwk]) 
-  linear_extrude(0.5)
+  linear_extrude(0.75)
    text("2018 02 21 VEB 2",size = 3);
  }
 }
@@ -346,7 +347,7 @@ module total()
 		union()
 		{
 			translate([51,-35,-0.05])
-				window(38,70,8,1.0,5,0.5,6);
+				window(38,70,8,1.5,5,0.65,6);
 
 			translate([14,0,0])
 			  rotate([0,0,90])
