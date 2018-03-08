@@ -5,17 +5,17 @@
  */
 
 
- $fn=50;
+ $fn=100;
  
  big = 50;  // Big number
 
-iod = (1+3/8)*25.4; // Shaft od (inside dia of coupler)
-sp_wid = 4; // Spline tooth width
-sp_dep = 3; // Spline tooth depth
-number_teeth = 10;
-sp_ht = 25; // Height of splined partion
+iod = 25.0; // Shaft od (inside dia of coupler)
+sp_wid = 1; // Spline tooth width
+sp_dep = 1.5; // Spline tooth depth
+number_teeth = 24;
+sp_ht = 31.1-10.0-6.1; // Height of splined partion
 
-cp_od = iod + 0.25*25.4*2; // Coupler outer dia
+cp_od = iod + 8; // Coupler outer dia
 cp_ht = sp_ht + 15; // Height (length) of coupler
 
 module spline_shaft()
