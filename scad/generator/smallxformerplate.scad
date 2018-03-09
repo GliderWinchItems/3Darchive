@@ -56,7 +56,7 @@ module xfmr_bolt(a,b,c)
 			// Washer
 			kb_wash = washer_od_6 + 0.5;
 			translate([0,0,xf_h_washer])
-				cylinder(d=kb_nut,h=kb_t_w,center=false,$fn=6);
+				cylinder(d=kb_wash,h=kb_t_w,center=false);
 
 
 			// Nut
@@ -116,7 +116,7 @@ xf_groove_len = 80;
 
 module groove_sub()
 {
-	wid = xf_wire_wid;
+	wid = xf_wire_wid + 1;
 	ofs_x = xf_wire_space/2 - wid/2;
 	ofs_z = kb_thick  - xf_wire_wid/2;
 	ofs_y = -6;
@@ -128,16 +128,16 @@ module groove_sub()
 		cube([wid,xf_groove_len,wid],center=true);
 
 	
-		translate([ofs_x-3, 28,ofs_z])
-			rotate([0,0,-10])
-				cube([wid, 30,wid],center=true);
+		translate([ofs_x-5, 24,ofs_z])
+			rotate([0,0, 18])
+				cube([wid, 35,wid],center=true);
 
-		translate([ofs_x-3, -2,ofs_z])
-			rotate([0,0,-10])
-				cube([wid, 30,wid],center=true);
+		translate([ofs_x-5, -4,ofs_z])
+			rotate([0,0, 18])
+				cube([wid, 35,wid],center=true);
 }
-
-module kb_post(a,r)
+// Post with slot in top
+module kb_post2(a,r)
 {
   translate(a)
   rotate(r)
@@ -157,6 +157,29 @@ module kb_post(a,r)
 	}
   }
 }
+// Post with hole
+module kb_post(a,r)
+{
+  translate(a)
+  rotate(r)
+  {
+	difference()
+	{
+        dia = 7;
+        ht = 8;
+        depth = 6;
+		translate([0,0,0])
+			cylinder(d=dia,h=ht,center=false);
+
+		slot = xf_wire_wid + 0.5;
+		ofs_z = ht - depth/2;
+		translate([0,0,ofs_z])
+			rotate([90,0,0])
+			cylinder(d=slot,h=big,center=true);
+	}
+  }
+}
+
 module kb_posts()
 {
     kb_post([ 19, kb_len/2-3.5,kb_thick-0.01],90);   // HV 
