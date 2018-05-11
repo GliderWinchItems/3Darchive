@@ -8,7 +8,8 @@ include <../library_deh/deh_shapes.scad>
 include <../library_deh/deh_shapes2.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/Plano_frame.scad>
-include <../library_deh/discovery_posts.scad>
+include <../library_deh/discovery_posts.scad
+//include <../library_deh/POD_posts.scad
 
 /*********************************************************
 // Stud magnet relative postions.
@@ -138,8 +139,6 @@ module plano_base_del(thk)
 	mag_posts_del();
 }
 
-
-
 module base_with_F4posts()
 {
 	thk = 5;	// Thickness
@@ -157,4 +156,25 @@ module base_with_F4posts()
 		}
 	}
 }
-//base_with_F4posts();
+base_with_F4posts();
+
+/*
+module base_with_PODposts()
+{
+	thk = 5;	// Thickness
+	difference()
+	{
+		union()
+		{
+			plano_base_add(thk+1);
+				translate([-3.5,8,thk-0.01])
+					POD_posts_angled();	// Test
+		}
+		union()
+		{
+			plano_base_del(thk);
+		}
+	}
+}
+//base_with_PODposts();
+*/
