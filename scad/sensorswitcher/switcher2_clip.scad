@@ -25,7 +25,7 @@ fp_h_d  = 2.8;	// Self-tap screw hole dia
 fp_h2_x = 35;	// Mounting hole #2 x
 fp_h2_y = 17;	// Mounting hole #2 y
 
-fp_ofs_z = 7;	// height flat plate raised
+fp_ofs_z = 7-2.5;	// height flat plate raised
 
 /* Corner counts for solder pads */
 module corner(ofx,ofy,ofz)
@@ -69,6 +69,9 @@ module flat(ofs_z)
 				cutout(2,9,3,7);
 				cutout(12,1,9,4);
 				cutout(35,5,3,8);
+
+				/* cutout for brd xtal */
+				cutout(11,2,11,5);
 			}
 		}
 	}
@@ -89,8 +92,7 @@ module bhpost(ofs_z)
 		cube([bh_len,bh_wid,ofs_z],center=false);
 		union()
 		{
-			translate([fp_h2_x,fp_h2_y,0]) // sw screw hole
-				cylinder(d=fp_h_d,h=big,center=false);
+
 
 			corner(0,0,4);	// Cutout below sw brd pad
 
@@ -106,7 +108,7 @@ sp_h1_x = 4;
 sp_h1_y = 6;
 sp_h1_d1 = 6.0;
 sp_h1_d2 = 3.4;
-sp_h1_z1 = 3;
+sp_h1_z1 = 2.6;
 sp_trans = 30 - sp_h1_x;
 
 
@@ -124,6 +126,22 @@ module spost(ofs_x, ofs_z)
 		}
 	}
   }
+}
+module plug()
+{
+    d_in = 8.6;
+    difference()
+    {
+        union()
+        {
+            cylinder(d= d_in, h = 1.5, center= false);
+            cylinder(d=d_in+2,h = 1, center= false);
+        }
+        union()
+        {
+            cylinder(d=3.4, h = big,center=false);
+        }
+    }
 }
 
 module total()
@@ -143,8 +161,17 @@ module total()
 
 			translate([sp_h1_x+sp_trans,sp_h1_y,-.01])
 				cylinder(d = sp_h1_d2,h = big, center=false);
+            
+            translate([fp_h1_x,fp_h1_y,1.5]) // sw screw hole
+				cylinder(d=fp_h_d,h=big,center=false);
         }
+
+
    }
 }
 total();
 
+//   translate([-10,0,0])
+//        plug();
+
+	
