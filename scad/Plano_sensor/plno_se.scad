@@ -9,7 +9,7 @@ include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/ridged_screw_hole.scad>
 
- $fn=50;
+ $fn=30;
 
 big = 10;	// Big z in direction 
 
@@ -32,6 +32,13 @@ module post(ofx,ofy)
         }
     }
 }
+
+module posthole(ofx,ofy)
+{
+    translate([ofx,ofy,0])
+       cylinder(d=hs_d1,h=hs_ht,center=false);
+}
+
 module posts()
 {
     post(     0,      0);
@@ -68,6 +75,16 @@ module web(len,ofx,ofy,theta)
                 cube([lenx,wb_thx,wb_ht], center=false);
 }
 
+module webplate()
+{
+	kx = hs_len + hs_post_d;
+	ky = hs_wid + hs_post_d + ppofs_y*2;
+	translate([-hs_post_d/2,-ppofs_y-hs_post_d/2,0])
+		cube([kx,ky,1.5],center = false);
+
+
+}
+
 module webs()
 {
     
@@ -99,12 +116,37 @@ module pwebs()
 
 }
 
+module postholes()
+{
+    posthole(     0,      0);
+    posthole(     0,hs_wid);
+    posthole(hs_len,      0);
+    posthole(hs_len,hs_wid);
+
+    posthole(     0,     ppy);
+    posthole(hs_len,     ppy);
+    posthole(hs_len,    -ppofs_y);
+    posthole(     0,    -ppofs_y);
+
+}
+
 
 module total()
 {
-    posts();
-    pposts();
-    webs();
-	 pwebs();
+	difference()
+	{ 
+		union()
+		{
+			posts();
+		   pposts();
+    		webs();
+	 		pwebs();
+	 		webplate();
+		}
+		union()
+		{
+			postholes();
+		}
+	}
 }
 total();
