@@ -14,10 +14,10 @@ include <../library_deh/ridged_screw_hole.scad>
 cs_len = 130;     // Inside length (x) of case
 cs_wid = 40;    // Inside width (y) of case
 cs_rad = 5;     // Rounded corner radius
-cs_dep = 35;    // Inside depth 
+cs_dep = 40;    // Inside depth 
 cs_thx = 3;     // Wall thickness
 
-ptpost_wid = 15;    // Pot bar post width (y)
+ptpost_wid = 18;    // Pot bar post width (y)
 ptpost_len = 8;      // Pot bar post length (x)
 ptpost_ht  = 11;     // Pot bar post height (z)
 ptpost_screw_d1 = 3.1;     // Pot bar post screw hole diameter
@@ -44,6 +44,49 @@ module case()
     }
 }
 
+/* Case mounting tab */
+tb_od  = 18;   // outside diameter of rounded end, and width of bar
+tb_hd  = 3.4;	// diameter of hole in end of bar
+tb_len = 13;	// length of bar
+tb_thx = 3;		// thickness/height of bar
+tb_fr  = 5;		// Radius of tab fillet
+
+module cstab(tx,ty, theta)
+{
+/* ***** eyebar *****
+ * rounded bar with hole in rounded end
+ * module eye_bar(d1, d2, len, ht)
+d1 = outside diameter of rounded end, and width of bar
+d2 = diameter of hole in end of bar
+*/
+	translate([tx,ty])
+		rotate([0,0,theta])
+		union()
+		{
+			// Tab
+			eye_bar(tb_od, tb_hd, tb_len, tb_thx);
+
+			// Fillet at base of tab
+			ofx = tb_len - tb_fr/2;
+			translate([ofx,-tb_od/2,tb_thx-.1])
+				rotate([0,0,180])
+				rotate([90,0,0])
+				fillet(tb_fr,tb_od);
+      }
+
+}
+
+module cstabs()
+{
+	csx = cs_len/2 + cs_thx +tb_len;
+	csy = cs_wid/2 + cs_thx +tb_len - 0.5;
+	ofy = 10;
+
+	cstab(-csx, ofy,  0);
+	cstab( csx, ofy,180);
+	cstab(   0,-csy, 90);
+}
+
 /* Cover mounting posts */
 
 cv_d = 6;	// Diameter of post
@@ -66,6 +109,54 @@ module cover_post(cx,cy)
 	}	
 }
 
+module corner_post(dia_p,screw_d,screw_z,ht)
+{
+	rad = dia_p/2;
+
+ translate([-rad-.05,-rad,0])
+ {
+	difference()
+	{
+		union()
+		{
+			cube([dia_p,dia_p,ht],center=false);
+			
+			translate([0,0,0]) rotate([0,0,-90])
+				fillet(rad,ht);
+
+			translate([dia_p,dia_p,0]) rotate([0,0,-90])
+				fillet(rad,ht);
+		}
+		union()
+		{	// Screw hole
+			translate([rad,rad,ht-screw_z])
+				cylinder(d=screw_d,h=screw_z,center=false);
+
+			// Round corner of the above cube
+			translate([dia_p-.05,-.05,0]) rotate([0,0,90])
+				fillet(rad,ht);
+		}
+	}
+ }
+}
+module corner_post1(cx,cy,theta)
+{
+	translate([cx,cy,0])
+	rotate([0,0,theta])
+		corner_post(6,2.8,12,cs_dep+cs_thx);
+}
+module corner_posts()
+{
+	vx = cs_len/2 - 0;
+	vy = cs_wid/2 - 0;
+
+	corner_post1( vx, vy,-90);
+	corner_post1( vx,-vy,180);
+	corner_post1(-vx, vy,  0);
+	corner_post1(-vx,-vy, 90);
+
+}
+
 module cover_posts()
 {
 	cx = cs_len/2 - 1;
@@ -77,7 +168,6 @@ module cover_posts()
 	cover_post(-cx,-cy);
 }
     
-
 /* Post to mount pot bar with screw hole */
 module ptpost(dx, dy, dz)
 {
@@ -95,9 +185,9 @@ module ptpost(dx, dy, dz)
     }   
 }
 
-/* Both pot mount posts at each end */
+/* Both pot mount posts */
 px = -cs_len/2 - cs_rad/2 + ptpost_len/2;
-py = cs_wid/2 - ptpost_bar_y;
+py = 4;    //cs_wid/2 - ptpost_bar_y;
 
 module ptposts()
 {
@@ -127,8 +217,8 @@ module potbar()
 {
     difference()
     {
-        translate([-br_len/2,-py/2,br_thx/2]) // Pot mounting bar
-            cube([br_len/2,py,br_thx],center=false);
+        translate([-br_len/2,-ptpost_wid/2,br_thx/2]) // Pot mounting bar
+            cube([br_len/2,ptpost_wid,br_thx],center=false);
         
         union()
         {
@@ -155,8 +245,8 @@ module potbar()
 }
 
 /* Mounting holes in side for Bowden tube */
-bw_z = 20;	// Height from enclosure floor
-bw_y = 10;	// Width offset (y) from centerline
+bw_z = 30;	// Height from enclosure floor
+bw_y = 8;	// Width offset (y) from centerline
 bw_d = 3;	// Dia of string hole
 bw_c = 4;	// Mounting screw circle dia
 bw_screw_d = 2.8;	// Mounting screw hole diameter
@@ -245,7 +335,7 @@ sg_d1  = 7;		// Post main diameter
 sg_d2  = 3.3;		// Post indent dia
 sg_d3  = 4.5;
 sg_d4  = 3.0;
-sg_h1 = 16;		// Post Height bottom portion
+sg_h1 = 19;		// Post Height bottom portion
 sg_h2 = 2;
 sg_h3	= 2;
 
@@ -277,7 +367,9 @@ module total ()
             case();			// Overall case
             ptposts();  	// Potentiometer mounting posts
 				spring_post(); // Tension spring post
-				cover_posts(); // Cover posts
+//				cover_posts(); // Cover posts
+				corner_posts();// Fancy corner posts
+				cstabs();		// Case mounting tabs
 		}
 		union()
 		{
@@ -285,13 +377,13 @@ module total ()
 		}
 	}
 }
+/* Uncomment the following to render */
 /* Enclosure */
 total();
 
 /* Potentiometer bar */
-translate([0,100,-cs_thx/2])
-  potbar();
+//translate([0,100,-cs_thx/2]) potbar();
 
 /* Bowden tube fixture */
-translate([0,60,0])
-	bowden_fitting();
+translate([0,60,0]) bowden_fitting();
+
