@@ -11,18 +11,18 @@ include <../library_deh/ridged_screw_hole.scad>
 
  $fn=25;
 
-j_len  = 10.4;  // Length inside bottom ridge to backside
+j_len  = 10.4; // Length inside bottom ridge to backside
 j_wid = 13.5;  // Width of jack
-j_ht  =  9.0;   // Height of jack
-j_rdg =  2.0;   // Rdige for cap to seat on wall
-j_w_thx = 2;	 // Thickness of walls
-j_b_thx = 4;      // Thickness of base jack sits upon 
+j_ht  =  9.0;  // Height of jack
+j_rdg =  2.0;  // Rdige for cap to seat on wall
+j_w_thx = 2;	// Thickness of walls
+j_b_thx = 4;   // Thickness of base jack sits upon 
 j_cd = 2.9; 	// Cap self-tap screw hole dia
 j_hd = 1.88 + 0.6;	// Jack indices hole dia
 j_hx1 = 6.0;
 j_hy1 = 1.8;
-j_hx2 = 9.2;
-j_hy2 = 2.7;
+j_hx2 = 8.0;
+j_hy2 = 1.8;
 j_lenb = 2.5;
 j_htb = j_b_thx - 1.3; // Handle small ridge under jack entrance
 
@@ -89,6 +89,11 @@ module jbase()
 				ofy3 = j_wid - jp_len/2;
 				translate([ofx3,ofy3,-0.1])
         	   	cylinder(d=j_cd, h=20,center=false);
+
+				// Chamfer
+				translate([j_len+.5,0,j_b_thx+10])
+					rotate([0,0,-45])	
+						cube([5,2,20],center=true);
 		}
     }  
  } 
@@ -168,20 +173,6 @@ ofy0 = j_wid1/2;
     }
 }
 
-module total()
-{
-    difference()
-    {
-        union()
-        {
-            jbase();
-        }
-        union()
-        {
- 
-        }
-    }
-}
-total();
-//translate([40,0,0]) jbase();
-translate([0,50,0]) jcap();
+/* Uncomment to print separately */
+//translate([0,0,0]) jbase();
+//translate([0,30,0]) jcap();

@@ -8,11 +8,12 @@ include <../library_deh/deh_shapes.scad>
 include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/ridged_screw_hole.scad>
+include <mod4pjack.scad>
 
  $fn=50;
 
 cs_len = 130;     // Inside length (x) of case
-cs_wid = 40;    // Inside width (y) of case
+cs_wid = 35;    // Inside width (y) of case
 cs_rad = 5;     // Rounded corner radius
 cs_dep = 40;    // Inside depth 
 cs_thx = 3;     // Wall thickness
@@ -24,6 +25,7 @@ ptpost_screw_d1 = 3.1;     // Pot bar post screw hole diameter
 ptpost_screw_d2 = 2.7;     // Pot bar post screw hole diameter
 ptpost_screw_z = 6; // Pot post bar screw hole depth
 ptpost_bar_y = 12;  // Pot post bar center line from top inside wall
+
 
 /* Main enclosure */
 module case()
@@ -79,12 +81,15 @@ d2 = diameter of hole in end of bar
 module cstabs()
 {
 	csx = cs_len/2 + cs_thx +tb_len;
+	csx1= cs_len/2 - cs_thx*2;
 	csy = cs_wid/2 + cs_thx +tb_len - 0.5;
 	ofy = 10;
 
-	cstab(-csx, ofy,  0);
-	cstab( csx, ofy,180);
-	cstab(   0,-csy, 90);
+//	cstab(-csx, ofy,  0);	// End tab
+//	cstab( csx, ofy,180);	// End tab
+	cstab(-csx1, csy,-90);	// Top right tab
+	cstab( csx1, csy,-90);	// Top left tab
+	cstab(    0,-csy, 90);	// Bottom center tab
 }
 
 /* Cover mounting posts */
@@ -186,27 +191,29 @@ module ptpost(dx, dy, dz)
 }
 
 /* Both pot mount posts */
-px = -cs_len/2 - cs_rad/2 + ptpost_len/2;
 py = 4;    //cs_wid/2 - ptpost_bar_y;
+br_plen2 = 40;	// Position of middle mounting post hole
+px2 = -cs_len/2 -cs_rad/2 + br_plen2;
+px1 = -cs_len/2 -cs_rad/2 + ptpost_len/2;
 
 module ptposts()
 {
-    ptpost( px, py, cs_thx);
-    ptpost(-ptpost_len/2, py, cs_thx);
+    ptpost( px1, py, cs_thx);
+    ptpost( px2, py, cs_thx);
 }
 
 /* Bar to hold potentiometer */
 
-br_len = cs_len + cs_rad;
+br_len = 70;	// Overall length of pot mounting bar
 br_thx = 3; // Pot mounting bar thickness
-br_pot_d = 7.0; // Pot hole diameter
-br_hx = -cs_len/2 + 25; // Locate pot hole on bar
+br_pot_d = 7.0;   // Pot hole diameter
+br_hx = 22;       // Locate pot hole on bar
 br_tab_ofx = 7.5;	// Indexing tab offset from center of shaft
-br_tab_x = 2.0;	// Indexing tab x
-br_tab_y = 2.5;	// Indexing tab y
+br_tab_x = 2.0;	// Indexing rectangular tab hole x
+br_tab_y = 2.5;	// Indexing rectangular tab hole y
 
 // Rectangular cutouts for pot anti-rotate tab
-module potindex(rot)
+module potindex(rot) // 'rot' rotation angle for tab
 {
 	rotate([0,0,rot])
        translate([br_tab_ofx,0,0])
@@ -217,17 +224,17 @@ module potbar()
 {
     difference()
     {
-        translate([-br_len/2,-ptpost_wid/2,br_thx/2]) // Pot mounting bar
-            cube([br_len/2,ptpost_wid,br_thx],center=false);
+        translate([0,-ptpost_wid/2,br_thx/2]) // Pot mounting bar
+            cube([br_len,ptpost_wid,br_thx],center=false);
         
         union()
         {
             // Holes in bar at both ends to mount bar on enclosure
-				brx = br_len/2 - ptpost_len/2;
-            translate([-brx,0,0])
+				brx = ptpost_len/2;
+            translate([brx,0,0])
                 cylinder(d1=ptpost_screw_d1,d2=ptpost_screw_d2,h=ptpost_screw_z,center=false);
 
-            translate([-ptpost_len/2,0,0])
+            translate([br_plen2,0,0])
                 cylinder(d1=ptpost_screw_d1,d2=ptpost_screw_d2,h=ptpost_screw_z,center=false);
             
             // Pot mounting on bar
@@ -235,9 +242,9 @@ module potbar()
 				{
                 cylinder(d=br_pot_d, h=20, center=false); // Main shaft
 
-					 potindex(  0); // Anti-rotate tab cutouts
-					 potindex( 90);
-					 potindex(-90);
+					 potindex(  0); // Anti-rotate tab cutouts for 4 positions
+//					 potindex( 90);
+//					 potindex(-90);
 					 potindex(180);
 				}
         }
@@ -356,6 +363,30 @@ module spring_post()
 
 	}
 }
+/* Cutout for telephone type cable */
+cc_ofz = cs_dep + 2;
+cc_ofy = 5;
+cc_ofx = cs_len/2;
+
+module cable_cutout()
+{
+	translate([cc_ofx,cc_ofy,cc_ofz]) // Cutout center of block
+		rotate([0,90,0])
+		rounded_rectangle(5,5,20,2);
+
+
+}
+
+/* Potentiometer bar with 4P4C jack mount */
+
+module potbar_w_jack()
+{
+	translate([0,0,-cs_thx/2]) potbar(0);
+
+	translate([br_len-11.5,0,br_thx]) 
+	  rotate([0,0,180])
+   	 jbase();	// This is brought in with include mod4jack.scad
+}
 
 /* Total enclosure */
 module total ()
@@ -373,17 +404,21 @@ module total ()
 		}
 		union()
 		{
-			bowden(); // Holes for Bowden fitting
+			bowden();         // Holes for Bowden fitting
+			cable_cutout();   // Telephone type cable cutout
 		}
 	}
+
 }
 /* Uncomment the following to render */
 /* Enclosure */
 total();
 
-/* Potentiometer bar */
-//translate([0,100,-cs_thx/2]) potbar();
+translate([0,100,0]) potbar_w_jack();
+
+//translate([-cs_len/2 - cs_rad/2 ,py,13]) potbar_w_jack(); // Overlay view
+
 
 /* Bowden tube fixture */
-translate([0,60,0]) bowden_fitting();
+//translate([0,60,0]) bowden_fitting();
 
