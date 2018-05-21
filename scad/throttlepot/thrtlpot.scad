@@ -204,8 +204,8 @@ module ptposts()
 
 /* Bar to hold potentiometer */
 
-br_len = 70;	// Overall length of pot mounting bar
-br_thx = 3; // Pot mounting bar thickness
+br_len = 70;      // Overall length of pot mounting bar
+br_thx = 3;       // Pot mounting bar thickness
 br_pot_d = 7.0;   // Pot hole diameter
 br_hx = 22;       // Locate pot hole on bar
 br_tab_ofx = 7.5;	// Indexing tab offset from center of shaft
@@ -377,13 +377,43 @@ module cable_cutout()
 
 }
 
+/* 'potbar' wire strain relief */
+sr_len = 20;
+sr_wid = 5;
+sr_hole_d = 3;
+
+module potbar_strainp(dx)
+{
+	translate([dx, sr_wid/2,-.05])
+		cylinder(d=sr_hole_d,h = 20, center=false);
+}
+
+module potbar_strain()
+{
+	difference()
+	{
+		union()
+		{
+			cube([sr_len,sr_wid,br_thx],center=false);
+		}
+		union()
+		{ // Strain relief holes
+			potbar_strainp( 3);
+			potbar_strainp(10);
+			potbar_strainp(17);
+		}
+	}
+}
+
 /* Potentiometer bar with 4P4C jack mount */
 
 module potbar_w_jack()
 {
-	translate([0,0,-cs_thx/2]) potbar(0);
+	translate([0,0,-cs_thx/2]) potbar(0);	// Main bar
 
-	translate([br_len-11.5,0,br_thx]) 
+	translate([30,ptpost_wid/2,0]) potbar_strain(); // Wire strain relief tab
+
+	translate([br_len-11.5,0,br_thx]) 	// 4P4C jack mount
 	  rotate([0,0,180])
    	 jbase();	// This is brought in with include mod4jack.scad
 }
@@ -412,7 +442,7 @@ module total ()
 }
 /* Uncomment the following to render */
 /* Enclosure */
-total();
+//total();
 
 translate([0,100,0]) potbar_w_jack();
 
