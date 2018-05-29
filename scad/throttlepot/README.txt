@@ -23,3 +23,13 @@ thrlpot_spl
 
 Has parts for the "spool" that goes over the 
 poteniometer shaft.
+
+General idea: modular jack for connecting the poteniometer
+  mounts on the 'potbar' part.  
+
+mod4pjack.scad--file with mount and cap for 4P4C jack
+  Abandoned 4P since most ready-made cables are 6P wide.
+
+mod6pjack.scad--file with mount and cap for 
+  6P6C jack with flying leads
+

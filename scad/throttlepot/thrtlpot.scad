@@ -75,7 +75,6 @@ d2 = diameter of hole in end of bar
 				rotate([90,0,0])
 				fillet(tb_fr,tb_od);
       }
-
 }
 
 module cstabs()
