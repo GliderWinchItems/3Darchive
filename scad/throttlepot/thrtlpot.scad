@@ -2,6 +2,7 @@
  * Enclosure for throttle potentiometer
  * Author: deh
  * Latest edit: 20180514
+ * V1: 2018 05 30 First version
  */
 
 include <../library_deh/deh_shapes.scad>
@@ -9,6 +10,7 @@ include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/ridged_screw_hole.scad>
 include <mod4pjack.scad>
+include <mod6pjack.scad>
 
  $fn=50;
 
@@ -26,6 +28,23 @@ ptpost_screw_d2 = 2.7;     // Pot bar post screw hole diameter
 ptpost_screw_z = 6; // Pot post bar screw hole depth
 ptpost_bar_y = 12;  // Pot post bar center line from top inside wall
 
+// **** Id the part ***
+module id(dx,dy,theta)
+{
+  font = "Liberation Sans:style=Bold Italic";
+	translate([dx,dy,cs_thx])
+	{
+	  rotate([0,0,theta])
+	  {
+		  linear_extrude(1.0)
+	   	text("throttlepot",size = 3.5);
+
+		 translate([0,-6, 0]) 
+			  linear_extrude(1.0)
+	   		text("2018 05 30 V1",size = 3.5);
+		}
+  	}
+}
 
 /* Main enclosure */
 module case()
@@ -190,7 +209,7 @@ module ptpost(dx, dy, dz)
 }
 
 /* Both pot mount posts */
-py = 4;    //cs_wid/2 - ptpost_bar_y;
+py = 4-1;    //cs_wid/2 - ptpost_bar_y;
 br_plen2 = 40;	// Position of middle mounting post hole
 px2 = -cs_len/2 -cs_rad/2 + br_plen2;
 px1 = -cs_len/2 -cs_rad/2 + ptpost_len/2;
@@ -219,12 +238,12 @@ module potindex(rot) // 'rot' rotation angle for tab
 			cube([br_tab_x,br_tab_y,20],center=true);
 }
 
-module potbar()
+module potbar(len)
 {
     difference()
     {
         translate([0,-ptpost_wid/2,br_thx/2]) // Pot mounting bar
-            cube([br_len,ptpost_wid,br_thx],center=false);
+            cube([len,ptpost_wid,br_thx],center=false);
         
         union()
         {
@@ -239,7 +258,7 @@ module potbar()
             // Pot mounting on bar
             translate([br_hx,0,0])
 				{
-                cylinder(d=br_pot_d, h=20, center=false); // Main shaft
+                cylinder(d=br_pot_d, h=20, center=false); // Main shaft hole
 
 					 potindex(  0); // Anti-rotate tab cutouts for 4 positions
 //					 potindex( 90);
@@ -333,6 +352,22 @@ module bowden_fitting()
 		}
 	}
 }
+/* Punch holes in side for screws to mount jack module */
+module j6jack_holes(dx,dz)
+{
+	translate([dx,25,dz])
+	{
+		rotate([90,0,0])
+		{
+				// Bring cap mount holes through to bottom
+				translate([0,j6psts_ofy,0])
+					cylinder(d=j6pst_d2,h=50,center=true);
+
+				translate([0,-j6psts_ofy,0])
+					cylinder(d=j6pst_d2,h=50,center=true);			
+		}
+	}
+}
 
 /* Spring post: has indentation near top */
 sg_ofx = cs_len/2 - .75;	// Offset from inside wall
@@ -359,9 +394,9 @@ module spring_post()
 		
 		translate([0,0,sg_h1+sg_h2*2])	// Top chamfer
 			cylinder(d1=sg_d3, d2 = sg_d4, h=sg_h3, center=false);
-
 	}
 }
+
 /* Cutout for telephone type cable */
 cc_ofz = cs_dep + 2;
 cc_ofy = 5;
@@ -372,8 +407,6 @@ module cable_cutout()
 	translate([cc_ofx,cc_ofy,cc_ofz]) // Cutout center of block
 		rotate([0,90,0])
 		rounded_rectangle(5,5,20,2);
-
-
 }
 
 /* 'potbar' wire strain relief */
@@ -387,13 +420,13 @@ module potbar_strainp(dx)
 		cylinder(d=sr_hole_d,h = 20, center=false);
 }
 
-module potbar_strain()
+module potbar_strain(len)
 {
 	difference()
 	{
 		union()
 		{
-			cube([sr_len,sr_wid,br_thx],center=false);
+			cube([len,sr_wid,br_thx],center=false);
 		}
 		union()
 		{ // Strain relief holes
@@ -408,13 +441,20 @@ module potbar_strain()
 
 module potbar_w_jack()
 {
-	translate([0,0,-cs_thx/2]) potbar(0);	// Main bar
+	translate([0,0,-cs_thx/2]) potbar(br_len);	// Main bar
 
-	translate([30,ptpost_wid/2,0]) potbar_strain(); // Wire strain relief tab
+	translate([30,ptpost_wid/2,0]) potbar_strain(sr_len); // Wire strain relief tab
 
 	translate([br_len-11.5,0,br_thx]) 	// 4P4C jack mount
 	  rotate([0,0,180])
    	 jbase();	// This is brought in with include mod4jack.scad
+}
+module potbar_short(len)
+{
+	translate([0,0,-cs_thx/2]) potbar(len);	// Main bar
+
+	translate([30,ptpost_wid/2,0]) potbar_strain(20); // Wire strain relief tab
+
 }
 
 /* Total enclosure */
@@ -430,23 +470,25 @@ module total ()
 //				cover_posts(); // Cover posts
 				corner_posts();// Fancy corner posts
 				cstabs();		// Case mounting tabs
+				id(0,0,0);
 		}
 		union()
 		{
 			bowden();         // Holes for Bowden fitting
 			cable_cutout();   // Telephone type cable cutout
+			j6jack_holes(15,18+cs_thx); // Jack mounting holes
 		}
 	}
-
 }
+
 /* Uncomment the following to render */
 /* Enclosure */
-//total();
+total();
 
-translate([0,100,0]) potbar_w_jack();
-
+//translate([0,100,0]) potbar_w_jack();	// Offset for print
 //translate([-cs_len/2 - cs_rad/2 ,py,13]) potbar_w_jack(); // Overlay view
 
+translate([0,60,0]) potbar_short(50);	// Main bar
 
 /* Bowden tube fixture */
 //translate([0,60,0]) bowden_fitting();

@@ -76,8 +76,6 @@ ofy = (wid - wid2)/2;
 					cube([len3,wid3,j6_ht],center=false);
 
 echo("x0 x1 x2 x3",x0, x1,x2,x3);
-				
-
 			}
 		}
 	}
@@ -204,11 +202,10 @@ module total()
 	j6floor();
 	j6posts();
 }
-translate([0,0,j6flr_b_thx])
-	total();
 
-translate([30,0,0])
-	j6cap();
+//translate([0,0,j6flr_b_thx]) total();
+
+//translate([30,0,0]) j6cap();
 
 // Position cap over jack mount for visual check
 //translate([0,0,j6_ht + j6flr_b_thx + 1]) j6cap();
