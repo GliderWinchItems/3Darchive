@@ -482,8 +482,8 @@ module total ()
 }
 
 /* Uncomment the following to render */
-/* Enclosure */
-total();
+
+//total(); // Enclosure
 
 //translate([0,100,0]) potbar_w_jack();	// Offset for print
 //translate([-cs_len/2 - cs_rad/2 ,py,13]) potbar_w_jack(); // Overlay view
