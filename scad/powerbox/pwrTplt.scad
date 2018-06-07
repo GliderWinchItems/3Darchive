@@ -66,5 +66,58 @@ module tpl_holes()
 	tpl_hole(-ofx,tpl_ofs);
 
 }
+tpl_pcb_thx = 6;	// Thickness of bar on top for pcb mt
+module tpl_pcb_mt(dx,dy)
+{
+len = tpl_sid;
+wid = tpl_sid;
+ofx = dx - tpl_sid/2;
+ofz = tpl_pcb_thx/2 + tpl_thx;
+		translate([ofx,dy,ofz])
+			cube([len,wid,tpl_pcb_thx],center = true);
+}
+module tpl_pcb_mts()
+{
+ofx = tpl_len/2;
+ofy1 = tpl_wid - tpl_sid*2 + 2;
+	tpl_pcb_mt( ofx, ofy1);
+	tpl_pcb_mt(-ofx+tpl_sid, ofy1);
+ofy2 = tpl_sid*2 - 2;
+	tpl_pcb_mt( ofx, ofy2);
+	tpl_pcb_mt(-ofx+tpl_sid, ofy2);
+}
+tpl_pcb_hole_d = 2.8;	// pcb mt hole diameter
+module tpl_pcb_mts_hole(dx,dy)
+{
+	translate([dx,dy,0])
+		cylinder(d=tpl_pcb_hole_d, h=100,center=false);
+}
+module tpl_pcb_mts_holes()
+{
+ofx1 = tpl_len/2 -tpl_sid/2;
+ofy1 = tpl_wid/2 - 12.8;
+	tpl_pcb_mts_hole( ofx1,ofy1);
+	tpl_pcb_mts_hole(-ofx1,ofy1);
+ofy2 = tpl_wid/2 + 12.8;
+	tpl_pcb_mts_hole( ofx1,ofy2);
+	tpl_pcb_mts_hole(-ofx1,ofy2);
 
-top_plate();
+}
+
+module total()
+{
+	difference()
+	{
+		union()
+		{
+			top_plate();
+			tpl_pcb_mts();
+		}
+		union()
+		{
+			tpl_pcb_mts_holes();
+
+		}
+	}
+}
+total();

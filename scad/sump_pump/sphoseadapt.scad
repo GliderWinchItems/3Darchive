@@ -12,9 +12,9 @@ include <../library_deh/ridged_screw_hole.scad>
 
  $fn=100;
 
-w = 2;          // Wall thickness
-flx_d1 = 36;	 // Flex hose end goes inside flex hose
-flx_d2 = 33;
+w = 2.5;          // Wall thickness
+flx_d1 = 35.5;	 // Flex hose end goes inside flex hose
+flx_d2 = 33.5;
 flx_ht = 25;
 pvc_d2 = 41.0+w;	// PVC end goes around outside of pvc pipe
 pvc_d1 = 42.0+w;

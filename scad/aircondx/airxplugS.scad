@@ -12,12 +12,12 @@ include <../library_deh/ridged_screw_hole.scad>
 
  $fn=100;
 
-plg_ht = 26;
-plg_d1 = 12;
-plg_d2 = 13.5;
-tub_d1 = 6.5;
-tub_d2 = 5.8;
-tub_ht = 35;
+plg_ht = 20;
+plg_d1 = 9;
+plg_d2 = 12.0;
+tub_d1 = 5.0;
+tub_d2 = 4.0;
+tub_ht = 30;
 hole_dia = 4.5;
 
 module plug_tube()
