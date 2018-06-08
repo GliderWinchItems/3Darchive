@@ -60,6 +60,18 @@ module corner_posts_holes()
 	translate([-ofx,-ofy, 0]) cylinder(d=d1,h=50,center=true);
 
 }
+module block_holes()
+{
+	ofs = 4;
+	ofx = plt3_len/2 - ofs;
+	ofy = plt3_wid/2 - ofs;
+	d1 = 3.5;
+	translate([ ofx,   0, 0]) cylinder(d=d1,h=50,center=true);
+	translate([-ofx,   0, 0]) cylinder(d=d1,h=50,center=true);
+	translate([   0,-ofy, 0]) cylinder(d=d1,h=50,center=true);
+	translate([   0, ofy, 0]) cylinder(d=d1,h=50,center=true);	
+
+}
 
 module d_plate2()
 {
@@ -76,9 +88,11 @@ module d_plate2()
 
 		union()
 		{
-			k = 8.0;	// Edge ridge width
+			k = 8.0*2;	// Edge ridge width
 			len2 = plt3_len - k - j;
 			wid2 = plt3_wid - k - j;
+echo ("len2",len2,"wid2",wid2);
+echo ("plt3_len",plt3_len,"plt3_wid",plt3_wid);
 		   cube([len2,wid2,50],center=true);
 		}
 	}	
@@ -96,6 +110,7 @@ module total()
 		union()
 		{
 			corner_posts_holes();
+			block_holes();
 		}
 	}	
 }
