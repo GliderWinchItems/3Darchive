@@ -10,6 +10,9 @@ include <../library_deh/deh_shapes2.scad>
 include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/ridged_screw_hole.scad>
+include <mod6pjack.scad>
+
+include <pwrBotplt.scad>
 
 
 
@@ -29,10 +32,11 @@ mm_ht12 = 2;	// Amount material below washer
 
  $fn=20;
 
-cs_len = 120;   // Inside length (x) of case
+cs_extend = 30-6; 
+cs_len = 110+cs_extend;   // Inside length (x) of case
 cs_wid = 80;    // Inside width (y) of case
 cs_rad = 5;     // Rounded corner radius
-cs_dep = 17;    // Inside depth 
+cs_dep = 13;    // Inside depth 
 cs_thx = 3;     // Wall thickness
 
 // **** Id the part ***
@@ -44,7 +48,7 @@ module id(dx,dy,theta)
 	  rotate([0,0,theta])
 	  {
 		  linear_extrude(1.0)
-	   	text("powwerbox 2018 06 07 V1",size = 3.5);
+	   	text("2018 06 07 V1",size = 3.5);
 		}
   	}
 }
@@ -106,11 +110,13 @@ module cstabs()
 	csy = cs_wid/2 + cs_thx +tb_len - 0.5;
 	ofy = 10;
 
-//	cstab(-csx, ofy,  0);	// End tab
-//	cstab( csx, ofy,180);	// End tab
-	cstab(-csx1, csy,-90);	// Top right tab
-	cstab( csx1, csy,-90);	// Top left tab
-	cstab(    0,-csy, 90);	// Bottom center tab
+//	cstab(-csx,   0,  0);	// Left  end center tab
+	cstab( csx,   0,180);	// Right end center tab
+//	cstab( csx1, csy,-90);	// Top right tab
+	cstab(-csx1, csy,-90);	// Top left tab
+//	cstab( csx1,-csy, 90);	// Bottom right tab
+	cstab(-csx1,-csy, 90);	// Bottom left tab
+//	cstab(    0,-csy, 90);	// Bottom center tab
 }
 
 module corner_post(dia_p,screw_d,screw_z,ht)
@@ -161,10 +167,10 @@ module corner_posts()
 
 }
 
-
 /* Cutout for telephone type cable */
 cc_ofz = cs_dep + 2;
-cc_ofy = 5;
+cc_ofy = 25;
+cc_ofy2 = -25;
 cc_ofx = cs_len/2;
 module cable_cutout1()
 {
@@ -172,13 +178,57 @@ module cable_cutout1()
 }
 module cable_cutout2()
 {
-	cable_cutout([-cc_ofx-8,cc_ofy,cc_ofz]);
+	cable_cutout([cc_ofx,cc_ofy2,cc_ofz+2]);
 }
 module cable_cutout(a)
 {
 	translate(a) // Cutout center of block
 		rotate([0,90,0])
 		rounded_rectangle(5,5,20,2);
+}
+
+module bot_plate()
+{
+	difference()
+	{
+		union()
+		{
+			translate([0,0,bplt_thx/2])
+				cube([bplt_len, bplt_wid, bplt_thx],center=true);
+		}
+		union()
+		{
+			translate([0,0,bplt_thx/2])
+				cube([bplt_len-22, bplt_wid-22, bplt_thx],center=true);
+
+			/* Capacitor mounting block holes */
+			translate([  0,0,0]) cap_mtg_holes();
+			translate([-12,0,0]) cap_mtg_holes();
+
+		}
+	}
+}
+
+module power_cable_cutout()
+{
+ 	translate([cc_ofx,0,bplt_thx])
+ 	{
+		/* cutout for power cable */
+		len = 6.5; wid = 12; ht = 18;
+		ofz = rht + 7-2.8;  // Set depth of cutout
+		translate([-6,0,ofz])
+			rotate([90,0,90])
+				rounded_rectangle(len,wid,ht,2);
+	}
+}
+/* Plate for mod6 jack */
+module j6part(dx,dy)
+{
+	translate([dx,dy,-11]) 
+		rotate([0, 90,90])
+			j6mntblock_plt();
+
+
 }
 
 /* Total enclosure */
@@ -191,17 +241,21 @@ module total ()
             case();			// Overall case
 				corner_posts();// Fancy corner posts
 				cstabs();		// Case mounting tabs
-				id(-cs_len/2,-20, 90);
+				id(-cs_len/2,-25, 0);
+				j6part(-47, 20); // mod6 jack plate
+
 		}
 		union()
 		{
 			cable_cutout1();   // Telephone type cable cutout
 			cable_cutout2();   // Telephone type cable cutout
+			power_cable_cutout();
 		}
 	}
 }
 
 /* Uncomment the following to render */
 total(); // Enclosure
+translate([13+cs_extend/2,0,0]) total2(); // Mounting plate
 
 
