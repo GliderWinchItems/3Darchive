@@ -30,7 +30,7 @@ ss_dia1 = magx_stud_dia + 0.5;
 ss_nut_dia = magx_nut_hex_peak + 0.6;
 mm_ht12 = 2;	// Amount material below washer
 
- $fn=20;
+ $fn=50;
 
 cs_extend = 30-6; 
 cs_len = 110+cs_extend;   // Inside length (x) of case
@@ -76,7 +76,7 @@ module case()
 tb_od  = 18;   // outside diameter of rounded end, and width of bar
 tb_hd  = 3.4;	// diameter of hole in end of bar
 tb_len = 13;	// length of bar
-tb_thx = 3;		// thickness/height of bar
+tb_thx = 4;		// thickness/height of bar
 tb_fr  = 5;		// Radius of tab fillet
 
 module cstab(tx,ty, theta)
@@ -118,7 +118,12 @@ module cstabs()
 	cstab(-csx1,-csy, 90);	// Bottom left tab
 //	cstab(    0,-csy, 90);	// Bottom center tab
 }
-
+/* 
+  dia_p   = diameter of post
+  screw_d = diameter of screw hole
+  screw_z = depth of screw hole
+  ht      = height of post
+*/  
 module corner_post(dia_p,screw_d,screw_z,ht)
 {
 	rad = dia_p/2;
@@ -164,27 +169,27 @@ module corner_posts()
 	corner_post1( vx,-vy,180);
 	corner_post1(-vx, vy,  0);
 	corner_post1(-vx,-vy, 90);
-
 }
 
 /* Cutout for telephone type cable */
 cc_ofz = cs_dep + 2;
-cc_ofy = 25;
-cc_ofy2 = -25;
+cc_del = 2.5;
+cc_ofy = 25+cc_del;
+cc_ofy2 = -25-cc_del;
 cc_ofx = cs_len/2;
-module cable_cutout1()
+module cable_cutout1(dz)
 {
-	cable_cutout([cc_ofx,cc_ofy,cc_ofz]);
+	cable_cutout([cc_ofx,cc_ofy ,cc_ofz+2.5+dz]);
 }
-module cable_cutout2()
+module cable_cutout2(dz)
 {
-	cable_cutout([cc_ofx,cc_ofy2,cc_ofz+2]);
+	cable_cutout([cc_ofx,cc_ofy2,cc_ofz+0.0+dz]);
 }
 module cable_cutout(a)
 {
 	translate(a) // Cutout center of block
 		rotate([0,90,0])
-		rounded_rectangle(5,5,20,2);
+		rounded_rectangle(6.2,5,20,2);
 }
 
 module bot_plate()
@@ -204,14 +209,13 @@ module bot_plate()
 			/* Capacitor mounting block holes */
 			translate([  0,0,0]) cap_mtg_holes();
 			translate([-12,0,0]) cap_mtg_holes();
-
 		}
 	}
 }
 
-module power_cable_cutout()
+module power_cable_cutout(thx)
 {
- 	translate([cc_ofx,0,bplt_thx])
+ 	translate([cc_ofx,0,thx])
  	{
 		/* cutout for power cable */
 		len = 6.5; wid = 12; ht = 18;
@@ -227,8 +231,6 @@ module j6part(dx,dy)
 	translate([dx,dy,-11]) 
 		rotate([0, 90,90])
 			j6mntblock_plt();
-
-
 }
 
 /* Total enclosure */
@@ -247,15 +249,15 @@ module total ()
 		}
 		union()
 		{
-			cable_cutout1();   // Telephone type cable cutout
-			cable_cutout2();   // Telephone type cable cutout
-			power_cable_cutout();
+			cable_cutout1(0);   // Telephone type cable cutout
+			cable_cutout2(0);   // Telephone type cable cutout
+			power_cable_cutout(bplt_thx);
 		}
 	}
 }
 
 /* Uncomment the following to render */
-total(); // Enclosure
-translate([13+cs_extend/2,0,0]) total2(); // Mounting plate
+//total(); // Enclosure
+//translate([13+cs_extend/2,0,0]) total2(); // Mounting plate
 
 

@@ -402,9 +402,9 @@ cc_ofz = cs_dep + 2;
 cc_ofy = 5;
 cc_ofx = cs_len/2;
 
-module cable_cutout()
+module cable_cutout(ofy,ofz)
 {
-	translate([cc_ofx,cc_ofy,cc_ofz]) // Cutout center of block
+	translate([cc_ofx,ofy,ofz]) // Cutout center of block
 		rotate([0,90,0])
 		rounded_rectangle(5,5,20,2);
 }
@@ -475,7 +475,7 @@ module total ()
 		union()
 		{
 			bowden();         // Holes for Bowden fitting
-			cable_cutout();   // Telephone type cable cutout
+			cable_cutout(cc_ofy, cc_ofz);   // Telephone type cable cutout
 			j6jack_holes(15,18+cs_thx); // Jack mounting holes
 		}
 	}
@@ -488,7 +488,7 @@ module total ()
 //translate([0,100,0]) potbar_w_jack();	// Offset for print
 //translate([-cs_len/2 - cs_rad/2 ,py,13]) potbar_w_jack(); // Overlay view
 
-translate([0,60,0]) potbar_short(50);	// Main bar
+//translate([0,60,0]) potbar_short(50);	// Main bar
 
 /* Bowden tube fixture */
 //translate([0,60,0]) bowden_fitting();

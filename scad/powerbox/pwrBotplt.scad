@@ -109,7 +109,7 @@ module bot_plate()
 		}
 	}
 }
-rlen = 8;
+rlen = 9;
 rht  = 10;
 module bot_wire_clamp(dx,dy,rwid,cwid,chole,czd)
 {
@@ -146,7 +146,7 @@ module bot_wire_clamp(dx,dy,rwid,cwid,chole,czd)
 /* Top clamp bar to hold power cable */
 kht  = 5;	// Height of top wire clamp bar
 
-module top_wire_clamp(a)
+module top_wire_clamp(a, rwid)
 {
 translate(a)
  {
@@ -177,7 +177,38 @@ translate(a)
 	}	
  }
 }
+module top_side_wire_clamp(a, rwid)
+{
+translate(a)
+ {
+	difference()
+	{
+		union()
+		{
+			// Main clamp bar
+			translate([0,0,kht/2])
+				cube([rlen,rwid,kht],center=true);
 
+			// Center wedge 
+//			translate([rlen/2,0,kht])
+//				rotate([0,-90,0])
+//					wedge_isoceles(rlen, 2, 2);
+		}
+		union()
+		{
+			/* cutout for power cable */
+
+			/* Holes for power cable clamp */
+			dia = 3.2;
+			ofx1 = 0;
+			ofy1 = 5.5;
+			translate([ofx1, ofy1,0])cylinder(d=dia,h=50,center=true);
+			translate([ofx1,-ofy1,0])cylinder(d=dia,h=50,center=true);
+		}
+	}	
+ }
+}
+bw_del = 2.5;
 module total2()
 {
 	difference()
@@ -185,9 +216,9 @@ module total2()
 		union()
 		{
 			bot_plate();
-			bot_wire_clamp(40,  0,20,6.5,7,0);
-			bot_wire_clamp(40,-25,15,4.0,5,0);
-			bot_wire_clamp(40, 25,15,4.0,5,1);
+			bot_wire_clamp(40.05,         0,20,6.5,7.0, 0);
+			bot_wire_clamp(40,-25-bw_del,15,5.0,5.5,-1.5);
+			bot_wire_clamp(40, 25+bw_del,15,5.0,5.5, 1);
 		}
 		union()
 		{
@@ -195,6 +226,8 @@ module total2()
 	}	
 }
 //total2();
-//top_wire_clamp([80,0,0]);
+top_wire_clamp([20,0,0], 20);
+top_side_wire_clamp([0,0,0], 15);
+top_side_wire_clamp([-10,0,0], 15);
 
 
