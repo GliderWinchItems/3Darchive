@@ -8,8 +8,8 @@ include <../library_deh/deh_shapes.scad>
 include <../library_deh/deh_shapes2.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/Plano_frame.scad>
-include <../library_deh/discovery_posts.scad
-//include <../library_deh/POD_posts.scad
+include <../library_deh/discovery_posts.scad>
+include <../library_deh/POD_posts.scad>
 
 /*********************************************************
 // Stud magnet relative postions.
@@ -99,6 +99,7 @@ module mag_posts_add()
 	mag_post_add([-tm_ofs_x,tm_ofs_y,0],mgp_ht);
 	mag_post_add([ tm_ofs_x,tm_ofs_y,0],mgp_ht);	
 }
+mag_posts_add();
 
 module mag_posts_del()
 {
@@ -133,7 +134,7 @@ echo("plano_base_add","pl_wid",pl_wid,"pl_len",pl_len,"thick",thick);
 	mag_posts_add();
 
 }
-/* Deletions (used in a final 'difference()' */
+/* Deletions (used in a final difference() */
 module plano_base_del(thk)
 {
 	mag_posts_del();

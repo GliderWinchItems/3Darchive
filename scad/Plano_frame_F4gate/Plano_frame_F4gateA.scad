@@ -16,13 +16,14 @@ include <../library_deh/deh_shapes.scad>
 include <../library_deh/Plano_frame.scad>
 include <../library_deh/fasteners.scad>
 include <../library_deh/ridged_screw_hole.scad>
+
 include <../library_deh/Plano_base.scad>
 
 include <F4g_capA.scad>
 include <carrier_6P.scad>
 
 
- $fn=100;
+ $fn=50;
 
 big = 10;	// Big z in direction 
 
@@ -366,6 +367,6 @@ module xtest()
 //F4gtotal();
 
 // 6P carrier
-//translate([0,plano_len,18])
-// rotate([0,0,180])
-//  crr_total();
+translate([0,plano_len,18])
+ rotate([0,0,180])
+  crr_total();

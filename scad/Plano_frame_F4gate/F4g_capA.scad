@@ -1,4 +1,4 @@
-/* File: F4g_cap.scad
+/* File: F4g_capA.scad
  * Hold-down cap for Plano_F4gate.scad
  * Author: deh
  * Latest edit: 20180123
@@ -84,4 +84,4 @@ module F4gtotal()
 
     
 }
-//F4gtotal();
+F4gtotal();

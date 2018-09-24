@@ -115,5 +115,3 @@ base_rnd = 10;	// Base plate corner rounding radius
  iso_osd_y = iso_wid + iso_slop - 0.5; // Board y
  iso_osd_x = iso_len + iso_slop - 0.5; // Board x
  iso_side  = iso_lip + iso_ridge_wid;
-
-
