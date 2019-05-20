@@ -1,9 +1,9 @@
 /* pod-endbell-1
    POD endbell insert for POD #1
-   03/05/2017
+   03/05/2017;09/28/2018
 */
 
-$fn = 200;
+$fn = 100;
 
 include <../library_deh/deh_shapes.scad>
 
@@ -13,7 +13,7 @@ width_centerrim = 10;
 width_centerbar = 14;
 
 
-thick_bottom = 5;	// Bottom of endbell
+thick_bottom = 6;	// Bottom of endbell
 thick_sides = 2.8;	// Sides
 height_sides = 15;	// Height of sides
 
@@ -137,8 +137,8 @@ module ip_holes()
 /* recess for battery-to-pcboard cable */
 module bp_recess()
 {
-  translate([-5,0,0])
-    cube([15,25,2],center = false);
+  translate([-10,-15,0])
+    cube([20,38,3],center = false);
 
 }
 
@@ -157,7 +157,7 @@ module main()
       }
       union()
       {
-           translate([15,-1,0])
+           translate([12,-1,0])
              cylinder(d = 25, h = 40, center = false);
 	   ip_holes();
            bp_recess();

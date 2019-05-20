@@ -1,7 +1,8 @@
 /* File: Plano_frame_POD_fullbase.scad
  * Full base plate with low density infill
  * Author: deh
- * Latest edit: 201701291316
+ * V1 = 09/27/2018
+ * V2 = 09/28/2018 Change washer dia to 8.0
  */
  $fn=100;
  
@@ -31,9 +32,9 @@ base_rnd = 10;	// Base plate corner rounding radius
  
  plano_mag_stud = 2.8;  // Dia of mounting magnet studs (4-40)
  plano_mag_stud_len = 7.95; // Height of stud from magnet back
- mag_washer_dia = 9.5;      // Diameter of washer for magnet stud
+ mag_washer_dia = 8.0;      // Diameter of washer for magnet stud
  mag_washer_thick = 1.1;    // Thickness of washer
- mag_washer_dia_extra = 1;  // Washer slop
+ mag_washer_dia_extra = 0.6;  // Washer slop
  mag_nut_thick = 2.4;       // Nut for stud thickness
  plano_web_thick = 2;   // Plano box thickness where stud is 
  mag_wash_recess_dia = mag_washer_dia + mag_washer_dia_extra;
@@ -108,6 +109,24 @@ base_rnd = 10;	// Base plate corner rounding radius
  iso_osd_x = iso_len + iso_slop; // Board x
  iso_side  = iso_lip + iso_ridge_wid;
 
+
+// **** Id the part ***
+module id()
+{
+r = ([0,0,0]);
+ {
+  font = "Liberation Sans:style=Bold Italic";
+ translate([6, 4, base_ht-.05]) 
+  rotate(r)
+  linear_extrude(1.0)
+   text("POD_fullbase",size = 3.0);
+
+ translate([-34, 4, base_ht-.05]) 
+  rotate(r)
+  linear_extrude(1.0)
+   text("2018 09 28 V2",size = 3.0);
+ }
+}
 
 RJ_cutout_y = pc_y - p_ridge - pod_len + RJ_length + RJ_slop - RJ_cutout_length;
 
@@ -352,18 +371,39 @@ module rounded_corner(dia, height, width)
         translate([0,-dia/2,-.01])cube([(dia/2+.01),(width + .01),(height + .01)],false);
      }
 }
+module mag_stud_post(mhx, mhy)
+{
+od = mag_wash_recess_dia + 1.0;
+ht = base_ht - 1.5 + mag_nut_thick + 0.5 + mag_washer_thick + 0.3 + 0.6;
 
+   translate([mhx,mhy,0])
+   {
+     cylinder(d = od, h = ht, center=false);
+   }
+}
 module mag_stud_hole(mhx, mhy)
 {
+wash_thx = mag_washer_thick + 0.3; // Washer well thickness
+wash_ofz = base_ht - 1.5;
+nut_ofz = wash_ofz + wash_thx;
+nut_thx = mag_nut_thick + 0.5;
+nut_dia = 7.12 + 0.5;	// nut_dia_440 + slop peak-peak
+echo ("wash_ofz",wash_ofz);
+echo ("nut_ofz",nut_ofz);
+echo ("wash_thx",wash_thx);
+echo ("nut_thx",nut_thx);
+
    translate([mhx,mhy,0])
     {
         // Magnet stud hole
-        cylinder(h = (base_ht + .1), d = plano_mag_stud, center = false);
-        // Recess for washer and nut
-        translate([0,0,mag_stud_z])
-            cylinder(h = mag_wash_recess_z, d = mag_wash_recess_dia, center = false);
+        cylinder(h = (base_ht + 5), d = plano_mag_stud, center = false);
+        // Recess for washer
+        translate([0,0,wash_ofz])
+            cylinder(h = wash_thx, d = mag_wash_recess_dia, center = false);
+        // Recess for nut
+        translate([0,0,nut_ofz])
+            cylinder(h = nut_thx,d = nut_dia, $fn = 6, center=false);
     }
-
 }
 
 // Base plate w rounded corners
@@ -396,6 +436,15 @@ module base_plate()
 */
 }
 
+module mag_stud_posts()
+{
+   mag_stud_post(0,plano_mag_bot_ofs);
+   mag_stud_post((plano_mag_top_x),
+                 (plano_mag_bot_ofs + plano_mag_top_y));
+   mag_stud_post((-plano_mag_top_x),
+                 (plano_mag_bot_ofs + plano_mag_top_y));
+}
+
 module mag_stud_holes()
 {
    mag_stud_hole(0,plano_mag_bot_ofs);
@@ -403,7 +452,6 @@ module mag_stud_holes()
                  (plano_mag_bot_ofs + plano_mag_top_y));
    mag_stud_hole((-plano_mag_top_x),
                  (plano_mag_bot_ofs + plano_mag_top_y));
-
 }
 
 module RJ45_cutout()
@@ -489,10 +537,10 @@ module base_punched()
                  iso_blkw+.1,
                  iso_blkh + iso_ridge_ht - .75,
                  pod_post_s, pod_post_sd);
-
          }
-         stiffeners();
+mag_stud_posts();
 
+         stiffeners();
       }
       union()
       {
@@ -504,4 +552,5 @@ module base_punched()
 }
 
 base_punched();
+id();
 

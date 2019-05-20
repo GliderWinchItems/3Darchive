@@ -10,7 +10,7 @@ width_centerbar = 14;
 thick_bottom = 3;
 thick_sides = 2.8;
 height_sides = 10;
-$fn = 100;
+$fn = 50;
 
 module base()
 {
