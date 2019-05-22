@@ -10,18 +10,24 @@ Step to layer for insert and note layer number.
 2.  Edit G-Code
 
 3.  Search tab
-    Enter: ;Layer change
+    Enter a search string: 
+       ;Layer change
 
 4.  Search to step to insertion point
+    Click the layer counter.
+	Each click will move the gcode "cursor" location
+   layer-by-layer.
 
-5.  Enter: M226 and M25, e.g.--
+5.  Edit in two instructions: M226 and M25, e.g.--
 
 G1 X23.964 Y153.079 E36.73013
 ;Layer change
 G1 E30.73013 F1800.00000
-M226
-M25
+M226 [Inserted instruction]
+M25  [Inserted instruction]
 G92 E0
+
+Don't forget to "SAVE"!
 
 6.  When printing halts
 
@@ -29,9 +35,9 @@ G92 E0
   b.  Insert parts
   c.  Press Continue on panel
 
-  Don't insert parts without pressing Pause as unless
-  Pause is pressed the motors are disabled making it 
-  easy to move the table and the x/y willbe off for 
+  Don't insert parts without pressing Pause.  Unless
+  Pause is pressed the motors are in a disabled state making it 
+  *very* easy to move the table and the x/y will be off for 
   the remainder of the print.
 
 
