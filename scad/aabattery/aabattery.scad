@@ -8,7 +8,8 @@
 module bodyplus()
 {
 	difference()
-	{   union()
+	{   
+        union()
         {
             translate([0,0,2])
             cylinder(d = 13.5, h=49.5-2, center=false);
@@ -37,8 +38,13 @@ module bodyplus()
 module bodyminus()
 {
 	difference()
-	{
-		cylinder(d = 14.0, h=49.5, center=false);
+	{ 
+        union()
+        {
+            translate([0,0,2])
+            cylinder(d = 13.5, h=49.5-2, center=false);
+            cylinder(d1=13.5-2,d2=13.5,h=2,center=false);
+        }
 		union()
 		{
             translate([0,0,49.5 - 1.5])
@@ -46,7 +52,7 @@ module bodyminus()
             {
 				cylinder(d = 20, h=3, center=false);
 				translate([0,0,-0.1])
-				  cylinder(d = 9, h=6, center=false);
+				  cylinder(d = 8, h=6, center=false);
             }
             translate([0,0,49.6-40])
             cylinder(d = 3, h= 40,center=false);
