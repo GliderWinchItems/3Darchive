@@ -1,7 +1,7 @@
-/* File: lcdbezel.scad
- * LCD 2x16
+/* File: lcdbezel4x16.scad
+ * LCD 4x16
  * Author: deh
- * Latest edit: 20200425
+ * Latest edit: 20200423
  */
  
  $fn = 40;
@@ -9,33 +9,28 @@
  /* Reference: origin to bottom-left corner of pcb */
  
  /* LCD module */
- brdlen   = 80.4;     // Overall pcb length
- brdwid   = 36.0;     // Overall pcb width
- brdholeoffset = 2.2; // Mounting holes from pcb edge
- brdholedia    = 3.0; // Mounting hole diameter
- brdthick = 1.6;      // pcb thickness
+ brdlen   = 98.2;   // Overall pcb length
+ brdwid   = 60;     // Overall pcb width
+ brdholeoffset = 2.1; // Mounting holes from pcb edge
+ brdholedia    = 3.5; // Mounting hole diameter
+ brdthick = 1.7;    // pcb thickness
  
- dspoff_x = 4.2;    // Display offset x
- dspoff_y = 6.0;    // Display offset y
- dsplen   = 71.2;   // Display length
- dspwid   = 24.1;   // Display width
- dspthick = (8.5-brdthick);   // Display thickness
+ dspoff_x = 1.0;    // Display offset x
+ dspoff_y = 10.4;   // Display offset y
+ dsplen   = 97.1;   // Display length
+ dspwid   = 39.7;   // Display width
+ dspthick = 10.0;   // Display thickness
  dspdepth = 13;     // Top of pcb to floor below
- 
- dsptab_y = 18.5;   // tab on right side of display
- dsptab_x = 4.2;
- dsptab_z = (5.0-brdthick);
- dsptab_off_y = 8.2;
  
  pinlen   = 43;     // hdr pins length (x)
  pinwid   = 4.5;    // hdr pins width (y)
- pinoff_x = 6.2;      // hdr pins offset (x)
- pinht    = 4.5;      // hdr pins height above pcb
- pinoff_y = 31.4;   // hdr pins offset (y)
+ pinoff_x = 7;      // hdr pins offset (x)
+ pinht    = 5;      // hdr pins height above pcb
+ pinoff_y = 55.2;   // hdr pins offset (y)
  
  conlen   = 16;     // Connector w cable length (x)
  conwid   = 10.6;   // Connector width
- conoff_y = 21;     // Connector offset (y)
+ conoff_y = 45;     // Connector offset (y)
  
  /* Bottom box */
  bbxwall  = 3;     // Thickness of walls
@@ -178,7 +173,6 @@ bh = brdholeoffset;
         bezelpost([brdlen-bh,brdwid-bh,0],wht);
     }
 }
-// Screw head indentation
 module bezelindent(a)
 {
     translate(a)
@@ -205,7 +199,7 @@ module topbezel(wht,hdia)
  dspthick = 10.0;   // Display thickness
  dspdepth = 13;     // Top of pcb to floor below
  */
-            translate([dspoff_x,dspoff_y,-0.01])
+            translate([0,dspoff_y,-0.01])
               cube([dsplen,dspwid,wht+0.2],center=false);
 
 /* PCB header pins indentation. 
@@ -223,15 +217,6 @@ module topbezel(wht,hdia)
         bezelindent([brdlen-bh,       bh,0]);
         bezelindent([       bh,brdwid-bh,0]);
         bezelindent([brdlen-bh,brdwid-bh,0]);
-        
-/* Tab on right side of display. 
- dsptab_y = 18.5;   // tab on right side of display
- dsptab_x = 4.2;
- dsptab_z = (5.0-brdthick);
- dsptab_off_y = 8.2;*/
-        translate([dsplen+dspoff_x,dsptab_off_y,0])
-          cube([dsptab_x,dsptab_y,dsptab_z],center=false);
-        
         }
     }   
 }
@@ -239,5 +224,5 @@ module topbezel(wht,hdia)
 //bottombox(14,3.3);
 bottomboxwposts(14,2.8);
 
-translate([0,0,25]) topbezel(6,3.5);
+//translate([0,0,25]) topbezel(6,3.5);
 
