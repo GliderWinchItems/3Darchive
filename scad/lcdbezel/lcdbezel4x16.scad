@@ -6,27 +6,37 @@
  
  $fn = 40;
  
+ /* Type of mounting. */
+ botmnt = false; // false = Mount lcd to top piece
+ //botmnt = true;  // true  = Mount lcd to bottom box
+ 
  /* Reference: origin to bottom-left corner of pcb */
  
  /* LCD module */
- brdlen   = 98.2;   // Overall pcb length
- brdwid   = 60;     // Overall pcb width
- brdholeoffset = 2.1; // Mounting holes from pcb edge
- brdholedia    = 3.5; // Mounting hole diameter
- brdthick = 1.7;    // pcb thickness
+  brdlen   = 87.0;     // Overall pcb length
+ brdwid   = 60.0;     // Overall pcb width
+ brdholeoffset = 2.2; // Mounting holes from pcb edge
+ brdholedia    = 3.0; // Mounting hole diameter
+ brdthick = 1.6;      // pcb thickness
  
- dspoff_x = 1.0;    // Display offset x
- dspoff_y = 10.4;   // Display offset y
- dsplen   = 97.1;   // Display length
- dspwid   = 39.7;   // Display width
- dspthick = 10.0;   // Display thickness
+ dspoff_x = 6.6;    // Display offset x
+ dspoff_y = 9.0;    // Display offset y
+ dsplen   = 76.0;   // Display length
+ dspwid   = 42.2;   // Display width
+ dspthick = (11.2-brdthick);   // Display thickness
  dspdepth = 13;     // Top of pcb to floor below
+ 
+ dsptab_y = 33.0;   // tab on right side of display
+ dsptab_x = 5.7;
+ dsptab_z = (5.0-brdthick);
+ dsptab_off_y = 13.8;
  
  pinlen   = 43;     // hdr pins length (x)
  pinwid   = 4.5;    // hdr pins width (y)
- pinoff_x = 7;      // hdr pins offset (x)
- pinht    = 5;      // hdr pins height above pcb
- pinoff_y = 55.2;   // hdr pins offset (y)
+ pinoff_x = 8.2;      // hdr pins offset (x)
+ pinht    = 4.5;      // hdr pins height above pcb
+ pinoff_y = 55.0;   // hdr pins offset (y)
+ 
  
  conlen   = 16;     // Connector w cable length (x)
  conwid   = 10.6;   // Connector width
@@ -158,7 +168,18 @@ bzht = wht - brdthick;
         }
     }
 }
-
+// Post with no screw
+module bezelpostns(a,wht)
+{
+bzht = wht - brdthick;  
+    translate(a)
+    {
+        difference()
+        {
+            cylinder(d=bzldia,h=bzht,center=false);
+        }
+    }
+}
 /* Bottom box with LCD pcb posts */
 module bottomboxwposts(wht,dia)
 {
@@ -166,12 +187,22 @@ bh = brdholeoffset;
     union()
     {
         bottombox(wht,dia);
-        
+      if (botmnt)
+      {
+/* To screw LCD to bottom box         */
         bezelpost([       bh,       bh,0],wht);
-        bezelpost([brdlen-bh,       bh,0],wht);
-        bezelpost([       bh,brdwid-bh,0],wht);
-        bezelpost([brdlen-bh,brdwid-bh,0],wht);
-    }
+        bezelpost([brdlen-bh-1,       bh,0],wht);
+        bezelpost([       bh,brdwid-bh-1.5,0],wht);
+        bezelpost([brdlen-bh-1,brdwid-bh-1.5,0],wht);
+      }
+      else
+      {
+/* To screw LCD to top, or just capture        */
+        bezelpostns([bh, bh+13,0],wht);
+        bezelpostns([brdlen-bh-23,brdwid-bh-1.5,0],wht);
+        bezelpostns([brdlen-bh-10,       bh,0],wht);
+      }
+    }   
 }
 module bezelindent(a)
 {
@@ -180,6 +211,14 @@ module bezelindent(a)
         cylinder(d=6,h=2.5,center=false);
     }
 }//
+// No indentation: Screw to top, instead of screw head indentation
+module bezelindentns(a,wht)
+{
+    translate(a)
+    {
+        cylinder(d=2.8,h=wht-0.5,center=false);
+    }    
+}
 
 module topbezel(wht,hdia)
 {
@@ -191,32 +230,41 @@ module topbezel(wht,hdia)
         }
         union()
         {
- /* Cutout for LCD display 
- dspoff_x = 1.0;    // Display offset x
- dspoff_y = 10.4;   // Display offset y
- dsplen   = 97.1;   // Display length
- dspwid   = 39.7;   // Display width
- dspthick = 10.0;   // Display thickness
- dspdepth = 13;     // Top of pcb to floor below
- */
-            translate([0,dspoff_y,-0.01])
+ /* Cutout for LCD display */
+            translate([dspoff_x,dspoff_y,-0.01])
               cube([dsplen,dspwid,wht+0.2],center=false);
 
-/* PCB header pins indentation. 
- pinlen   = 43;     // hdr pins length (x)
- pinwid   = 4.5;    // hdr pins width (y)
- pinoff_x = 7;      // hdr pins offset (x)
- pinht    = 5;      // hdr pins height above pcb
- pinoff_y = 55.2;   // hdr pins offset (y)          
-*/          translate([pinoff_x,pinoff_y,0])  
+
+/* PCB header pins indentation. */
+            translate([pinoff_x,pinoff_y,0])  
               cube([pinlen,pinwid,pinht],center=false);
 
 /* PCB Screw head indentations. */
-        bh = brdholeoffset;          
+    bh = brdholeoffset;          
+
+    if (botmnt)
+    {
         bezelindent([       bh,       bh,0]);
-        bezelindent([brdlen-bh,       bh,0]);
-        bezelindent([       bh,brdwid-bh,0]);
-        bezelindent([brdlen-bh,brdwid-bh,0]);
+        bezelindent([brdlen-bh-1,       bh,0]);
+        bezelindent([       bh,brdwid-bh-1.5,0]);
+        bezelindent([brdlen-bh-1,brdwid-bh-1.5,0]);
+    }
+    else
+    {
+        
+        bezelindentns([          bh,       bh    ,0],wht);
+        bezelindentns([brdlen-bh-1,       bh    ,0],wht);
+        bezelindentns([         bh,brdwid-bh-1.5,0],wht);
+        bezelindentns([brdlen-bh-1,brdwid-bh-1.5,0],wht);
+    }
+         
+/* Tab on right side of display. 
+ dsptab_y = 18.5;   // tab on right side of display
+ dsptab_x = 4.2;
+ dsptab_z = (5.0-brdthick);
+ dsptab_off_y = 8.2;*/
+        translate([dsplen+dspoff_x,dsptab_off_y,0])
+          cube([dsptab_x,dsptab_y,dsptab_z],center=false);
         }
     }   
 }

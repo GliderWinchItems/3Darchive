@@ -1,10 +1,14 @@
 /* File: lcdbezel.scad
  * LCD 2x16
  * Author: deh
- * Latest edit: 20200425
+ * Latest edit: 20200423
  */
  
  $fn = 40;
+ 
+ /* Type of mounting. */
+ botmnt = false; // false = Mount lcd to top piece
+ //botmnt = true;  // true  = Mount lcd to bottom box
  
  /* Reference: origin to bottom-left corner of pcb */
  
@@ -128,7 +132,14 @@ module bframe(zht,holedia)
         }
     }
 }
-
+//
+module boxmnttab(a,r)
+{
+    translate(a)
+     rotate(r)
+      eye_bar(8, 3.5, 9, 4);
+}
+    
 module bottombox(wht,hdia)
 {
     difference()
@@ -136,15 +147,28 @@ module bottombox(wht,hdia)
        union()
         {
             bframe(wht,hdia);
+            
+            // Mounting tabs
+            boxmnttab([bbxoff_x-4, bbxwid*0.5,0],[0,0,0]);
+            boxmnttab([bbxoff_x+bbxlen+4, bbxwid*0.5,0],[0,0,180]);
         }
         union()
         {
-            translate([bbxoff_x+bbxwall,0,bbxflr])
-              cube([bbxlen-2*bbxwall,bbxwid-2*bbxwall,wht-bbxflr],center=false);
+            translate([bbxoff_x+bbxwall,-.5,bbxflr])
+              cube([bbxlen-2*bbxwall,bbxwid-2*bbxwall+1,wht-bbxflr],center=false);
             
-            // Cable exit
+            // Cable exit--left side
             translate([bbxoff_x-8,conoff_y+1,wht-5])
              cube([15,8,15],center=false);
+            
+            // Cable exit--bottom, under plug
+            translate([bbxoff_x+bbxwall+1,conoff_y+1,-0.01])
+             cube([4,12,15],center=false);
+            
+            // Cable exit--bottom, near middle
+            translate([25,conoff_y-2,-0.01])
+             cube([15,15,15],center=false);
+            
         }
     }
 }
@@ -163,6 +187,18 @@ bzht = wht - brdthick;
         }
     }
 }
+// Post with no screw
+module bezelpostns(a,wht)
+{
+bzht = wht - brdthick;  
+    translate(a)
+    {
+        difference()
+        {
+            cylinder(d=bzldia,h=bzht,center=false);
+        }
+    }
+}
 
 /* Bottom box with LCD pcb posts */
 module bottomboxwposts(wht,dia)
@@ -171,12 +207,22 @@ bh = brdholeoffset;
     union()
     {
         bottombox(wht,dia);
-        
+      if (botmnt)
+      {
+/* To screw LCD to bottom box         */
         bezelpost([       bh,       bh,0],wht);
-        bezelpost([brdlen-bh,       bh,0],wht);
-        bezelpost([       bh,brdwid-bh,0],wht);
-        bezelpost([brdlen-bh,brdwid-bh,0],wht);
-    }
+        bezelpost([brdlen-bh-1,       bh,0],wht);
+        bezelpost([       bh,brdwid-bh-1.5,0],wht);
+        bezelpost([brdlen-bh-1,brdwid-bh-1.5,0],wht);
+      }
+      else
+      {
+/* To screw LCD to top, or just capture        */
+        bezelpostns([bh, bh+13,0],wht);
+        bezelpostns([brdlen-bh-23,brdwid-bh-1.5,0],wht);
+        bezelpostns([brdlen-bh-10,       bh,0],wht);
+      }
+    }   
 }
 // Screw head indentation
 module bezelindent(a)
@@ -185,7 +231,15 @@ module bezelindent(a)
     {
         cylinder(d=6,h=2.5,center=false);
     }
-}//
+}
+// No indentation: Screw to top, instead of screw head indentation
+module bezelindentns(a,wht)
+{
+    translate(a)
+    {
+        cylinder(d=2.8,h=wht-0.5,center=false);
+    }    
+}
 
 module topbezel(wht,hdia)
 {
@@ -218,12 +272,24 @@ module topbezel(wht,hdia)
               cube([pinlen,pinwid,pinht],center=false);
 
 /* PCB Screw head indentations. */
-        bh = brdholeoffset;          
+    bh = brdholeoffset;          
+
+    if (botmnt)
+    {
         bezelindent([       bh,       bh,0]);
-        bezelindent([brdlen-bh,       bh,0]);
-        bezelindent([       bh,brdwid-bh,0]);
-        bezelindent([brdlen-bh,brdwid-bh,0]);
+        bezelindent([brdlen-bh-1,       bh,0]);
+        bezelindent([       bh,brdwid-bh-1.5,0]);
+        bezelindent([brdlen-bh-1,brdwid-bh-1.5,0]);
+    }
+    else
+    {
         
+       bezelindentns([          bh,       bh    ,0],wht);
+        bezelindentns([brdlen-bh-1,       bh    ,0],wht);
+        bezelindentns([         bh,brdwid-bh-1.5,0],wht);
+        bezelindentns([brdlen-bh-1,brdwid-bh-1.5,0],wht);
+    }
+         
 /* Tab on right side of display. 
  dsptab_y = 18.5;   // tab on right side of display
  dsptab_x = 4.2;
@@ -236,7 +302,6 @@ module topbezel(wht,hdia)
     }   
 }
 
-//bottombox(14,3.3);
 bottomboxwposts(14,2.8);
 
 translate([0,0,25]) topbezel(6,3.5);
