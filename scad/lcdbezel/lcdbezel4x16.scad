@@ -46,7 +46,7 @@
  bbxwall  = 3;     // Thickness of walls
  bbxflr   = 2;     // Thickness of floor
  bbxrad   = 3;     // Radius of outside corners
- bbxht    = 15;    // Height (outside)
+ bbxht    = 18;    // Height (outside)
  
  /* Pin protrusion spacer. */
  ppsthick = 3;     // Thickness of space
@@ -133,7 +133,12 @@ module bframe(zht,holedia)
         }
     }
 }
-
+module boxmnttab(a,r)
+{
+    translate(a)
+     rotate(r)
+      eye_bar(8, 3.5, 9, 4);
+}
 module bottombox(wht,hdia)
 {
     difference()
@@ -141,15 +146,24 @@ module bottombox(wht,hdia)
        union()
         {
             bframe(wht,hdia);
+            
+            // Mounting tabs
+            boxmnttab([bbxoff_x-4, bbxwid*0.5,0],[0,0,0]);
+            boxmnttab([bbxoff_x+bbxlen+4, bbxwid*0.5,0],[0,0,180]);
         }
         union()
         {
             translate([bbxoff_x+bbxwall,0,bbxflr])
               cube([bbxlen-2*bbxwall,bbxwid-2*bbxwall,wht-bbxflr],center=false);
             
-            // Cable exit
+            // Cable exit--left top side
             translate([bbxoff_x-8,conoff_y+1,wht-5])
              cube([15,8,15],center=false);
+            
+            // Cable exit-- bottom left
+            translate([bbxoff_x+4,conoff_y-2,0])
+              cube([8,15,15],center=false);
+
         }
     }
 }
@@ -176,7 +190,7 @@ bzht = wht - brdthick;
     {
         difference()
         {
-            cylinder(d=bzldia,h=bzht,center=false);
+            cylinder(d=bzldia+1,h=bzht,center=false);
         }
     }
 }
@@ -199,8 +213,8 @@ bh = brdholeoffset;
       {
 /* To screw LCD to top, or just capture        */
         bezelpostns([bh, bh+13,0],wht);
-        bezelpostns([brdlen-bh-23,brdwid-bh-1.5,0],wht);
-        bezelpostns([brdlen-bh-10,       bh,0],wht);
+        bezelpostns([brdlen-bh-23,brdwid-bh-1.0,0],wht);
+        bezelpostns([brdlen-bh-10,       bh+.8,0],wht);
       }
     }   
 }
@@ -269,8 +283,7 @@ module topbezel(wht,hdia)
     }   
 }
 
-//bottombox(14,3.3);
-bottomboxwposts(14,2.8);
+bottomboxwposts(bbxht,2.8);
 
-//translate([0,0,25]) topbezel(6,3.5);
+translate([0,0,25]) topbezel(6,3.5);
 
